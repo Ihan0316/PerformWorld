@@ -1,0 +1,13 @@
+package com.performworld;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class PerformWorldApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(PerformWorldApplication.class, args);
+    }
+
+}
