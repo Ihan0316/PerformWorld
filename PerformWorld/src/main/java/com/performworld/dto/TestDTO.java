@@ -1,5 +1,7 @@
 package com.performworld.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.performworld.config.DateDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +22,16 @@ public class TestDTO {
     private LocalDateTime birth;
     private String address;
     private String filePath;
-
+    // file
     private List<MultipartFile> files;
+    // search
+    private String srhName;
+    private boolean srhChkType;
+    @JsonDeserialize(using = DateDeserializer.class)
+    private LocalDateTime srhStrBirth;
+    @JsonDeserialize(using = DateDeserializer.class)
+    private LocalDateTime srhEndBirth;
+    private String srhAddress;
 
     private LocalDateTime regDate;
     private LocalDateTime modDate;
