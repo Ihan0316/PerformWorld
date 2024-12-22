@@ -9,12 +9,25 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <!-- css import -->
+    <link rel="stylesheet" th:href="@{/css/test.css}">
 </head>
 <body>
 <div layout:fragment="content">
     <h4>검색</h4>
     <form>
-        제목 : <input type="text" name="srhTitle">
+        Text: <input type="text" name="srhName"><br/>
+        Check: <input type="checkbox" name="srhChkType"><br/>
+        Date: <input type="date" name="srhStrBirth">
+                &nbsp;~&nbsp;
+                <input type="date" name="srhEndBirth"><br/>
+        Select: <select name="srhAddress">
+                    <option value="">전체</option>
+                    <option value="busan">부산</option>
+                    <option value="seoul">서울</option>
+                    <option value="gyeongnam">경남</option>
+                    <option value="gyeonggi">경기</option>
+                </select><br/>
         <button type="button" class="searchBtn">검색</button>
     </form>
     <h1>List</h1>
@@ -26,7 +39,7 @@
 
 <th:block layout:fragment="javascript">
     <!-- js import -->
-<!--    <script th:src="@{/js/test.js}"></script>-->
+    <script th:src="@{/js/test.js}"></script>
 </th:block>
 </body>
 </html>
