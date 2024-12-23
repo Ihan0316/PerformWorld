@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -36,6 +37,16 @@ public class TestRestController {
     @PostMapping(value = "/registTest", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Long registTest(@ModelAttribute TestDTO testDTO) {
         log.info(testDTO);
+
+        Path uploadDirectory = Paths.get(uploadPath);
+        try {
+            if (Files.notExists(uploadDirectory)) {
+                Files.createDirectories(uploadDirectory); // 디렉토리가 존재하지 않으면 생성
+                log.info("업로드 디렉토리 생성됨: " + uploadPath);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("업로드 디렉토리 생성 실패", e);
+        }
 
         // 파일 있으면 업로드
         if(testDTO.getFiles() != null && !testDTO.getFiles().isEmpty()) {

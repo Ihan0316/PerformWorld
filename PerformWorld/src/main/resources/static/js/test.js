@@ -74,15 +74,15 @@ const initGrid = () => {
             },
             {
                 header: '이미지',
-                name: '',
+                name: 'filePath',
                 align: 'center',
-                // formatter: (value) => {
-                //     if (value.value) {
-                //         const imageUrl = value.value;
-                //         return `<img src="${imageUrl}" alt="이미지" style="max-width: 100px; max-height: 100px;">`;
-                //     }
-                //     return "";
-                // }
+                formatter: (value) => {
+                    if (value.value) {
+                        const imageUrl = value.value;
+                        return `<img src="${imageUrl}" alt="이미지" style="max-width: 100px; max-height: 100px;">`;
+                    }
+                    return "";
+                }
             },
             {
                 header: '등록일',
