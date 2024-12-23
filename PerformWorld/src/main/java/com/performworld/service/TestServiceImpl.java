@@ -32,4 +32,16 @@ public class TestServiceImpl implements TestService {
     public Long insert(TestDTO testDTO) {
         return testRepository.save(modelMapper.map(testDTO, Test.class)).getId();
     }
+
+    // 수정
+    @Override
+    public Long update(TestDTO testDTO) {
+        return testRepository.save(modelMapper.map(testDTO, Test.class)).getId();
+    }
+
+    // 삭제
+    @Override
+    public void delete(Long id) {
+        testRepository.deleteById(id);
+    }
 }
