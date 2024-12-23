@@ -7,8 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Log4j2
 @Controller
+@RequestMapping("/test")
 public class TestController {
 
-    @GetMapping("/test")
-    public void test() { }
+    // 목록
+    @GetMapping("/list")
+    public String test() {
+        return "test";
+    }
+
+    // 등록
+
+    // 수정
+
 }

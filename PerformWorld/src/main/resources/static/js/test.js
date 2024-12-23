@@ -73,6 +73,18 @@ const initGrid = () => {
                 align: 'center'
             },
             {
+                header: '이미지',
+                name: '',
+                align: 'center',
+                // formatter: (value) => {
+                //     if (value.value) {
+                //         const imageUrl = value.value;
+                //         return `<img src="${imageUrl}" alt="이미지" style="max-width: 100px; max-height: 100px;">`;
+                //     }
+                //     return "";
+                // }
+            },
+            {
                 header: '등록일',
                 name: 'regDate',
                 formatter: (value) => {
@@ -91,7 +103,49 @@ const init = () => {
     // grid 초기 세팅
     const testGrid = initGrid();
 
-    // data 가져오기
+    // 검색
+    document.querySelector(".searchBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // 조회
+        getData();
+    }, false);
+
+    // 파일 추가 버튼
+    document.querySelector(".addFileBtn").addEventListener("click", function() {
+        const fileInputContainer = document.querySelector("#fileInputs");
+        const newFileInput = document.createElement("input");
+        newFileInput.type = "file";
+        newFileInput.name = "files";
+        fileInputContainer.appendChild(newFileInput);
+    });
+
+    // 등록
+    document.querySelector(".registBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        regTest();
+    }, false);
+
+    // 수정
+    document.querySelector(".updateBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        updTest();
+    }, false);
+
+    // 삭제
+    document.querySelector(".deleteBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        delTest();
+    }, false);
+
+    // 목록 조회
     async function getData() {
         // validation
         const strBirth = document.querySelector("input[name='srhStrBirth']").value;
@@ -100,34 +154,77 @@ const init = () => {
             alert("시작 날짜는 종료 날짜보다 이전이어야 합니다.");
             return;
         }
-
-        // send
-        const srhObj = {
+        // axios
+        const data = {
             srhName: document.querySelector("input[name='srhName']").value,
             srhChkType: document.querySelector("input[name='srhChkType']").checked,
             srhStrBirth: strBirth,
             srhEndBirth: endBirth,
             srhAddress: document.querySelector("select[name='srhAddress']").value
         };
-        console.log(srhObj);
+        console.log(data);
 
         try {
-            const res = await axios.post(`/test/getTestList`, srhObj);
+            const res = await axios.post(`/test/getTestList`, data);
             console.log(res);
-            // grid에 세팅
-            testGrid.resetData(res.data);
+            testGrid.resetData(res.data); // grid에 세팅
         } catch (e) {
             console.error(e);
         }
     }
 
-     // 검색
-     document.querySelector(".searchBtn").addEventListener("click", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    // 등록
+    async function regTest() {
+        // validation 추가
 
-        getData();
-     }, false);
+        // FormData
+        const formData = new FormData();
+        formData.append("name", document.querySelector("input[name='name']").value);
+        formData.append("chkType", document.querySelector("input[name='chkType']").checked);
+        formData.append("birth", document.querySelector("input[name='birth']").value);
+        formData.append("address", document.querySelector("select[name='address']").value);
+
+        // 파일 처리
+        const fileInputs = document.querySelectorAll("input[name='files']");
+        fileInputs.forEach(fileInput => {
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+        });
+
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        try {
+            const res = await axios.post('/test/registTest', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(res);
+            getData();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // 수정
+    async function updTest() {
+        alert("수정 기능");
+        // validation 추가
+        // data 세팅 및 axios send
+        // 성공 시 다시 getData();
+    }
+
+    // 삭제
+    async function delTest() {
+        alert("삭제 기능");
+        // validation 추가
+        // id만 세팅 및 axios send
+        // 성공 시 다시 getData();
+    }
 }
 
 window.onload = () => {

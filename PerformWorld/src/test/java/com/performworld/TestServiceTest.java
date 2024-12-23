@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.stream.IntStream;
 
 @Log4j2
@@ -23,7 +23,7 @@ public class TestServiceTest {
             TestDTO test = TestDTO.builder()
                     .name("test"+i)
                     .chkType(i%2==1)
-                    .birth(LocalDateTime.now())
+                    .birth(LocalDate.now())
                     .address("busan")
                     .build();
             testService.insert(test);

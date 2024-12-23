@@ -3,7 +3,7 @@ package com.performworld.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -20,7 +20,7 @@ public class Test extends BaseEntity {
     @Column(nullable = false, name = "chk_type")
     private boolean chkType;
     @Column(nullable = false)
-    private LocalDateTime birth;
+    private LocalDate birth;
     @Column(length = 50)
     private String address;
     @Column(length = 500, name = "file_path")

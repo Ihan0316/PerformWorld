@@ -4,18 +4,24 @@ import com.performworld.dto.TestDTO;
 import com.performworld.service.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Log4j2
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
 public class TestRestController {
+
+    @Value("${com.busanit501.upload.path}")
+    private String uploadPath;
 
     private final TestService testService;
 
@@ -27,9 +33,49 @@ public class TestRestController {
     }
 
     // 등록
-    @PostMapping("/registTest")
-    public Long registTest(@RequestBody TestDTO testDTO) {
+    @PostMapping(value = "/registTest", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Long registTest(@ModelAttribute TestDTO testDTO) {
         log.info(testDTO);
+
+        // 파일 있으면 업로드
+        if(testDTO.getFiles() != null && !testDTO.getFiles().isEmpty()) {
+            testDTO.getFiles().forEach(file -> {
+                String fileName = file.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString();
+                Path savePath = Paths.get(uploadPath, uuid + "_" + fileName);
+
+                try {
+                    String contentType = file.getContentType();
+                    if (contentType == null || !contentType.startsWith("image")) {
+                        throw new IllegalArgumentException("Uploaded file is not an image.");
+                    }
+
+                    file.transferTo(savePath);
+                    testDTO.setFilePath(savePath.toString());
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to upload file", e);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid file type: " + fileName, e);
+                }
+            });
+        }
+
         return testService.insert(testDTO);
+    }
+
+    // 수정
+    @PostMapping("/updateTest")
+    public Long updateTest(@RequestBody TestDTO testDTO) {
+        log.info(testDTO);
+        // 파일수정
+        return testService.update(testDTO);
+    }
+
+    // 삭제
+    @PostMapping("/deleteTest")
+    public void deleteTest(Long id) {
+        // 파일삭제
+        testService.delete(id);
     }
 }
