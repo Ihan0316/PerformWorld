@@ -79,7 +79,9 @@ const initGrid = () => {
                 formatter: (value) => {
                     if (value.value) {
                         const imageUrl = value.value;
-                        return `<img src="${imageUrl}" alt="이미지" style="max-width: 100px; max-height: 100px;">`;
+                        console.log("이미지경로:"+imageUrl)
+                        const absoluteImageUrl = `/test/uploads/${imageUrl}`;
+                        return `<img src="${absoluteImageUrl}" alt="이미지" style="max-width: 100px; max-height: 25px;">`;
                     }
                     return "";
                 }

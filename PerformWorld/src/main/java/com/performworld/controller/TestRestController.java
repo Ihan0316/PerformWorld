@@ -5,6 +5,8 @@ import com.performworld.service.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,16 @@ public class TestRestController {
 
     private final TestService testService;
 
+    @GetMapping("/uploads/{fileName}")
+    public Resource getFile(@PathVariable String fileName) {
+        Path filePath = Paths.get(uploadPath).resolve(fileName);
+        Resource resource = new FileSystemResource(filePath);
+        if (resource.exists() || resource.isReadable()) {
+            return resource;
+        } else {
+            throw new RuntimeException("File not found");
+        }
+    }
     // 목록 조회
     @PostMapping("/getTestList")
     public List<TestDTO> getTestList(@RequestBody TestDTO testDTO) {
@@ -62,7 +74,8 @@ public class TestRestController {
                     }
 
                     file.transferTo(savePath);
-                    testDTO.setFilePath(savePath.toString());
+//                    testDTO.setFilePath(savePath.toString());
+                    testDTO.setFilePath(uuid + "_" + fileName);
 
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to upload file", e);
