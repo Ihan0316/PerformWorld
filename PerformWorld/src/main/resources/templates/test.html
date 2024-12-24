@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+    <!-- libraries -->
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <!-- css import -->
+    <link rel="stylesheet" th:href="@{/css/test.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <h4>검색</h4>
+    <form>
+        Text: <input type="text" name="srhName"><br/>
+        Check: <input type="checkbox" name="srhChkType"><br/>
+        Date: <input type="date" name="srhStrBirth">
+                &nbsp;~&nbsp;
+                <input type="date" name="srhEndBirth"><br/>
+        Select: <select name="srhAddress">
+                    <option value="">전체</option>
+                    <option value="busan">부산</option>
+                    <option value="seoul">서울</option>
+                    <option value="gyeongnam">경남</option>
+                    <option value="gyeonggi">경기</option>
+                </select><br/>
+        <button type="button" class="searchBtn">검색</button>
+    </form>
+    <h1>List</h1>
+    <!-- list grid -->
+    <div id="grid"></div>
+
+    <h4>등록</h4>
+    <form id="regForm" method="POST" action="/test/registTest" enctype="multipart/form-data">
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name"><br/>
+
+        <label for="chkType">체크:</label>
+        <input type="checkbox" id="chkType" name="chkType"><br/>
+
+        <label for="birth">생일:</label>
+        <input type="date" id="birth" name="birth"><br/>
+
+        <label for="address">주소:</label>
+        <select id="address" name="address">
+            <option value="">전체</option>
+            <option value="busan">부산</option>
+            <option value="seoul">서울</option>
+            <option value="gyeongnam">경남</option>
+            <option value="gyeonggi">경기</option>
+        </select><br/>
+
+        <label>파일 업로드:</label>
+        <div id="fileInputs">
+            <input type="file" name="files" />
+        </div>
+        <button type="button" class="addFileBtn">파일 추가</button>
+
+        <button type="button" class="registBtn">등록하기</button>
+    </form>
+
+    <div>
+        <button type="button" class="updateBtn">수정</button>
+        <button type="button" class="deleteBtn">삭제</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</div>
+
+<th:block layout:fragment="javascript">
+    <!-- js import -->
+    <script th:src="@{/js/test.js}"></script>
+</th:block>
+</body>
+</html>
