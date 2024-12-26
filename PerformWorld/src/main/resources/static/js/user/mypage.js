@@ -1,7 +1,5 @@
 const init = () => {
 
-    const chnPwModal = new bootstrap.Modal(document.querySelector('.chnPwModal'));
-
     // data 가져오기
     // getUserInfo().then(data => {
     //     document.querySelector("input[name='userId']").value = data.userId;
