@@ -9,23 +9,50 @@
 
 <div id="fh5co-main" layout:fragment="content">
     <!-- Modal -->
-    <div class="modal eventRegisterModal" tabindex="-1">
-        <div class="modal-dialog">
+    <div class="modal eventRegisterModal" tabindex="-1" style="max-width: 3000px; ">
+        <div class="modal-dialog modal-lg" > <!-- modal-lg 클래스 추가하여 크기 확장 -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>업로드 파일</h4>
+                    <h4>공연/전시 추가</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <!--                        <span class="input-group-text">첨부 파일</span>-->
-                        <input type="file" name="files"
-                               class="form-control" multiple></input>
-                    </div>
+                    <!-- 테이블 추가 -->
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>썸네일</th>
+                            <th>Event ID</th>
+                            <th>제목</th>
+                            <th>공연 시작일</th>
+                            <th>공연 종료일</th>
+                            <th>지역</th>
+                            <th>장르</th>
+                            <th>추가</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 예시 데이터 -->
+                        <tr>
+                            <td>
+                                <img src="/images/thumbnail.jpg" alt="썸네일" style="width: 100%; height: auto;">
+                            </td>
+                            <td>1</td>
+                            <td>Art Exhibition2222222222222</td>
+                            <td>2024-12-01</td>
+                            <td>2024-12-10</td>
+                            <td>서울</td>
+                            <td>전시</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">추가</button>
+                            </td>
+                        </tr>
+                        <!-- 추가 데이터는 여기에 동적으로 추가 -->
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
