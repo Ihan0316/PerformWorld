@@ -3,8 +3,6 @@ package com.performworld.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -14,8 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 public class User extends BaseEntity {
     @Id
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "user_id", length = 20)
+    private String userId;
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;

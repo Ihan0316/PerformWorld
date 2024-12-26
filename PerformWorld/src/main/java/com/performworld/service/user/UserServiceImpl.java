@@ -3,20 +3,16 @@ package com.performworld.service.user;
 import com.performworld.domain.User;
 import com.performworld.dto.user.UserDto;
 import com.performworld.repository.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     // 회원가입 로직
     @Override
@@ -51,5 +47,10 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
-}
 
+    // 내 정보 조회
+    @Override
+    public UserDto getUserInfo(UserDto userDto) {
+        return userRepository.findUserByUserId(userDto.getUserId());
+    }
+}

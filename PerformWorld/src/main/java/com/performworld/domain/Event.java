@@ -38,5 +38,6 @@ public class Event extends BaseEntity {
     private Integer luntime;  // 공연 시간 (분 단위)
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Image> image = new ArrayList<>();  // Images 테이블과의 연관
 }

@@ -24,7 +24,7 @@ public class SystemCode extends BaseEntity{
     @Column(name = "sub_code", nullable = false, length = 50)
     private String subCode;
 
-    @Column(name = "code", nullable = false, length = 50)
+    @Column(name = "code", nullable = false, length = 50, unique = true)
     private String code;
 
     @Column(name = "code_cate", nullable = false, length = 50)

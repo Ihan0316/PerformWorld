@@ -1,19 +1,7 @@
 const init = () => {
+//        const loginInfo = sessionStorage.getItem("user");  // 로그인 유저 정보
 
-    // data 가져오기
-    // getUserInfo().then(data => {
-    //     document.querySelector("input[name='userId']").value = data.userId;
-    //     document.querySelector("input[name='name']").value = data.name;
-    //     document.querySelector("input[name='tierName']").value = data.tier.tierName;
-    //     document.querySelector("input[name='email']").value = data.email;
-    //     document.querySelector("input[name='phoneNumber']").value = data.phoneNumber;
-    //     document.querySelector("input[name='address1']").value = data.address1;
-    //     document.querySelector("input[name='address2']").value = data.address2;
-    //     document.querySelector("input[name='postcode']").value = data.postcode;
-    //
-    // }).catch(e => {
-    //    console.error("회원 정보를 불러오는데 실패했습니다.");
-    // });
+     getUserInfo();
 
     // 비밀번호 변경
     document.querySelector(".chnPwBtn").addEventListener("click", function (e) {
@@ -49,24 +37,31 @@ const init = () => {
             }
 
             if(confirm("회원 정보를 수정하시겠습니까?")) {
-                // axios
-                modeChange(0);
-                e.target.value = '정보 수정';
+                updUserInfo().then(res => {
+                    getUserInfo();
+                    modeChange(0);
+                    e.target.value = '정보 수정';
+                }).catch(e => {
+                    alert("회원정보 수정에 실패했습니다.");
+                });
             }
         }
     });
 
     // 주소 변경
-    document.querySelectorAll("input[name^='address']").forEach(function(input) {
-        input.addEventListener("click", function (e) {
-            openPostCode();
-        });
+    document.querySelector("input[name='address1']").addEventListener("click", function (e) {
+        openPostCode();
     });
 
     // 회원 탈퇴
     document.querySelector(".delUserBtn").addEventListener("click", function (e) {
         if(confirm("정말로 탈퇴하시겠습니까?")) {
-            // axios
+            delUserInfo().then(res => {
+                alert("회원 탈퇴에 성공했습니다.");
+                window.location.href = '/';
+            }).catch(e => {
+                alert("회원 탈퇴에 실패했습니다.");
+            });
         }
     });
 
@@ -91,14 +86,61 @@ const init = () => {
         }
     }
 
-    // 내 정보 조회
+    // 정보 조회
     async function getUserInfo() {
-        const loginInfo = sessionStorage.getItem("loginInfo");
+        try {
+            const res = await axios({
+                method: 'post',
+                url: '/user/getInfo',
+                data: { userId: 'user123' }, // loginInfo
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            document.querySelector("input[name='userId']").value = res.data.userId;
+            document.querySelector("input[name='name']").value = res.data.name;
+            document.querySelector("input[name='tierName']").value = res.data.tierName;
+            document.querySelector("input[name='email']").value = res.data.email;
+            document.querySelector("input[name='phoneNumber']").value = res.data.phoneNumber;
+            document.querySelector("input[name='address1']").value = res.data.address1;
+            document.querySelector("input[name='address2']").value = res.data.address2;
+            document.querySelector("input[name='postcode']").value = res.data.postcode;
+
+        } catch (error) {
+            alert("회원 정보를 불러오는데 실패했습니다.");
+        }
+    }
+
+    // 정보 수정
+    async function updUserInfo() {
+        const user = {
+            userId: document.querySelector("input[name='userId']").value,
+            name: document.querySelector("input[name='name']").value,
+            email: document.querySelector("input[name='email']").value,
+            phoneNumber: document.querySelector("input[name='phoneNumber']").value,
+            address1: document.querySelector("input[name='address1']").value,
+            address2: document.querySelector("input[name='address2']").value,
+            postcode: document.querySelector("input[name='postcode']").value,
+        };
 
         const res = await axios({
-            method : 'post',
-            url : '/user/getInfo',
-            data : loginInfo,
+            method : 'put',
+            url : '/user',
+            data : user,
+           headers : {
+               'Content-Type' : 'application/json'
+           }
+        });
+        return res.data;
+    }
+
+    // 회원 탈퇴
+    async function delUserInfo() {
+        const res = await axios({
+            method : 'delete',
+            url : '/user',
+            data : 'user123',  // loginInfo.userId
             headers : {
                 'Content-Type' : 'application/json'
             }
