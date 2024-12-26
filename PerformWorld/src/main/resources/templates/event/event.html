@@ -9,6 +9,36 @@
 
 <div id="fh5co-main" layout:fragment="content">
     <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5"
+                            th:if="${resultType == 'register'}">
+                            글쓰기 성공
+                        </h1>
+                        <h1 class="modal-title fs-5"
+                            th:if="${resultType == 'update'}">
+                            글쓰기 수정
+                        </h1>
+                        <h1 class="modal-title fs-5"
+                            th:if="${resultType == 'delete'}">
+                            글쓰기 삭제
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        [[${result}]]
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <h2>공연 등록</h2>
@@ -54,7 +84,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary btn-md">검색</button>
+                                <button type="button" class="btn btn-primary btn-md searchEventBtn">검색</button>
                             </div>
                         </div>
                     </div>
@@ -108,10 +138,23 @@
     <div id="map"></div>
 </div>
 <!--	content layout end  -->
+
+
 <!-- js import -->
 <th:block layout:fragment="javascript">
-    <!-- 예시
-    <script th:src="@{/js/test.js}"></script> -->
+    <script th:src="@{/js/event/event.js}"></script>
+
+    <script th:inline="javascript">
+
+        const modal = new bootstrap.Modal(document.querySelector(".modal"))
+
+        document.querySelector(".searchEventBtn").addEventListener("click",
+            function(e){
+                e.preventDefault()
+                e.stopPropagation()
+                modal.show()
+            },false)
+    </script>
 </th:block>
 </body>
 </html>
