@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+
+    <link rel="stylesheet" th:href="@{/css/mainstyle.css}">
+</head>
+
+<body>
+<div id="fh5co-page" layout:fragment="content">
+
+
+    <div id="fh5co-main">
+        <div id="menu">
+            <div class="col-md-3 col-sm-10 col-padding">
+                <h1 class="header_link__5ddf2" data-animate-effect="fadeInLeft">The Ticket</h1>
+            </div>
+<!--            검색목록-->
+            <menu class="Ticket_GNB_PC header_wrapMenu__02b29">
+                <ul class="header_genreMenu__34716">
+                    <li><a class="header_link__5ddf2" href="theater.html">연극</a></li>
+                    <li><a class="header_link__5ddf2" href="">무용</a></li>
+                    <li><a class="header_link__5ddf2" href="">서양음악(클래식)</a></li>
+                    <li><a class="header_link__5ddf2" href="">한국음악(국악)</a></li>
+                    <li><a class="header_link__5ddf2" href="">무용(서양/한국무용)</a></li>
+                    <li><a class="header_link__5ddf2" href="">대중무용</a></li>
+                    <li><a class="header_link__5ddf2" href="">복합</a></li>
+                    <li><a class="header_link__5ddf2" href="">서커스/마술</a></li>
+                    <li><a class="header_link__5ddf2" href="">뮤지컬</a></li>
+                </ul>
+
+                <div class="header_menuDivider__01d75"></div>
+
+                <ul class="header_categoryMenu__4fbf3">
+                    <li><a class="header_link__5ddf2" href="">공연상태</a></li>
+                    <li><a class="header_link__5ddf2" href="">지역</a></li>
+                </ul>
+
+
+                <div class="header_searchWrapper">
+                    <input type="text" class="header_searchInput" placeholder="검색어를 입력하세요..." onkeypress="handleSearch(event)">
+                </div>
+
+            </menu>
+        </div>
+
+        <!--       목록-->
+        <div class="fh5co-narrow-content">
+            <div class="row row-bottom-padded-md">
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(http://www.kopis.or.kr/upload/pfmPoster/PF_PF233707_240110_134155.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-2.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Brading</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-3.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-4.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-5.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Brading</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-6.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-1.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-2.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Brading</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-1.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-2.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Brading</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-3.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-padding text-center animate-box">
+                    <a href="#" class="work image-popup" style="background-image: url(images/img-4.jpg);">
+                        <div class="desc">
+                            <h3>Project Name</h3>
+                            <span>Illustration</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
+
