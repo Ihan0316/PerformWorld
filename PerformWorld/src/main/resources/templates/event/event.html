@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<body>
+<!--	content layout start  -->
+
+<div id="fh5co-main" layout:fragment="content">
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>공연 등록</h2>
+            </div>
+        </div>
+        <form action="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="공연 이름">
+                            </div>
+                            <div class="form-group">
+                                <label for="start-date">공연 시작일</label>
+                                <input type="date" id="start-date" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="end-date">공연 종료일</label>
+                                <input type="date" id="end-date" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="location-code">지역 코드</label>
+                                <select id="location-code" class="form-control">
+                                    <option value="">지역 선택</option>
+                                    <option value="11">서울</option>
+                                    <option value="26">부산</option>
+                                    <option value="27">대구</option>
+                                    <option value="28">인천</option>
+                                    <option value="29">광주</option>
+                                    <option value="30">대전</option>
+                                    <option value="31">울산</option>
+                                    <option value="36">세종</option>
+                                    <option value="41">경기</option>
+                                    <option value="51">강원</option>
+                                    <option value="43">충북</option>
+                                    <option value="44">충남</option>
+                                    <option value="45">전북</option>
+                                    <option value="46">전남</option>
+                                    <option value="47">경북</option>
+                                    <option value="48">경남</option>
+                                    <option value="50">제주</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-md">검색</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>공연 목록</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 10%;">썸네일</th>
+                        <th style="width: 10%;">Event ID</th>
+                        <th style="width: 20%;">제목</th>
+                        <th style="width: 15%;">공연 시작일</th>
+                        <th style="width: 15%;">공연 종료일</th>
+                        <th style="width: 15%;">지역</th>
+                        <th style="width: 15%;">장르</th>
+                        <th style="width: 10%;">삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Example Row -->
+                    <tr>
+                        <td>
+                            <img src="/images/thumbnail.jpg" alt="썸네일" style="width: 100%; height: auto;">
+                        </td>
+                        <td>1</td>
+                        <td>Art Exhibition</td>
+                        <td>2024-12-01</td>
+                        <td>2024-12-10</td>
+                        <td>서울</td>
+                        <td>전시</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+                        </td>
+                    </tr>
+                    <!-- 추가 데이터는 여기로 동적으로 추가 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+</div>
+<!--	content layout end  -->
+<!-- js import -->
+<th:block layout:fragment="javascript">
+    <!-- 예시
+    <script th:src="@{/js/test.js}"></script> -->
+</th:block>
+</body>
+</html>
+
