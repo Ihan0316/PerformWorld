@@ -10,10 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/test")
 public class TestController {
 
-    // 목록
+    // grid 및 기능 테스트 페이지
     @GetMapping("/list")
     public String test() {
         return "test";
+    }
+
+    // 레이아웃 테스트 페이지
+    @GetMapping("/list2")
+    public String test2() {
+        return "test2";
     }
 
     // 등록
