@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     @Column(name = "total_spent", precision = 10, scale = 2)
     private Long totalSpent;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "tier_id", referencedColumnName = "tier_id")
     private Tier tier;
 
