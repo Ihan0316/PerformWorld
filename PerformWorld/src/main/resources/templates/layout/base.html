@@ -48,6 +48,20 @@
     <link rel="stylesheet" th:href="@{/css/flexslider.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.easing.1.3.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/js/jquery.flexslider-min.js}"></script>
+
+    <!-- MAIN JS -->
+    <script th:src="@{/js/main.js}"></script>
+
     <!-- Modernizr JS -->
     <script th:src="@{/js/modernizr-2.6.2.min.js}"></script>
     <!-- FOR IE9 below -->
@@ -84,21 +98,8 @@
     </aside>
 
     <div layout:fragment="content"></div>
+    <th:block layout:fragment="javascript"></th:block>
 </div>
-
-<th:block layout:fragment="javascript">
-
-</th:block>
-
-<!-- jQuery -->
-<script th:src="@{/js/jquery.min.js}"></script>
-<script th:src="@{/js/jquery.easing.1.3.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/jquery.waypoints.min.js}"></script>
-<script th:src="@{/js/jquery.flexslider-min.js}"></script>
-
-<!-- MAIN JS -->
-<script th:src="@{/js/main.js}"></script>
 
 </body>
 </html>
