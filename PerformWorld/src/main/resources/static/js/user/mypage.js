@@ -1,7 +1,5 @@
 const init = () => {
 
-    const chnPwModal = new bootstrap.Modal(document.querySelector('.chnPwModal'));
-
     // data 가져오기
     // getUserInfo().then(data => {
     //     document.querySelector("input[name='userId']").value = data.userId;
@@ -19,9 +17,22 @@ const init = () => {
 
     // 비밀번호 변경
     document.querySelector(".chnPwBtn").addEventListener("click", function (e) {
-        // 모달 open
         chnPwModal.show();
-        // 새 비밀번호 입력 방식
+    });
+    document.querySelector(".updPwBtn").addEventListener("click", function (e) {
+        if(document.querySelector("input[name='password']").value === "") {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+        if(document.querySelector("input[name='password']").value !==
+            document.querySelector("input[name='chkPassword']").value) {
+            alert("비밀번호를 다시 확인해주세요.");
+            return;
+        }
+
+        if(confirm("비밀번호를 변경하시겠습니까?")) {
+            // axios
+        }
     });
 
     // 정보 수정
@@ -31,6 +42,12 @@ const init = () => {
             e.target.value = '수정 완료';
 
         } else {
+            const form = document.querySelector('form');
+            if (!form.checkValidity()) {
+                alert("모든 필드를 올바르게 입력해주세요.");
+                return;
+            }
+
             if(confirm("회원 정보를 수정하시겠습니까?")) {
                 // axios
                 modeChange(0);

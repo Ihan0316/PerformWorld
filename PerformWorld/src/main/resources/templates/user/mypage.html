@@ -6,6 +6,30 @@
 
 <body>
 	<div id="fh5co-main" layout:fragment="content">
+		<!-- 비밀번호 변경 모달 -->
+		<div class="modal chnPwModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">비밀번호 변경하기</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="input-group mb-3">
+							<div class="input-group">새 비밀번호</div>
+							<input type="password" class="form-control" name="password">
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group">비밀번호 확인</div>
+							<input type="password" class="form-control" name="chkPassword">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary updPwBtn">변경 완료</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
 			<div class="row">
 				<div class="col-md-4">
@@ -30,7 +54,7 @@
 								<label>이름</label>
 								<div class="form-group">
 									<div class="col-md-8" style="padding-left: 0px">
-										<input type="text" name="name" class="form-control" disabled>
+										<input type="text" name="name" class="form-control" required disabled>
 									</div>
 									<div class="col-md-4" style="padding: 0px">
 										<input type="text" name="tierName" class="form-control" value="VIP" disabled>
@@ -38,50 +62,25 @@
 								</div>
 								<label style="margin-top: 10px">이메일</label>
 								<div class="form-group">
-									<input type="text" name="email" class="form-control" disabled>
+									<input type="email" name="email" class="form-control" required disabled>
 								</div>
 								<label>연락처</label>
 								<div class="form-group">
-									<input type="text" name="phoneNumber" class="form-control" disabled>
+									<input type="tel" name="phoneNumber" class="form-control" placeholder="010-1234-5678" pattern="^(?:0)(?:10|11|12|13|14|15|16|17|18|19)-\d{3,4}-\d{4}$" required disabled>
 								</div>
 								<label>주소</label>
 								<div class="form-group">
-									<input type="text" name="address1" class="form-control" disabled>
+									<input type="text" name="address1" class="form-control" required disabled>
 									<div class="col-md-9" style="padding-left: 0px">
-										<input type="text" name="address2" class="form-control" disabled>
+										<input type="text" name="address2" class="form-control" placeholder="상세주소" disabled>
 									</div>
 									<div class="col-md-3" style="padding: 0px">
-										<input type="text" name="postcode" class="form-control" disabled>
+										<input type="text" name="postcode" class="form-control" required disabled>
 									</div>
 								</div>
 								<div class="form-group">
 									<input type="button" class="btn btn-primary btn-md updUserBtn" style="margin-top: 20px" value="정보 수정">
 									<input type="button" class="btn btn-primary btn-md delUserBtn" style="margin-top: 20px" value="회원 탈퇴">
-								</div>
-							</div>
-							<!-- 비밀번호 변경 모달 -->
-							<div class="modal fade chnPwModal" tabindex="-1"
-								 aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title">비밀번호 변경하기</h5>
-											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div class="modal-body">
-											<div class="input-group mb-3">
-												<span class="input-group-text">새 비밀번호</span>
-												<input type="text" class="form-control" name="password">
-											</div>
-											<div class="input-group mb-3">
-												<span class="input-group-text">비밀번호 확인</span>
-												<input type="text" class="form-control" name="chkPassword">
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-primary updPwBtn">변경 완료</button>
-										</div>
-									</div>
 								</div>
 							</div>
 							<!-- 캘린더, 예매내역, 후기목록 -->
@@ -92,16 +91,19 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</form>
 		</div>
 	</div>
-<!-- js import -->
-<th:block layout:fragment="javascript">
-	<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
-	<script th:src="@{/js/user/mypage.js}"></script>
-</th:block>
+
+	<!-- js import -->
+	<th:block layout:fragment="javascript">
+		<script th:inline="javascript">
+			const chnPwModal = new bootstrap.Modal(document.querySelector('.chnPwModal'));
+		</script>
+		<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+		<script th:src="@{/js/user/mypage.js}"></script>
+	</th:block>
 </body>
 </html>
 
