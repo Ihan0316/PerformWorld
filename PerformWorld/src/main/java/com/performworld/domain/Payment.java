@@ -18,7 +18,7 @@ public class Payment extends BaseEntity{
     @Column(name = "payment_id")
     private Long paymentId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
     private Booking booking;  // Bookings 테이블과의 관계
 

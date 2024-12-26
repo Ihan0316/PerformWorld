@@ -22,7 +22,7 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;  // Users 테이블과의 관계
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
     private Booking booking;  // Booking 테이블과의 관계
 

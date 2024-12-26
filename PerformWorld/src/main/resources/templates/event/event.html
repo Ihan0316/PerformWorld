@@ -69,19 +69,19 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="공연 이름">
+                                <input type="text" class="form-control" name="perform-name" placeholder="공연 이름">
                             </div>
                             <div class="form-group">
                                 <label for="start-date">공연 시작일</label>
-                                <input type="date" id="start-date" class="form-control">
+                                <input type="date" id="start-date" name="start-date" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="end-date">공연 종료일</label>
-                                <input type="date" id="end-date" class="form-control">
+                                <input type="date" id="end-date" name="end-date" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="location-code">지역 코드</label>
-                                <select id="location-code" class="form-control">
+                                <select id="location-code" class="form-control" name="location-code">
                                     <option value="">지역 선택</option>
                                     <option value="11">서울</option>
                                     <option value="26">부산</option>
@@ -172,6 +172,12 @@
             e.stopPropagation();
             modal.show();
         }, false);
+
+
+
+
+
+
     </script>
 </th:block>
 </body>

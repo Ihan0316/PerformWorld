@@ -3,8 +3,9 @@ package com.performworld.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.awt.*;
-import java.time.LocalDateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -36,7 +37,6 @@ public class Event extends BaseEntity {
     @Column(name = "luntime")
     private Integer luntime;  // 공연 시간 (분 단위)
 
-    @OneToMany
-    @JoinColumn(name = "image_id", referencedColumnName = "image_id")
-    private Image image;  // Images 테이블과의 연관
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> image = new ArrayList<>();  // Images 테이블과의 연관
 }
