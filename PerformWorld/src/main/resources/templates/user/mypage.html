@@ -100,6 +100,8 @@
 	<!-- js import -->
 	<th:block layout:fragment="javascript">
 		<script th:inline="javascript">
+			const loginUser = [[${session.user}]];
+			console.log(loginUser);
 			const chnPwModal = new bootstrap.Modal(document.querySelector('.chnPwModal'));
 		</script>
 		<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>

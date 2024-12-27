@@ -183,8 +183,6 @@ const initRvGrid = () => {
 }
 
 const init = () => {
-//        const loginInfo = sessionStorage.getItem("user");  // 로그인 유저 정보
-
      getUserInfo();
 
     // grid 초기 세팅
