@@ -12,7 +12,13 @@ public class EventController {
 
     // 레이아웃 테스트 페이지
     @GetMapping("/register")
-    public String test2() {
+    public String test1() {
         return "/event/event";
     }
+
+    @GetMapping("/main")
+    public String test2() {
+            return "/event/main";
+    }
 }
+
