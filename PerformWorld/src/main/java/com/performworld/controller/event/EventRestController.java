@@ -22,12 +22,14 @@ public class EventRestController {
             @RequestParam String stdate,
             @RequestParam String eddate,
             @RequestParam String shprfnm,
-            @RequestParam String signgucode) {
+            @RequestParam String signgucode,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         try {
             log.info("공연 목록 API 호출 시작 - 시작일: {}, 종료일: {}, 공연명: {}, 지역코드: {}",
                     stdate, eddate, shprfnm, signgucode);
 
-            EventSearchListDTO performances = eventService.getPerformances(stdate, eddate, shprfnm, signgucode);
+            EventSearchListDTO performances = eventService.getPerformances(stdate, eddate, shprfnm, signgucode ,page , size);
 
             log.info("공연 목록 API 호출 성공 - 결과 수: {}", performances.getPerformances().size());
             return performances;

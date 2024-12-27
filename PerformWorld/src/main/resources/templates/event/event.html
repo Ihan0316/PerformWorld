@@ -35,8 +35,20 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- 페이지 네비게이션 버튼 -->
+                    <div id="paginationContainer" class="d-flex justify-content-between mt-3">
+                        <!-- 이전 페이지 버튼 -->
+                        <button id="prevPageBtn" class="btn btn-outline-secondary" disabled>이전</button>
+                        <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                            <span id="pageButtons" class="mx-3 text-center">Page 1</span>
+                            <input type="text" id="pageInput" class="page-input form-control mx-2" min="1" placeholder="Page 검색" style="width: 125px;">
+                        </div>
+                        <!-- 다음 페이지 버튼 -->
+                        <button id="nextPageBtn" class="btn btn-outline-secondary">다음</button>
+                    </div>
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>

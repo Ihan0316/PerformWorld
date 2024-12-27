@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Log4j2
@@ -24,12 +22,12 @@ public class EventService {
 
     private final RestTemplate restTemplate;
 
-    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode) throws Exception {
+    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size) throws Exception {
         log.info("API 호출을 시작합니다...");
 
         // 파라미터를 URL에 안전하게 추가
-        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=1&rows=10&signgucode=%s&shprfnm=%s",
-                apiUrl, apiKey, stdate, eddate, signgucode, shprfnm);
+        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shprfnm=%s",
+                apiUrl, apiKey, stdate, eddate, Page,Size,signgucode, shprfnm);
 
         log.info("API 호출 URL: {}", url);
 

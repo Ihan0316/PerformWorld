@@ -29,7 +29,7 @@ public class EventController {
 
     @GetMapping("/main")
     public String test2() {
-            return "/event/main";
+        return "/event/main";
     }
 
     @GetMapping("/search")
@@ -37,12 +37,15 @@ public class EventController {
             @RequestParam String performName,
             @RequestParam String startDate,
             @RequestParam String endDate,
-            @RequestParam String locationCode) {
-        startDate = startDate.replace("-","");
-        endDate = endDate.replace("-","");
+            @RequestParam String locationCode,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        startDate = startDate.replace("-", "");
+        endDate = endDate.replace("-", "");
         try {
             // 공연 검색 서비스 호출
-            EventSearchListDTO eventSearchListDTO = eventService.getPerformances(startDate, endDate, performName, locationCode);
+            EventSearchListDTO eventSearchListDTO = eventService.getPerformances(startDate, endDate, performName, locationCode,page,size);
             return ResponseEntity.ok(eventSearchListDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
