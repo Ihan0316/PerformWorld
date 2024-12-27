@@ -1,10 +1,12 @@
 package com.performworld.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -14,6 +16,10 @@ public class EventSearchListDTO {
     @JacksonXmlElementWrapper(useWrapping = false) // <db> 태그가 배열 형태임을 명시
     @JacksonXmlProperty(localName = "db") // 내부 태그 이름 매핑
     private List<Performance> performances;
+
+    private List<EventDTO> content;  // 검색된 공연 목록
+    private int totalPages;          // 전체 페이지 수
+    private long totalElements;
 
     @Data
     public static class Performance {

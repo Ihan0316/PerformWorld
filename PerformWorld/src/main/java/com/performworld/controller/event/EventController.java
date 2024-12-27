@@ -5,6 +5,8 @@ import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,15 +32,22 @@ public class EventController {
             return "/event/main";
     }
 
-    @GetMapping("/event/search")
-    public String searchEvent(@RequestParam(required = false) String performName,
-                              @RequestParam(required = false) String startDate,
-                              @RequestParam(required = false) String endDate,
-                              @RequestParam(required = false) String locationCode,
-                              Model model) throws Exception {
-        EventSearchDTO eventSearchDTO = eventService.searchEvents(performName, startDate, endDate, locationCode);
-        model.addAttribute("eventSearchDTO", eventSearchDTO);
-        return "event/search";
+    @GetMapping("/search")
+    public ResponseEntity<EventSearchListDTO> searchEvents(
+            @RequestParam String performName,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam String locationCode) {
+        startDate = startDate.replace("-","");
+        endDate = endDate.replace("-","");
+        try {
+            // 공연 검색 서비스 호출
+            EventSearchListDTO eventSearchListDTO = eventService.getPerformances(startDate, endDate, performName, locationCode);
+            return ResponseEntity.ok(eventSearchListDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 }
 
