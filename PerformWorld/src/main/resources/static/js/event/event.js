@@ -45,12 +45,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // 공연 데이터 처리 (db 태그를 사용)
                 const performances = xmlDoc.getElementsByTagName("db");
-
+                console.log(performances);
                 // 기존 테이블 내용 삭제
                 const eventListContainer = document.getElementById('eventList');  // 테이블이 들어갈 컨테이너
                 eventListContainer.innerHTML = '';
 
-                if (performances.length > 0) {
+                if (performances.length > 1) {
                     Array.from(performances).forEach(performance => {
                         const row = document.createElement("tr");
 
