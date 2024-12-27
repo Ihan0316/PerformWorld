@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<body>
+<div id="fh5co-main" layout:fragment="content">
+  <div class="fh5co-narrow-content">
+    <div class="tier-header">
+      <h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">User Tiers</h2>
+    </div>
+
+    <!-- User Tier 목록 -->
+    <ul class="tier-list" style="display:none;">
+      <li th:each="tier : ${tiers}" class="tier-item animate-box" data-animate-effect="fadeInLeft">
+        <h3 th:text="${tier.tierName}"></h3> <!-- tierName을 표시 -->
+        <p>
+          <span>Min Spent: <span th:text="${tier.minSpent}"></span></span><br/>
+          <span>Max Spent: <span th:text="${tier.maxSpent}"></span></span><br/>
+          <span>Discount Rate: <span th:text="${tier.discountRate}"></span>%</span>
+        </p>
+      </li>
+    </ul>
+    <button class="add-tier-btn">Add User Tier</button>
+  </div>
+</div>
+
+<!-- User Tier 추가 모달 (팝업창) -->
+<div id="addTierModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeAddTierModal()">&times;</span>
+    <h3>Add New User Tier</h3>
+    <form id="addTierForm">
+      <label for="tierName">Tier Name</label>
+      <input type="text" id="tierName" name="tierName" required>
+
+      <label for="minSpent">Min Spent</label>
+      <input type="number" id="minSpent" name="minSpent" required>
+
+      <label for="maxSpent">Max Spent</label>
+      <input type="number" id="maxSpent" name="maxSpent" required>
+
+      <label for="discountRate">Discount Rate</label>
+      <input type="number" id="discountRate" name="discountRate" required>
+
+      <button type="submit">Add Tier</button>
+    </form>
+  </div>
+</div>
+
+<!-- js import -->
+<th:block layout:fragment="javascript">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:src="@{/js/tier/tiers-management.js}"></script> <!-- Thymeleaf를 사용하여 외부 JS 파일 로드 -->
+</th:block>
+
+</body>
+</html>
