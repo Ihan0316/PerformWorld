@@ -1,7 +1,10 @@
 package com.performworld.domain;
 
+import com.performworld.dto.user.UserDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -42,4 +45,26 @@ public class User extends BaseEntity {
 
     @Column(name = "postcode", length = 20)
     private String postcode;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QnA> qnas;
+
+    // 비밀번호 변경
+    public void chnUserInfo(String password) {
+        this.password = password;
+    }
+
+    // 정보 수정
+    public void chnUserInfo(UserDto userDto) {
+        this.name = userDto.getName();
+        this.email = userDto.getEmail();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.address1 = userDto.getAddress1();
+        this.address2 = userDto.getAddress2();
+        this.postcode = userDto.getPostcode();
+    }
 }

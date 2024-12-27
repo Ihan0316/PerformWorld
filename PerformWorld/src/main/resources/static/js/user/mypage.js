@@ -19,7 +19,12 @@ const init = () => {
         }
 
         if(confirm("비밀번호를 변경하시겠습니까?")) {
-            // axios
+            updUserPw().then(res => {
+                alert("비밀번호 변경에 성공했습니다.");
+                chnPwModal.hide();
+            }).catch(e => {
+                alert("비밀번호 수정에 실패했습니다.");
+            });
         }
     });
 
@@ -38,6 +43,7 @@ const init = () => {
 
             if(confirm("회원 정보를 수정하시겠습니까?")) {
                 updUserInfo().then(res => {
+                    alert("회원정보 수정에 성공했습니다.");
                     getUserInfo();
                     modeChange(0);
                     e.target.value = '정보 수정';
@@ -112,6 +118,24 @@ const init = () => {
         }
     }
 
+    // 비밀번호 변경
+    async function updUserPw() {
+        const user = {
+            userId: document.querySelector("input[name='userId']").value,
+            password: document.querySelector("input[name='password']").value,
+        };
+
+        const res = await axios({
+            method : 'post',
+            url : '/user/changePw',
+            data : user,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
     // 정보 수정
     async function updUserInfo() {
         const user = {
@@ -140,7 +164,7 @@ const init = () => {
         const res = await axios({
             method : 'delete',
             url : '/user',
-            data : 'user123',  // loginInfo.userId
+            data : { userId: 'user123' },  // loginInfo.userId
             headers : {
                 'Content-Type' : 'application/json'
             }
