@@ -24,9 +24,6 @@ public class Image extends BaseEntity {
 
     @Column(name = "file_path", nullable = false)
     private String filePath;  // 파일 경로
-//
-//    @Column(name = "original_name", nullable = false)
-//    private String originalName;  // 원본 파일명
 
     @Column(name = "is_thumbnail", nullable = false)
     private boolean isThumbnail;  // 썸네일 여부

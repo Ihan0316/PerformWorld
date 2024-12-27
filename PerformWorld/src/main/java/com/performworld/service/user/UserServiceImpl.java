@@ -3,20 +3,18 @@ package com.performworld.service.user;
 import com.performworld.domain.User;
 import com.performworld.dto.user.UserDto;
 import com.performworld.repository.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Log4j2
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     // 회원가입 로직
     @Override
@@ -51,5 +49,36 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
-}
 
+    // 내 정보 조회
+    @Override
+    public UserDto getUserInfo(UserDto userDto) {
+        return userRepository.findUserByUserId(userDto.getUserId());
+    }
+
+    // 비밀번호 변경
+    @Override
+    public void changePw(UserDto userDto) {
+        User user = userRepository.findById(userDto.getUserId()).orElseThrow();
+        user.chnUserInfo(userDto.getPassword());
+        log.info(user);
+
+        userRepository.save(user);
+    }
+
+    // 내 정보 수정
+    @Override
+    public void updateUser(UserDto userDto) {
+        User user = userRepository.findById(userDto.getUserId()).orElseThrow();
+        user.chnUserInfo(userDto);
+        log.info(user);
+
+        userRepository.save(user);
+    }
+
+    // 회원 탈퇴
+    @Override
+    public void deleteUser(String userId) {
+        userRepository.deleteById(userId);
+    }
+}
