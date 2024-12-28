@@ -105,6 +105,22 @@ const init = () => {
     // grid 초기 세팅
     const testGrid = initGrid();
 
+    // 지역 세팅
+    getRegionList().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='address']");
+
+        for(const region of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = region.code;  // 코드
+            optionElement.textContent = region.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+
     // 검색
     document.querySelector(".searchBtn").addEventListener("click", function(e) {
         e.preventDefault();
@@ -146,6 +162,19 @@ const init = () => {
 
         delTest();
     }, false);
+
+    // 지역 목록 조회
+    async function getRegionList() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'RGN' },  // 지역 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
 
     // 목록 조회
     async function getData() {

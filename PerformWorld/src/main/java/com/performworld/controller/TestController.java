@@ -17,6 +17,10 @@ public class TestController {
     }
 
     // 레이아웃 테스트 페이지
+    @GetMapping("/list2")
+    public String test2() {
+        return "test2";
+    }
 
     // 등록
 
