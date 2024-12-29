@@ -1,0 +1,5 @@
+.tui-grid-cell-row-header {
+    background-color: none;
+    border: 1px solid gray;
+    color: white;
+}
