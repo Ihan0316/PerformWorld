@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const modal = new bootstrap.Modal(document.querySelector(".eventRegisterModal"));
     const searchEventBtn = document.querySelector(".searchEventBtn");
     const eventListContainer = document.getElementById("eventList");
@@ -8,14 +8,14 @@ document.addEventListener("DOMContentLoaded", function() {
     const pageButtons = document.getElementById("pageButtons");
     const pageInput = document.getElementById("pageInput");
 
-     // 페이지 크기 (한 페이지에 10개 항목)
+    // 페이지 크기 (한 페이지에 10개 항목)
     const pageSize = 10;
     let currentPage = 1; // 현재 페이지
 
-    searchEventBtn.addEventListener("click", function(e) {
+    searchEventBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        currentPage=1;
+        currentPage = 1;
         // 입력값 가져오기
         const performName = document.querySelector("input[name='perform-name']").value;
         const startDate = document.querySelector("input[name='start-date']").value;
@@ -35,15 +35,15 @@ document.addEventListener("DOMContentLoaded", function() {
             return;  // 함수 종료하여 API 호출을 막음
         }
         // API 호출
-        fetchPerformances(performName, startDate, endDate, locationCode,currentPage);
+        fetchPerformances(performName, startDate, endDate, locationCode, currentPage);
 
         modal.show();  // 모달 띄우기
     });
 
-    function fetchPerformances(performName, startDate, endDate, locationCode,page) {
+    function fetchPerformances(performName, startDate, endDate, locationCode, page) {
         // API URL 설정
         const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&page=${page}&size=${pageSize}`;
-        console.log("현재페이지 : "+page)
+        console.log("현재페이지 : " + page)
         fetch(apiUrl)
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td>${prfpdto}</td>
                     <td>${area}</td>
                     <td>${genrenm}</td>
-                    <td><button class="btn btn-success btn-sm">추가</button></td>
+                    <td><button class="btn btn-success btn-sm add-btn" data-id="${mt20id}">추가</button></td>
                 `;
                         // 테이블에 추가
                         eventListContainer.appendChild(row);
@@ -91,13 +91,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     eventListContainer.appendChild(noDataRow);
                     updatePagination(0);
                 }
-                eventListContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+                eventListContainer.scrollIntoView({behavior: "smooth", block: "start"});
             })
             .catch(error => {
                 console.error('API 호출 실패:', error);
                 alert('공연 목록을 가져오는 데 실패했습니다.');
             });
     }
+
     function updatePagination(performancesLength) {
         // 페이지 네비게이션 버튼을 업데이트
         // 이전 버튼 활성화 여부
@@ -129,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (inputPage > 0 && inputPage !== currentPage) {
                 currentPage = inputPage;
                 triggerFetch();
-                pageInput.value="";
+                pageInput.value = "";
             }
         }
     });
@@ -145,6 +146,96 @@ document.addEventListener("DOMContentLoaded", function() {
         );
 
         // 테이블 맨 위로 스크롤
-        eventListContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+        eventListContainer.scrollIntoView({behavior: "smooth", block: "start"});
     }
+
+    eventListContainer.addEventListener("click", function (e) {
+        if (e.target.classList.contains("add-btn")) {
+            const eventID = e.target.getAttribute("data-id");
+            console.log("eventID:" + eventID)
+            if (eventID) {
+                fetchEventDetails(eventID)
+                    .then((eventData) => saveEvent(eventData))
+                    .catch((error) => {
+                        console.error("상세 조회 또는 저장 실패:", error);
+                        alert("저장에 실패했습니다.");
+                    });
+            }
+        }
+    });
+
+    async function fetchEventDetails(eventID) {
+
+        const apiUrl = `/event/detail/${eventID}`;
+
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`상세 조회 실패: ${response.status}`);
+        }
+
+        const xmlString = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+        console.log("상세 조회 결과:", xmlDoc);
+
+        // 필요한 데이터 추출
+        const genrenm = xmlDoc.getElementsByTagName("genrenm")[0]?.textContent || '';
+        const prfnm = xmlDoc.getElementsByTagName("prfnm")[0]?.textContent || '';
+        const prfcast = xmlDoc.getElementsByTagName("prfcast")[0]?.textContent || '';
+        const area = xmlDoc.getElementsByTagName("area")[0]?.textContent || '';
+        const prfruntime = xmlDoc.getElementsByTagName("prfruntime")[0]?.textContent || '';
+        const poster = xmlDoc.getElementsByTagName("poster")[0]?.textContent || '';
+
+        // styurls는 여러 개일 수 있으므로 배열로 처리
+        const styurls = Array.from(xmlDoc.getElementsByTagName("styurl")).map(url => url.textContent);
+
+        // 필요한 데이터를 객체로 반환
+        return {
+            genrenm,
+            prfnm,
+            prfcast,
+            area,
+            prfruntime,
+            poster,
+            styurls
+        };
+    }
+
+    async function saveEvent(eventData) {
+        const saveApiUrl = "/event/save";
+
+        // XML 데이터 생성
+        const xmlString = `
+    <event>
+        <genrenm>${eventData.genrenm || ''}</genrenm>
+        <prfnm>${eventData.prfnm || ''}</prfnm>
+        <prfcast>${eventData.prfcast || ''}</prfcast>
+        <area>${eventData.area || ''}</area>
+        <prfruntime>${eventData.prfruntime || ''}</prfruntime>
+        <poster>${eventData.poster || ''}</poster>
+        <styurls>
+            ${eventData.styurls && eventData.styurls.length > 0
+            ? eventData.styurls.map(url => `<styurl>${url}</styurl>`).join('')
+            : ''}
+        </styurls>
+    </event>
+`;
+
+        console.log("결과"+xmlString);
+        // XML 형식으로 서버에 전송
+        const response = await fetch(saveApiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/xml" },
+            body: xmlString, // 생성된 XML 데이터를 요청 본문에 포함
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();  // 응답 본문을 텍스트로 읽기
+            throw new Error(`저장 실패: ${response.status} - ${errorText}`);
+        }
+
+        alert("이벤트가 성공적으로 저장되었습니다.");
+    }
+
 });

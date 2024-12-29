@@ -4,10 +4,9 @@ import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/event")
@@ -38,5 +37,21 @@ public class EventRestController {
             log.error("공연 목록 API 호출 중 오류 발생: {}", e.getMessage(), e);
             throw new RuntimeException("공연 목록을 가져오는 중 문제가 발생했습니다. 관리자에게 문의하세요.");
         }
+    }
+
+    @GetMapping("/detail/{eventID}")
+    public ResponseEntity<String> getEventDetails(@PathVariable String eventID) {
+        // 상세 조회 API 호출 및 XML 반환
+        String responseXml = eventService.getEventDetails(eventID);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/xml; charset=UTF-8")
+                .body(responseXml);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<String> saveEvent(@RequestBody String eventXml) {
+        // XML 데이터를 데이터베이스에 저장
+        log.info("컨트롤러에서 저장하기 위해 받은 xml"+eventXml);
+        eventService.saveEvent(eventXml);
+        return ResponseEntity.ok("이벤트가 성공적으로 저장되었습니다.");
     }
 }
