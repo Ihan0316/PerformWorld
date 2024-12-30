@@ -3,8 +3,9 @@
 }
 
 .schedule-item {
+    max-width: 305px;
     padding: 10px;
-    margin: 5px 0;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
@@ -17,8 +18,12 @@
 }
 
 .schedule-item.active {
-    background-color: #569ff7; /* 클릭된 회차 배경색 */
-    color: #fff; /* 텍스트 색상 변경 */
+    background-color: #ccc;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.seatSelBox {
+    min-width: 400px !important;
 }
 
 .seat-stage {
@@ -60,20 +65,20 @@
 }
 
 .seat.selected {
-    background-color: #4CAF50;
+    background-color: dimgray;
     color: white;
 }
 
 .vip-seat {
-    background-color: gold;
+    background-color: mediumorchid;
 }
 
 .r-seat {
-    background-color: lightblue;
+    background-color: mediumseagreen;
 }
 
 .s-seat {
-    background-color: lightgreen;
+    background-color: skyblue;
 }
 
 .seat-info {
