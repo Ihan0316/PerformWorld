@@ -74,9 +74,25 @@ const init = () => {
                     const scheduleElement = document.createElement("div");
                     scheduleElement.classList.add("schedule-item");
                     scheduleElement.innerHTML = `
-                    <p><strong>시간:</strong> ${schedule.eventDate.split('T')[1].substring(0, 5)}</p>
-                    <p><strong>출연진:</strong> ${schedule.eventCast}</p>
-                `;
+                <p><strong>시간:</strong> ${schedule.eventDate.split('T')[1].substring(0, 5)}</p>
+                <p><strong>출연진:</strong> ${schedule.eventCast}</p>
+            `;
+
+                    // 클릭 가능한 이벤트 핸들러 추가
+                    scheduleElement.addEventListener("click", function() {
+                        // 이전에 클릭한 항목이 있다면 active 클래스를 제거
+                        const activeItem = document.querySelector(".schedule-item.active");
+                        if (activeItem) {
+                            activeItem.classList.remove("active");
+                        }
+
+                        // 클릭된 항목에 active 클래스 추가
+                        scheduleElement.classList.add("active");
+
+                        // 클릭 시 원하는 동작을 여기에 작성, 예시로 alert 사용
+                        alert(`시간: ${schedule.eventDate.split('T')[1].substring(0, 5)}\n출연진: ${schedule.eventCast}`);
+                    });
+
                     scheduleInfoDiv.appendChild(scheduleElement);
                 });
             } else {
