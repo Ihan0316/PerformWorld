@@ -188,6 +188,17 @@ public class EventService {
         }
     }
 
+    // 이벤트 목록을 반환하는 메서드
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
+    }
+
+    // 이벤트 삭제 메서드
+    @Transactional
+    public void deleteEvent(Long eventId) {
+        eventRepository.deleteById(eventId);
+    }
+
 
 
 }

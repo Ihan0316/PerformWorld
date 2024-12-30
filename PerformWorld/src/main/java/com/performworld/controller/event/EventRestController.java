@@ -60,4 +60,23 @@ public class EventRestController {
         eventService.saveEvent(eventXml);
         return ResponseEntity.ok("이벤트가 성공적으로 저장되었습니다.");
     }
+
+    // 모든 이벤트를 가져오는 API
+    @GetMapping("/savedEventList")
+    public List<Event> getAllEvents() {
+        log.info("호출됨");
+        return eventService.getAllEvents();  // 서비스에서 데이터를 가져옴
+    }
+
+    // 이벤트 삭제 API
+    @DeleteMapping("/deleteEvent/{eventId}")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId) {
+        eventService.deleteEvent(eventId);  // 서비스에서 이벤트 삭제
+        return ResponseEntity.ok("Event deleted successfully");
+    }
+
+
+
+
+
 }

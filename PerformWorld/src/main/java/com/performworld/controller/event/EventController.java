@@ -21,12 +21,12 @@ public class EventController {
 
     // 레이아웃 테스트 페이지
     @GetMapping("/register")
-    public String test1() {
+    public String register() {
         return "event/event";
     }
 
     @GetMapping("/main")
-    public String test2() {
+    public String main() {
         return "/event/main";
     }
 
@@ -35,7 +35,6 @@ public class EventController {
     public String book() {
         return "/event/booking";
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<EventSearchListDTO> searchEvents(
