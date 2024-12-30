@@ -1,77 +1,182 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base.html}">
 <head>
   <meta charset="UTF-8">
-  <title>회원 목록 관리</title>
+  <title>Tier 및 User 조회</title>
 </head>
 <body>
-<h2>회원 목록</h2>
+<div id="fh5co-main" layout:fragment="content">
+  <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+    <div class="row">
+      <!-- Tier 조회 섹션 -->
+      <div class="col-md-12">
+        <h2>Tier 조회</h2>
+        <div class="row">
+          <div class="col-md-12 text-end">
+            <button class="btn btn-primary add-tier-btn">Add Tier</button>
+          </div>
+        </div>
+        <!-- Tier 조회 테이블 -->
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Tier ID</th>
+                <th>Tier 이름</th>
+                <th>최소 소비 금액</th>
+                <th>최대 소비 금액</th>
+                <th>할인율 (%)</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="tier : ${tiers}">
+                <td th:text="${tier.tierId}"></td>
+                <td th:text="${tier.tierName}"></td>
+                <td th:text="${tier.minSpent} + ' 원'"></td>
+                <td th:text="${tier.maxSpent} + ' 원'"></td>
+                <td th:text="${tier.discountRate} + '%'"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-<!-- 회원 목록 테이블 -->
-<table border="1">
-  <thead>
-  <tr>
-    <th>User ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Phone Number</th>
-    <th>Tier</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="user : ${users}">
-    <td th:text="${user.userId}"></td>
-    <td th:text="${user.name}"></td>
-    <td th:text="${user.email}"></td>
-    <td th:text="${user.phoneNumber}"></td>
-    <td th:text="${user.tierName}"></td>
-    <td>
-      <!-- 수정 버튼 -->
-      <button onclick="openEditForm('${user.userId}', '${user.name}', '${user.email}', '${user.phoneNumber}', '${user.tierName}')">Edit</button>
-      <!-- 삭제 버튼 -->
-      <form th:action="@{/admin/deleteUser}" method="post" style="display:inline;">
-        <input type="hidden" name="userId" th:value="${user.userId}"/>
-        <button type="submit">Delete</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
+      <hr> <!-- 구분선 추가 -->
 
-<!-- 회원 정보 수정 폼 -->
-<h3>회원 정보 수정</h3>
-<form th:action="@{/admin/editUser}" method="post">
-  <input type="hidden" name="userId" id="editUserId" />
+      <!-- User 조회 섹션 -->
+      <div class="col-md-12">
+        <h2>User 조회</h2>
+        <div class="row">
+          <div class="col-md-12 text-end">
+            <button class="btn btn-primary add-user-btn">Add User</button>
+          </div>
+        </div>
+        <!-- User 조회 테이블 -->
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>User ID</th>
+                <th>이름</th>
+                <th>Email</th>
+                <th>전화번호</th>
+                <th>주소</th>
+                <th>우편번호</th>
+                <th>Tier</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user : ${users}">
+                <td th:text="${user.userId}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.address1} + ' ' + ${user.address2}"></td>
+                <td th:text="${user.postcode}"></td>
+                <td th:text="${user.tierName}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <label for="editName">Name:</label>
-  <input type="text" id="editName" name="name" required/><br/><br/>
+  <!-- Tier 추가 모달 -->
+  <div id="addTierModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Tier 추가</h4>
+          <button type="button" class="close" onclick="closeAddTierModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="addTierForm">
+            <div class="form-group">
+              <label for="tierName">Tier 이름</label>
+              <input type="text" class="form-control" id="tierName" required>
+            </div>
+            <div class="form-group">
+              <label for="minSpent">최소 소비 금액</label>
+              <input type="number" class="form-control" id="minSpent" required>
+            </div>
+            <div class="form-group">
+              <label for="maxSpent">최대 소비 금액</label>
+              <input type="number" class="form-control" id="maxSpent" required>
+            </div>
+            <div class="form-group">
+              <label for="discountRate">할인율 (%)</label>
+              <input type="number" class="form-control" id="discountRate" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Tier 추가</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <label for="editEmail">Email:</label>
-  <input type="email" id="editEmail" name="email" required/><br/><br/>
+  <!-- 사용자 추가 모달 -->
+  <div id="addUserModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" style="text-align: right;">
+          <h4 class="modal-title">사용자 추가</h4>
+          <button type="button" class="close" onclick="closeAddUserModal()">&times;</button>
+        </div>
+        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+          <form id="addUserForm">
+            <!-- 기존 폼 필드들 -->
+            <div class="form-group">
+              <label for="userId">User ID</label>
+              <input type="text" class="form-control" id="userId" required>
+            </div>
+            <div class="form-group">
+              <label for="name">이름</label>
+              <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">이메일</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="form-group">
+              <label for="password">비밀번호</label>
+              <input type="password" class="form-control" id="password" required>
+            </div>
+            <div class="form-group">
+              <label for="phoneNumber">전화번호</label>
+              <input type="text" class="form-control" id="phoneNumber" required>
+            </div>
+            <div class="form-group">
+              <label for="address1">주소 1</label>
+              <input type="text" class="form-control" id="address1" required>
+            </div>
+            <div class="form-group">
+              <label for="address2">주소 2</label>
+              <input type="text" class="form-control" id="address2" required>
+            </div>
+            <div class="form-group">
+              <label for="postcode">우편번호</label>
+              <input type="text" class="form-control" id="postcode" required>
+            </div>
+            <div class="form-group">
+              <input type="hidden" id="tierId" name="tierId" value="1">
+            </div>
+            <button type="submit" class="btn btn-primary">사용자 추가</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <label for="editPhoneNumber">Phone Number:</label>
-  <input type="text" id="editPhoneNumber" name="phoneNumber" required/><br/><br/>
+</div>
 
-  <label for="editTier">Tier:</label>
-  <select name="tierName" id="editTier" required>
-    <option th:each="tier : ${tiers}"
-            th:value="${tier.tierName}"
-            th:text="${tier.tierName}"></option>
-  </select><br/><br/>
-
-  <button type="submit">Update</button>
-</form>
-
-<script>
-  // 회원 정보를 수정 폼에 채워넣는 함수
-  function openEditForm(userId, userName, userEmail, userPhoneNumber, userTierName) {
-    document.getElementById("editUserId").value = userId;
-    document.getElementById("editName").value = userName;
-    document.getElementById("editEmail").value = userEmail;
-    document.getElementById("editPhoneNumber").value = userPhoneNumber;
-    document.getElementById("editTier").value = userTierName;
-  }
-</script>
+<th:block layout:fragment="javascript">
+  <script th:src="@{/js/admin/tier-management.js}"></script>
+  <script th:src="@{/js/admin/user-management.js}"></script>
+</th:block>
 </body>
 </html>

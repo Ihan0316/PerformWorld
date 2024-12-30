@@ -1,8 +1,8 @@
-package com.performworld.repository.tier;
+package com.performworld.repository.admin;
 
 import com.performworld.domain.Tier;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
 public interface TierRepository extends JpaRepository<Tier, Long> {
-    // 필요한 쿼리 메소드 추가 가능
 }
