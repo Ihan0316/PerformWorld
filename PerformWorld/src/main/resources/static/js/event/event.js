@@ -183,6 +183,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // 필요한 데이터 추출
         const genrenm = xmlDoc.getElementsByTagName("genrenm")[0]?.textContent || '';
         const prfnm = xmlDoc.getElementsByTagName("prfnm")[0]?.textContent || '';
+        const prfpdfrom = xmlDoc.getElementsByTagName("prfpdfrom")[0]?.textContent || '';
+        const prfpdto = xmlDoc.getElementsByTagName("prfpdto")[0]?.textContent || '';
         const prfcast = xmlDoc.getElementsByTagName("prfcast")[0]?.textContent || '';
         const area = xmlDoc.getElementsByTagName("area")[0]?.textContent || '';
         const prfruntime = xmlDoc.getElementsByTagName("prfruntime")[0]?.textContent || '';
@@ -195,6 +197,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return {
             genrenm,
             prfnm,
+            prfpdfrom,
+            prfpdto,
             prfcast,
             area,
             prfruntime,
@@ -211,6 +215,8 @@ document.addEventListener("DOMContentLoaded", function () {
     <event>
         <genrenm>${eventData.genrenm || ''}</genrenm>
         <prfnm>${eventData.prfnm || ''}</prfnm>
+        <prfpdfrom>${eventData.prfpdfrom || ''}</prfpdfrom>
+        <prfpdto>${eventData.prfpdto || ''}</prfpdto>
         <prfcast>${eventData.prfcast || ''}</prfcast>
         <area>${eventData.area || ''}</area>
         <prfruntime>${eventData.prfruntime || ''}</prfruntime>
@@ -239,90 +245,98 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("이벤트가 성공적으로 저장되었습니다.");
     }
 
-    // 페이지가 로드되면 실행
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log("페이지가 로드되었습니다.");  // 페이지 로드 확인을 위한 로그
-        // 서버에서 이벤트 목록을 AJAX로 가져옵니다.
-        fetch('/event/savedEventList')
-            .then(response => response.json())  // JSON으로 응답 받기
-            .then(events => {
-                const tableBody = document.getElementById('savedEventList');
-                tableBody.innerHTML = '';  // 기존 내용 삭제
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("페이지 로딩됨!");
 
-                // 이벤트 목록을 순회하면서 테이블에 동적으로 추가
-                events.forEach((event, index) => {
-                    const row = document.createElement('tr');
-                    // 썸네일 이미지
-                    const thumbnailCell = document.createElement('td');
-                    const thumbnailImg = document.createElement('img');
-                    thumbnailImg.src = event.thumbnailUrl || '/images/default-thumbnail.jpg';  // 썸네일 URL
-                    thumbnailImg.alt = "썸네일";
-                    thumbnailImg.style.width = '100%';
-                    thumbnailImg.style.height = 'auto';
+        // 페이지가 로드되면 이벤트 데이터를 가져옵니다.
+        fetch('/event/savedEventList')  // 위에서 만든 REST API URL
+            .then(response => response.json())  // 서버에서 반환한 JSON 데이터를 파싱합니다.
+            .then(events => {
+                const savedEventList = document.getElementById("savedEventList");
+
+                // 받아온 이벤트 데이터로 테이블을 채웁니다.
+                events.forEach(event => {
+                    const row = document.createElement("tr");
+
+                    // 썸네일 이미지 (Image URL)
+                    const thumbnailCell = document.createElement("td");
+                    const thumbnailImg = document.createElement("img");
+                    thumbnailImg.src = event.poster;  // 'poster' 필드는 이미지 URL입니다.
+                    thumbnailImg.alt = "Thumbnail";
+                    thumbnailImg.style.width = "50px";  // 적당한 크기로 조정
+                    thumbnailImg.style.height = "50px";
                     thumbnailCell.appendChild(thumbnailImg);
-                    row.appendChild(thumbnailCell);
 
                     // Event ID
-                    const eventIdCell = document.createElement('td');
+                    const eventIdCell = document.createElement("td");
                     eventIdCell.textContent = event.eventId;
-                    row.appendChild(eventIdCell);
-                    console.log("eventIdCell"+eventIdCell)
+
                     // 제목
-                    const titleCell = document.createElement('td');
+                    const titleCell = document.createElement("td");
                     titleCell.textContent = event.title;
-                    row.appendChild(titleCell);
 
-                    // 시작일
-                    const startDateCell = document.createElement('td');
-                    startDateCell.textContent = event.startDate;
-                    row.appendChild(startDateCell);
+                    // 공연 시작일
+                    const prfpdfromCell = document.createElement("td");
+                    prfpdfromCell.textContent = event.prfpdfrom;
 
-                    // 종료일
-                    const endDateCell = document.createElement('td');
-                    endDateCell.textContent = event.endDate;
-                    row.appendChild(endDateCell);
+                    // 공연 종료일
+                    const prfpdtoCell = document.createElement("td");
+                    prfpdtoCell.textContent = event.prfpdto;
 
                     // 지역
-                    const locationCell = document.createElement('td');
+                    const locationCell = document.createElement("td");
                     locationCell.textContent = event.location;
-                    row.appendChild(locationCell);
 
                     // 장르
-                    const categoryCell = document.createElement('td');
-                    categoryCell.textContent = event.category;
-                    row.appendChild(categoryCell);
+                    const genreCell = document.createElement("td");
+                    genreCell.textContent = event.genreName;  // 장르 이름
 
-                    // 삭제 버튼
-                    const deleteCell = document.createElement('td');
-                    const deleteButton = document.createElement('button');
-                    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
-                    deleteButton.textContent = '삭제';
+                    // 삭제 (버튼)
+                    const deleteCell = document.createElement("td");
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "삭제";
+                    deleteButton.classList.add("btn", "btn-danger");
                     deleteButton.onclick = function() {
+                        // 삭제 처리 코드 추가
                         deleteEvent(event.eventId);
                     };
                     deleteCell.appendChild(deleteButton);
+
+                    // 각 셀을 행에 추가
+                    row.appendChild(thumbnailCell);
+                    row.appendChild(eventIdCell);
+                    row.appendChild(titleCell);
+                    row.appendChild(prfpdfromCell);
+                    row.appendChild(prfpdtoCell);
+                    row.appendChild(locationCell);
+                    row.appendChild(genreCell);
                     row.appendChild(deleteCell);
 
-                    // 테이블에 행 추가
-                    tableBody.appendChild(row);
+                    // 테이블 본문에 행 추가
+                    savedEventList.appendChild(row);
                 });
             })
-            .catch(error => console.error('Error fetching events:', error));
+            .catch(error => {
+                console.error("이벤트 데이터를 가져오는 중 오류 발생:", error);
+            });
     });
 
 // 이벤트 삭제 함수
     function deleteEvent(eventId) {
-        if (confirm("정말 삭제하시겠습니까?")) {
-            fetch(`/events/deleteEvent/${eventId}`, {
-                method: 'DELETE'
+        fetch(`/event/deleteEvent/${eventId}`, {
+            method: 'DELETE',  // DELETE 요청
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);  // 성공 메시지 출력
+                alert('이벤트가 삭제되었습니다.');
+                location.reload();  // 삭제 후 페이지 새로고침
             })
-                .then(response => response.json())
-                .then(() => {
-                    alert('이벤트가 삭제되었습니다.');
-                    location.reload();  // 페이지 새로 고침하여 삭제된 항목 반영
-                })
-                .catch(error => console.error('Delete Error:', error));
-        }
+            .catch(error => {
+                console.error("삭제 중 오류 발생:", error);
+            });
     }
+
+
 
 });

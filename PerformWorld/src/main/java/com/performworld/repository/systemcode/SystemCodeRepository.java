@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface SystemCodeRepository extends JpaRepository<SystemCode,Long> {
     Optional<SystemCode> findByCodeName(String codeName);
+    Optional<SystemCode> findByCode(String code);
 }

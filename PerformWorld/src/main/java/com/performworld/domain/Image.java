@@ -1,8 +1,10 @@
 package com.performworld.domain;
 
+import com.performworld.repository.image.ImageRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "images")
@@ -27,4 +29,6 @@ public class Image extends BaseEntity {
 
     @Column(name = "is_thumbnail", nullable = false)
     private boolean isThumbnail;  // 썸네일 여부
+
+
 }

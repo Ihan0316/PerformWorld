@@ -7,6 +7,7 @@ import com.performworld.domain.SystemCode;
 import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.repository.event.EventRepository;
+import com.performworld.repository.image.ImageRepository;
 import com.performworld.repository.systemcode.SystemCodeRepository;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -45,6 +47,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final SystemCodeRepository systemCodeRepository;
+    private final ImageRepository imageRepository;
 
     public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size) throws Exception {
         log.info("API 호출을 시작합니다...");
@@ -128,6 +131,8 @@ public class EventService {
         Event event = Event.builder()
                 .category(category)
                 .title(dto.getTitle())
+                .prfpdfrom(dto.getPrfpdfrom())
+                .prfpdto(dto.getPrfpdto())
                 .casting(dto.getCasting())
                 .location(location.getCodeName())
                 .luntime(runtimeMinutes)
@@ -188,9 +193,40 @@ public class EventService {
         }
     }
 
-    // 이벤트 목록을 반환하는 메서드
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    // 모든 이벤트를 가져오고 EventDTO로 변환
+    public List<EventDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+
+        // Event 객체를 EventDTO로 변환
+        return events.stream().map(event -> convertToDTO(event)).collect(Collectors.toList());
+    }
+
+    // Event를 EventDTO로 변환하는 메서드
+    private EventDTO convertToDTO(Event event) {
+        // EventDTO 빌더 사용
+        EventDTO.EventDTOBuilder eventDTOBuilder = EventDTO.builder()
+                .title(event.getTitle())
+                .prfpdfrom(event.getPrfpdfrom())
+                .prfpdto(event.getPrfpdto())
+                .casting(event.getCasting())
+                .location(event.getLocation())
+                .runtime(String.valueOf(event.getLuntime()));  // 공연 시간은 Integer로 되어 있으므로 String으로 변환
+
+        // 장르 (SystemCode에서 codeName 가져오기)
+        Optional<SystemCode> systemCode = systemCodeRepository.findByCode(event.getCategory().getCode());
+        systemCode.ifPresent(code -> eventDTOBuilder.genreName(code.getCodeName()));  // 장르 설정
+
+        // 썸네일 포스터 (Image에서 isThumbnail이 true인 이미지 가져오기)
+        Optional<Image> thumbnailImage = imageRepository.findByEventEventIdAndIsThumbnailTrue(event.getEventId()).stream().findFirst();
+        thumbnailImage.ifPresent(image -> eventDTOBuilder.poster(image.getFilePath()));  // 썸네일 이미지 URL
+
+        // 이미지 URL 목록 (썸네일을 제외한 다른 이미지를 모두 가져옴)
+        List<String> imageUrls = imageRepository.findByEventEventId(event.getEventId()).stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+        eventDTOBuilder.imageUrls(imageUrls);  // 이미지 URL 목록 설정
+
+        return eventDTOBuilder.build();
     }
 
     // 이벤트 삭제 메서드
