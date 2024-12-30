@@ -1,5 +1,3 @@
-// resources/static/js/tier-management.js
-
 $(document).ready(function() {
     // 모달 열기
     function openAddTierModal() {
@@ -10,6 +8,17 @@ $(document).ready(function() {
     function closeAddTierModal() {
         $('#addTierModal').fadeOut();  // 애니메이션 추가 (모달 닫기)
     }
+
+    // Add User Tier 버튼 클릭 시, 모달 열기
+    $(".add-tier-btn").on("click", openAddTierModal);
+
+    // 모달 외부 클릭 시 모달 닫기
+    $(window).on("click", function(event) {
+        var modal = document.getElementById('addTierModal');
+        if (event.target == modal) {
+            closeAddTierModal();
+        }
+    });
 
     // 폼 제출 시 처리
     $("#addTierForm").on("submit", function(e) {
@@ -53,28 +62,4 @@ $(document).ready(function() {
             }
         });
     });
-
-    // User Tiers 제목 클릭 시, 리스트 표시/숨기기
-    const tierHeader = document.querySelector('.tier-header h2'); // 'User Tiers' 제목을 클릭하는 이벤트
-    const tierList = document.querySelector('.tier-list'); // Tier 목록을 선택
-
-    tierHeader.addEventListener('click', function() {
-        // tier-list가 보이면 숨기고, 숨겨지면 보이게 한다.
-        if ($(tierList).is(":visible")) {
-            $(tierList).fadeOut();  // 리스트를 숨긴다.
-        } else {
-            $(tierList).fadeIn();  // 리스트를 보이게 한다.
-        }
-    });
-
-    // Add User Tier 버튼 클릭 시, 모달 열기
-    document.querySelector(".add-tier-btn").addEventListener("click", openAddTierModal);
-
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-        var modal = document.getElementById('addTierModal');
-        if (event.target == modal) {
-            closeAddTierModal();
-        }
-    };
 });
