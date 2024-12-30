@@ -1,4 +1,19 @@
+.fh5co-feature.fh5co-feature-sm.animate-box {
+    min-width: 300px;
+}
+
+.seat-stage {
+    width: 100%;
+    height: 70px;
+    text-align: center;
+    line-height: 70px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: x-large;
+}
+
 .seat-selection {
+    margin-right: 30px;
     padding: 20px;
     border: 2px solid #ccc;
     border-radius: 8px;
