@@ -158,6 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     .then((eventData) => saveEvent(eventData))
                     .catch((error) => {
                         console.error("상세 조회 또는 저장 실패:", error);
+                        alert(error);
                         alert("저장에 실패했습니다.");
                     });
             }
@@ -236,6 +237,86 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         alert("이벤트가 성공적으로 저장되었습니다.");
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/event/list')
+            .then(response => response.json())  // JSON 형식으로 응답 받기
+            .then(events => {
+                const tableBody = document.getElementById('eventTableBody');
+                tableBody.innerHTML = '';  // 기존 테이블 내용 지우기
+
+                events.forEach((event, index) => {
+                    const row = document.createElement('tr');
+
+                    // 썸네일 이미지
+                    const thumbnailCell = document.createElement('td');
+                    const thumbnailImg = document.createElement('img');
+                    thumbnailImg.src = event.thumbnailUrl || '/images/default-thumbnail.jpg';  // 썸네일 URL
+                    thumbnailImg.alt = "썸네일";
+                    thumbnailImg.style.width = '100%';
+                    thumbnailImg.style.height = 'auto';
+                    thumbnailCell.appendChild(thumbnailImg);
+                    row.appendChild(thumbnailCell);
+
+                    // 번호
+                    const numberCell = document.createElement('td');
+                    numberCell.textContent = index + 1;
+                    row.appendChild(numberCell);
+
+                    // 제목
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = event.title;
+                    row.appendChild(titleCell);
+
+                    // 시작일
+                    const startDateCell = document.createElement('td');
+                    startDateCell.textContent = event.startDate;
+                    row.appendChild(startDateCell);
+
+                    // 종료일
+                    const endDateCell = document.createElement('td');
+                    endDateCell.textContent = event.endDate;
+                    row.appendChild(endDateCell);
+
+                    // 장소
+                    const locationCell = document.createElement('td');
+                    locationCell.textContent = event.location;
+                    row.appendChild(locationCell);
+
+                    // 카테고리
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = event.category;
+                    row.appendChild(categoryCell);
+
+                    // 삭제 버튼
+                    const actionCell = document.createElement('td');
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'delete-btn');
+                    deleteButton.textContent = '삭제';
+                    deleteButton.onclick = function() {
+                        deleteEvent(event.eventId);
+                    };
+                    actionCell.appendChild(deleteButton);
+                    row.appendChild(actionCell);
+
+                    tableBody.appendChild(row);  // 테이블에 행 추가
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // 이벤트 삭제 함수
+    function deleteEvent(eventId) {
+        fetch(`/api/events/${eventId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(() => {
+                alert('이벤트가 삭제되었습니다.');
+                location.reload();  // 페이지 새로 고침하여 삭제된 항목 반영
+            })
+            .catch(error => console.error('Delete Error:', error));
     }
 
 });

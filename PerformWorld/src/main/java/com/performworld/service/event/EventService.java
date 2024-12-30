@@ -13,12 +13,20 @@ import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,11 +79,21 @@ public class EventService {
     @Transactional
     public void saveEvent(String eventXml) {
 
+
+
         // XML 데이터를 DTO로 변환
         EventDTO eventDTO = parseXmlToEventDTO(eventXml);
 
         // DTO를 엔티티로 변환
         Event event = convertToEntity(eventDTO);
+
+        // 중복된 title 체크
+        Optional<Event> existingEvent = eventRepository.findByTitle(event.getTitle());
+        if (existingEvent.isPresent()) {
+            // 중복된 title이 있을 경우 예외를 던짐
+            throw new DuplicateEventException("이미 존재하는 공연 제목입니다: " + event.getTitle());
+        }
+
         log.info("saveEvent Service단"+event);
         // 데이터베이스에 저장
         eventRepository.save(event);
@@ -162,4 +180,14 @@ public class EventService {
             return 0;
         }
     }
+
+    //데이터베이스 저장시 중복처리
+    public class DuplicateEventException extends RuntimeException {
+        public DuplicateEventException(String message) {
+            super(message);
+        }
+    }
+
+
+
 }

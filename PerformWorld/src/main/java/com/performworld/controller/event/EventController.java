@@ -1,5 +1,6 @@
 package com.performworld.controller.event;
 
+import com.performworld.domain.Event;
 import com.performworld.dto.event.EventSearchDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
@@ -10,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Controller
@@ -29,6 +33,7 @@ public class EventController {
     public String test2() {
         return "/event/main";
     }
+
 
     @GetMapping("/search")
     public ResponseEntity<EventSearchListDTO> searchEvents(
