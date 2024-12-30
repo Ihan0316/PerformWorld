@@ -140,6 +140,9 @@
 
                     </tbody>
                 </table>
+                <ul class="pagination replyPaging">
+                    <!-- 페이징 번호가 여기에 동적으로 추가됩니다 -->
+                </ul>
             </div>
         </div>
     </div>
@@ -154,100 +157,149 @@
     <script th:inline="javascript"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("페이지 로딩됨!");
+        // 이벤트 목록을 출력하는 함수
+        function printEventList(dtoList) {
+            // 동적으로 추가될 HTML을 저장할 변수
+            let str = "";
 
-            // 페이지가 로드되면 이벤트 데이터를 가져옵니다.
-            fetch('/event/savedEventList')  // 위에서 만든 REST API URL
-                .then(response => {
-                    if (!response.ok) {
-                        // 응답이 성공적이지 않으면 오류를 던집니다.
-                        throw new Error('서버 오류: ' + response.status + ' ' + response.statusText);
-                    }
-                    // 응답을 텍스트로 가져옵니다.
-                    return response.text();
-                })
+            // dtoList가 존재하고 길이가 0 이상인 경우
+            if (dtoList && dtoList.length > 0) {
+                // 이벤트 목록을 순회하며 테이블에 넣을 행을 동적으로 생성
+                dtoList.forEach(dto => {
+                    str += `
+                <tr>
+                    <!-- 썸네일 이미지 -->
+                    <td><img src="${dto.poster}" alt="Thumbnail" style="width: 50px; height: 50px;"></td>
+
+                    <!-- Event ID -->
+                    <td>${dto.eventId}</td>
+
+                    <!-- 제목 -->
+                    <td>${dto.title}</td>
+
+                    <!-- 공연 시작일 -->
+                    <td>${dto.prfpdfrom}</td>
+
+                    <!-- 공연 종료일 -->
+                    <td>${dto.prfpdto}</td>
+
+                    <!-- 지역 -->
+                    <td>${dto.location}</td>
+
+                    <!-- 장르 -->
+                    <td>${dto.genreName}</td>
+
+                    <!-- 삭제 버튼 -->
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteEvent(${dto.eventId})">삭제</button>
+                    </td>
+                </tr>
+            `;
+                });
+            } else {
+                // 이벤트 목록이 없을 경우
+                str = "<tr><td colspan='8'>이벤트가 없습니다.</td></tr>";
+            }
+
+            // 테이블 본문에 동적으로 생성된 HTML 넣기
+            const savedEventList = document.getElementById("savedEventList");
+            savedEventList.innerHTML = str;
+        }
+        // 페이징 목록 처리
+        function printPages(data) {
+            let pageStr = '';
+
+            // 이전 페이지 여부
+            if (data.prev) {
+                pageStr += `<li class="page-item"><a class="page-link" data-page="${data.start - 1}">이전</a></li>`;
+            }
+
+            // 페이지 번호를 출력 (보통 10개씩 출력 중)
+            for (let i = data.start; i <= data.end; i++) {
+                pageStr += `
+            <li class="${data.page == i ? 'page-item active' : 'page-item'}">
+                <a class="page-link" data-page="${i}">${i}</a>
+            </li>
+        `;
+            }
+
+            // 다음 페이지 여부
+            if (data.next) {
+                pageStr += `<li class="page-item"><a class="page-link" data-page="${data.end + 1}">다음</a></li>`;
+            }
+
+            // 페이징 번호를 화면에 출력
+            const replyPaging = document.querySelector('.replyPaging');
+            replyPaging.innerHTML = pageStr;
+        }
+        // 이벤트 목록을 서버에서 받아오는 함수
+        function fetchEventList(page, size) {
+            // 서버로부터 이벤트 목록을 가져오는 API 호출
+            fetch(`/event/savedEventList?page=${page}&size=${size}`)
+                .then(response => response.json())  // JSON 형식으로 변환
                 .then(data => {
-                    // 만약 HTML 문서가 응답으로 온 경우에는 확인합니다.
-                    if (data.startsWith("<!DOCTYPE html>") || data.startsWith("<html>")) {
-                        // HTML 문서로 응답이 온 경우
-                        console.error("서버에서 HTML 응답을 받았습니다. 오류 페이지일 수 있습니다.");
-                        console.error("응답 내용: ", data);  // HTML 오류 페이지 로그 출력
-                        alert("서버 오류: 이벤트 데이터를 가져올 수 없습니다.");
-                        return;
-                    }
-
-                    // 응답이 JSON일 경우, JSON으로 파싱
-                    const events = JSON.parse(data);
-
-                    // 받아온 이벤트 데이터로 테이블을 채웁니다.
-                    const savedEventList = document.getElementById("savedEventList");
-                    events.forEach(event => {
-                        const row = document.createElement("tr");
-
-                        // 썸네일 이미지 (Image URL)
-                        const thumbnailCell = document.createElement("td");
-                        const thumbnailImg = document.createElement("img");
-                        thumbnailImg.src = event.poster;  // 'poster' 필드는 이미지 URL입니다.
-                        thumbnailImg.alt = "Thumbnail";
-                        thumbnailImg.style.width = "50px";  // 적당한 크기로 조정
-                        thumbnailImg.style.height = "50px";
-                        thumbnailCell.appendChild(thumbnailImg);
-
-                        // Event ID
-                        const eventIdCell = document.createElement("td");
-                        eventIdCell.textContent = event.eventId;
-
-                        // 제목
-                        const titleCell = document.createElement("td");
-                        titleCell.textContent = event.title;
-
-                        // 공연 시작일
-                        const prfpdfromCell = document.createElement("td");
-                        prfpdfromCell.textContent = event.prfpdfrom;
-
-                        // 공연 종료일
-                        const prfpdtoCell = document.createElement("td");
-                        prfpdtoCell.textContent = event.prfpdto;
-
-                        // 지역
-                        const locationCell = document.createElement("td");
-                        locationCell.textContent = event.location;
-
-                        // 장르
-                        const genreCell = document.createElement("td");
-                        genreCell.textContent = event.genreName;  // 장르 이름
-
-                        // 삭제 (버튼)
-                        const deleteCell = document.createElement("td");
-                        const deleteButton = document.createElement("button");
-                        deleteButton.textContent = "삭제";
-                        deleteButton.classList.add("btn", "btn-danger");
-                        deleteButton.onclick = function() {
-                            // 삭제 처리 코드 추가 (옵션)
-                            alert(`삭제: ${event.eventId}`);
-                        };
-                        deleteCell.appendChild(deleteButton);
-
-                        // 각 셀을 행에 추가
-                        row.appendChild(thumbnailCell);
-                        row.appendChild(eventIdCell);
-                        row.appendChild(titleCell);
-                        row.appendChild(prfpdfromCell);
-                        row.appendChild(prfpdtoCell);
-                        row.appendChild(locationCell);
-                        row.appendChild(genreCell);
-                        row.appendChild(deleteCell);
-
-                        // 테이블 본문에 행 추가
-                        savedEventList.appendChild(row);
-                    });
+                    // 받아온 데이터를 출력 함수에 전달
+                    printEventList(data.dtoList); // 이벤트 목록 출력
+                    printPages(data); // 페이징 출력
                 })
                 .catch(error => {
-                    console.error("이벤트 데이터를 가져오는 중 오류 발생:", error);
-                    alert("이벤트 데이터를 가져오는 중 오류가 발생했습니다. 서버를 확인해주세요.");
+                    console.error('이벤트 목록을 가져오는 중 오류 발생:', error);
                 });
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("페이지 로딩됨!");
+            // 초기 페이지 로드시 첫 번째 페이지의 이벤트 목록을 가져옵니다.
+            fetchEventList(1, 10);
         });
+
+        // 페이징 번호 클릭 이벤트 핸들러
+        const replyPaging = document.querySelector('.replyPaging');
+        let currentPage = 1;
+        let pageSize = 10;
+
+        replyPaging.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const target = e.target;
+
+            // a 태그가 아니면, 이벤트 처리를 안합니다.
+            if (!target || target.tagName !== 'A') {
+                return;
+            }
+
+            // 페이지 번호 가져오기
+            const pageNum = target.getAttribute("data-page");
+            currentPage = pageNum;  // 현재 페이지 번호 업데이트
+
+            // 해당 페이지의 이벤트 목록을 가져옵니다.
+            fetchEventList(currentPage, pageSize);
+        });
+
+        // 이벤트 삭제 함수
+        function deleteEvent(eventId) {
+            if (confirm(`이벤트 ${eventId}를 삭제하시겠습니까?`)) {
+                fetch(`/event/deleteEvent/${eventId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('삭제 성공');
+                        // 삭제 후 이벤트 목록을 다시 불러와서 업데이트
+                        fetchEventList(currentPage, pageSize);
+                    })
+                    .catch(error => {
+                        console.error('삭제 실패:', error);
+                        alert('삭제 실패');
+                    });
+            }
+        }
+
+
+
+
+
+
     </script>
 </th:block>
 </body>
