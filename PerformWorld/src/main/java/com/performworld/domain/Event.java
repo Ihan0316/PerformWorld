@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "events")
 @Getter
-@ToString
+@ToString(exclude = "images")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,14 +21,14 @@ public class Event extends BaseEntity {
     @Column(name = "event_id")
     private Long eventId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category", referencedColumnName = "code")
     private SystemCode category;  // SystemCode 테이블과의 연관
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;
 
-    @Column(name="casting", nullable = false, length = 255)
+    @Column(name="casting", length = 255)
     private String casting;
 
     @Column(name = "location", nullable = false, length = 255)

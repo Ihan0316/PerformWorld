@@ -6,115 +6,119 @@
 
 <body>
 <!--	content layout start  -->
-
 <div id="fh5co-main" layout:fragment="content">
     <!-- Modal -->
-    <div class="modal eventRegisterModal" tabindex="-1" style="max-width: 3000px; ">
-        <div class="modal-dialog modal-lg" > <!-- modal-lg 클래스 추가하여 크기 확장 -->
+    <div class="modal eventRegisterModal" tabindex="-1">
+        <div class="modal-dialog" style="width: 80%; max-width: 1000px; ">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4>공연/전시 추가</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- 테이블 추가 -->
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>썸네일</th>
-                            <th>Event ID</th>
-                            <th>제목</th>
-                            <th>공연 시작일</th>
-                            <th>공연 종료일</th>
-                            <th>지역</th>
-                            <th>장르</th>
-                            <th>추가</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- 예시 데이터 -->
-                        <tr>
-                            <td>
-                                <img src="/images/thumbnail.jpg" alt="썸네일" style="width: 100%; height: auto;">
-                            </td>
-                            <td>1</td>
-                            <td>Art Exhibition2222222222222</td>
-                            <td>2024-12-01</td>
-                            <td>2024-12-10</td>
-                            <td>서울</td>
-                            <td>전시</td>
-                            <td>
-                                <button class="btn btn-success btn-sm">추가</button>
-                            </td>
-                        </tr>
-                        <!-- 추가 데이터는 여기에 동적으로 추가 -->
-                        </tbody>
-                    </table>
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <!-- 테이블 추가 -->
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th style="width: 15%;">썸네일</th>
+                                <th style="width: 10%;">Event ID</th>
+                                <th style="width: 15%;">제목</th>
+                                <th style="width: 13%;">공연 시작일</th>
+                                <th style="width: 13%;">공연 종료일</th>
+                                <th style="width: 15%;">지역</th>
+                                <th style="width: 14%;">장르</th>
+                                <th style="width: 5%;">추가</th>
+                            </tr>
+                            </thead>
+                            <tbody id="eventList">
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 페이지 네비게이션 버튼 -->
+                    <div id="paginationContainer" class="d-flex justify-content-between mt-3">
+                        <!-- 이전 페이지 버튼 -->
+                        <button id="prevPageBtn" class="btn btn-outline-secondary" disabled>이전</button>
+                        <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                            <span id="pageButtons" class="mx-3 text-center">Page 1</span>
+                            <input type="text" id="pageInput" class="page-input form-control mx-2" min="1" placeholder="Page 검색" style="width: 125px;">
+                        </div>
+                        <!-- 다음 페이지 버튼 -->
+                        <button id="nextPageBtn" class="btn btn-outline-secondary">다음</button>
+                    </div>
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft" style="padding-bottom: 0px;">
         <div class="row">
             <div class="col-md-4">
                 <h2>공연 등록</h2>
             </div>
         </div>
-        <form action="">
+        <form action="#" method="get" th:action="@{/event/search}" th:object="${eventSearchDTO}">
             <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="perform-name">공연 이름</label>
+                        <input type="text" class="form-control" name="perform-name" id="perform-name" placeholder="공연 이름">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="location-code">지역 코드</label>
+                        <select id="location-code" class="form-control" name="location-code">
+                            <option value="">지역 선택</option>
+                            <option value="11">서울</option>
+                            <option value="26">부산</option>
+                            <option value="27">대구</option>
+                            <option value="28">인천</option>
+                            <option value="29">광주</option>
+                            <option value="30">대전</option>
+                            <option value="31">울산</option>
+                            <option value="36">세종</option>
+                            <option value="41">경기</option>
+                            <option value="51">강원</option>
+                            <option value="43">충북</option>
+                            <option value="44">충남</option>
+                            <option value="45">전북</option>
+                            <option value="46">전남</option>
+                            <option value="47">경북</option>
+                            <option value="48">경남</option>
+                            <option value="50">제주</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="start-date">공연 시작일</label>
+                        <input type="date" id="start-date" name="start-date" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="end-date">공연 종료일</label>
+                        <input type="date" id="end-date" name="end-date" class="form-control">
+                    </div>
+                </div>
                 <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="perform-name" placeholder="공연 이름">
-                            </div>
-                            <div class="form-group">
-                                <label for="start-date">공연 시작일</label>
-                                <input type="date" id="start-date" name="start-date" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="end-date">공연 종료일</label>
-                                <input type="date" id="end-date" name="end-date" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="location-code">지역 코드</label>
-                                <select id="location-code" class="form-control" name="location-code">
-                                    <option value="">지역 선택</option>
-                                    <option value="11">서울</option>
-                                    <option value="26">부산</option>
-                                    <option value="27">대구</option>
-                                    <option value="28">인천</option>
-                                    <option value="29">광주</option>
-                                    <option value="30">대전</option>
-                                    <option value="31">울산</option>
-                                    <option value="36">세종</option>
-                                    <option value="41">경기</option>
-                                    <option value="51">강원</option>
-                                    <option value="43">충북</option>
-                                    <option value="44">충남</option>
-                                    <option value="45">전북</option>
-                                    <option value="46">전남</option>
-                                    <option value="47">경북</option>
-                                    <option value="48">경남</option>
-                                    <option value="50">제주</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary btn-md searchEventBtn">검색</button>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary btn-md searchEventBtn">검색</button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
     <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
         <div class="row">
             <div class="col-md-12">
-                <h2>공연 목록</h2>
+                <h2>등록된 공연 목록</h2>
             </div>
         </div>
         <div class="row">
@@ -132,23 +136,7 @@
                         <th style="width: 10%;">삭제</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <!-- Example Row -->
-                    <tr>
-                        <td>
-                            <img src="/images/thumbnail.jpg" alt="썸네일" style="width: 100%; height: auto;">
-                        </td>
-                        <td>1</td>
-                        <td>Art Exhibition</td>
-                        <td>2024-12-01</td>
-                        <td>2024-12-10</td>
-                        <td>서울</td>
-                        <td>전시</td>
-                        <td>
-                            <button class="btn btn-danger btn-sm delete-btn">삭제</button>
-                        </td>
-                    </tr>
-                    <!-- 추가 데이터는 여기로 동적으로 추가 -->
+                    <tbody id="savedEventList">
                     </tbody>
                 </table>
             </div>
@@ -158,28 +146,12 @@
 </div>
 <!--	content layout end  -->
 
-
-<!-- js import -->
+<!-- JavaScript -->
 <th:block layout:fragment="javascript">
     <script th:src="@{/js/event/event.js}"></script>
-
     <script th:inline="javascript">
-
-        const modal = new bootstrap.Modal(document.querySelector(".eventRegisterModal"));
-
-        document.querySelector(".searchEventBtn").addEventListener("click", function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            modal.show();
-        }, false);
-
-
-
-
-
 
     </script>
 </th:block>
 </body>
 </html>
-
