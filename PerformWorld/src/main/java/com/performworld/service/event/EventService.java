@@ -70,12 +70,13 @@ public class EventService {
 
     @Transactional
     public void saveEvent(String eventXml) {
+
         // XML 데이터를 DTO로 변환
         EventDTO eventDTO = parseXmlToEventDTO(eventXml);
 
         // DTO를 엔티티로 변환
         Event event = convertToEntity(eventDTO);
-
+        log.info("saveEvent Service단"+event);
         // 데이터베이스에 저장
         eventRepository.save(event);
     }
@@ -161,6 +162,4 @@ public class EventService {
             return 0;
         }
     }
-
-
 }
