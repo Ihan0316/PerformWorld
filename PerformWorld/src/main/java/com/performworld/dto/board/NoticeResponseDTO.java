@@ -1,4 +1,4 @@
-package com.performworld.dto;
+package com.performworld.dto.board;
 
 import lombok.*;
 
