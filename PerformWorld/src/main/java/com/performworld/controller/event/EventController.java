@@ -19,7 +19,6 @@ public class EventController {
 
     private final EventService eventService;
 
-    // 레이아웃 테스트 페이지
     @GetMapping("/register")
     public String register() {
         return "event/event";
