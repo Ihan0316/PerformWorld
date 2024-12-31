@@ -48,15 +48,16 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
                 // XML 파싱
+
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-
+                console.log(xmlDoc)
                 // 공연 데이터 처리 (db 태그를 사용)
                 const performances = xmlDoc.getElementsByTagName("db");
                 // 기존 테이블 내용 삭제
                 eventListContainer.innerHTML = '';
 
-                if (performances.length > 1) {
+                if (performances.length > 0) {
                     Array.from(performances).forEach(performance => {
                         const row = document.createElement("tr");
 
@@ -186,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const prfpdfrom = xmlDoc.getElementsByTagName("prfpdfrom")[0]?.textContent || '';
         const prfpdto = xmlDoc.getElementsByTagName("prfpdto")[0]?.textContent || '';
         const prfcast = xmlDoc.getElementsByTagName("prfcast")[0]?.textContent || '';
-        const area = xmlDoc.getElementsByTagName("area")[0]?.textContent || '';
+        const fcltynm = xmlDoc.getElementsByTagName("fcltynm")[0]?.textContent || '';
         const prfruntime = xmlDoc.getElementsByTagName("prfruntime")[0]?.textContent || '';
         const poster = xmlDoc.getElementsByTagName("poster")[0]?.textContent || '';
 
@@ -200,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
             prfpdfrom,
             prfpdto,
             prfcast,
-            area,
+            fcltynm,
             prfruntime,
             poster,
             styurls
@@ -218,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <prfpdfrom>${eventData.prfpdfrom || ''}</prfpdfrom>
         <prfpdto>${eventData.prfpdto || ''}</prfpdto>
         <prfcast>${eventData.prfcast || ''}</prfcast>
-        <area>${eventData.area || ''}</area>
+        <fcltynm>${eventData.fcltynm || ''}</fcltynm>
         <prfruntime>${eventData.prfruntime || ''}</prfruntime>
         <poster>${eventData.poster || ''}</poster>
         <styurls>
@@ -244,99 +245,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
         alert("이벤트가 성공적으로 저장되었습니다.");
     }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        console.log("페이지 로딩됨!");
-
-        // 페이지가 로드되면 이벤트 데이터를 가져옵니다.
-        fetch('/event/savedEventList')  // 위에서 만든 REST API URL
-            .then(response => response.json())  // 서버에서 반환한 JSON 데이터를 파싱합니다.
-            .then(events => {
-                const savedEventList = document.getElementById("savedEventList");
-
-                // 받아온 이벤트 데이터로 테이블을 채웁니다.
-                events.forEach(event => {
-                    const row = document.createElement("tr");
-
-                    // 썸네일 이미지 (Image URL)
-                    const thumbnailCell = document.createElement("td");
-                    const thumbnailImg = document.createElement("img");
-                    thumbnailImg.src = event.poster;  // 'poster' 필드는 이미지 URL입니다.
-                    thumbnailImg.alt = "Thumbnail";
-                    thumbnailImg.style.width = "50px";  // 적당한 크기로 조정
-                    thumbnailImg.style.height = "50px";
-                    thumbnailCell.appendChild(thumbnailImg);
-
-                    // Event ID
-                    const eventIdCell = document.createElement("td");
-                    eventIdCell.textContent = event.eventId;
-
-                    // 제목
-                    const titleCell = document.createElement("td");
-                    titleCell.textContent = event.title;
-
-                    // 공연 시작일
-                    const prfpdfromCell = document.createElement("td");
-                    prfpdfromCell.textContent = event.prfpdfrom;
-
-                    // 공연 종료일
-                    const prfpdtoCell = document.createElement("td");
-                    prfpdtoCell.textContent = event.prfpdto;
-
-                    // 지역
-                    const locationCell = document.createElement("td");
-                    locationCell.textContent = event.location;
-
-                    // 장르
-                    const genreCell = document.createElement("td");
-                    genreCell.textContent = event.genreName;  // 장르 이름
-
-                    // 삭제 (버튼)
-                    const deleteCell = document.createElement("td");
-                    const deleteButton = document.createElement("button");
-                    deleteButton.textContent = "삭제";
-                    deleteButton.classList.add("btn", "btn-danger");
-                    deleteButton.onclick = function() {
-                        // 삭제 처리 코드 추가
-                        deleteEvent(event.eventId);
-                    };
-                    deleteCell.appendChild(deleteButton);
-
-                    // 각 셀을 행에 추가
-                    row.appendChild(thumbnailCell);
-                    row.appendChild(eventIdCell);
-                    row.appendChild(titleCell);
-                    row.appendChild(prfpdfromCell);
-                    row.appendChild(prfpdtoCell);
-                    row.appendChild(locationCell);
-                    row.appendChild(genreCell);
-                    row.appendChild(deleteCell);
-
-                    // 테이블 본문에 행 추가
-                    savedEventList.appendChild(row);
-                });
-            })
-            .catch(error => {
-                console.error("이벤트 데이터를 가져오는 중 오류 발생:", error);
-            });
-    });
-
-// 이벤트 삭제 함수
-    function deleteEvent(eventId) {
-        fetch(`/event/deleteEvent/${eventId}`, {
-            method: 'DELETE',  // DELETE 요청
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);  // 성공 메시지 출력
-                alert('이벤트가 삭제되었습니다.');
-                location.reload();  // 삭제 후 페이지 새로고침
-            })
-            .catch(error => {
-                console.error("삭제 중 오류 발생:", error);
-            });
-    }
-
-
-
 });
