@@ -43,23 +43,4 @@ public class AdminController {
         TierDTO newTier = new TierDTO(null, tierName, minSpent, maxSpent, discountRate);
         return tierService.addTier(newTier);  // Tier 등록 서비스 호출
     }
-
-    // 사용자 정보 수정 처리
-    @PostMapping("/updateUser")
-    @ResponseBody
-    public UserDto updateUser(@RequestBody UserDto userDto) {
-        // 사용자 정보 업데이트 서비스 호출
-        UserDto updatedUser = userListService.updateUser(userDto);
-        return updatedUser;  // 수정된 사용자 객체 반환
-    }
-
-    // 특정 사용자 정보 가져오기
-    @GetMapping("/getUser/{userId}")
-    @ResponseBody
-    public UserDto getUser(@PathVariable Long userId) {
-        // 특정 사용자 정보 조회
-        return userListService.getUserById(userId);
-    }
-
-
 }

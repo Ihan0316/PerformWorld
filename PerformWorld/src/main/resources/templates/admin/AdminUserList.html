@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base.html}">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
 <head>
   <meta charset="UTF-8">
   <title>Tier 및 User 조회</title>
@@ -64,7 +67,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="user : ${users}" onclick="openEditUserModal(${user.userId})">
+              <tr th:each="user : ${users}">
                 <td th:text="${user.userId}"></td>
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.email}"></td>
@@ -118,7 +121,6 @@
 
 <th:block layout:fragment="javascript">
   <script th:src="@{/js/admin/tier-management.js}"></script>
-  <script th:src="@{/js/admin/user-management.js}"></script>
 </th:block>
 </body>
 </html>

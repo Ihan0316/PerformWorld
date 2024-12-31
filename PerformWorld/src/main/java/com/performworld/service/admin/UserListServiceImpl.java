@@ -39,14 +39,4 @@ public class UserListServiceImpl implements UserListService {
                 )
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public UserDto updateUser(UserDto userDto) {
-        return null;
-    }
-
-    @Override
-    public UserDto getUserById(Long userId) {
-        return null;
-    }
 }
