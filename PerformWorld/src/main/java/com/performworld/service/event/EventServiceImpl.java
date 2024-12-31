@@ -15,11 +15,11 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -90,6 +90,8 @@ public class EventServiceImpl implements EventService{
 
     private EventDTO parseXmlToEventDTO(String eventXml) {
         try {
+            eventXml = eventXml.replaceAll("&(?!amp;|lt;|gt;|quot;)(?![a-zA-Z#0-9]{1,10};)", "&amp;");
+
             JAXBContext jaxbContext = JAXBContext.newInstance(EventDTO.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             return (EventDTO) unmarshaller.unmarshal(new StringReader(eventXml));
@@ -201,18 +203,43 @@ public class EventServiceImpl implements EventService{
         eventRepository.deleteById(eventId);
     }
 
-    @Override
-    public List<EventSavedListDTO> getAllEventsWithThumbnails() {
-        return eventRepository.findAllWithThumbnailAndCategory();
-    }
+//    @Override
+//    public List<EventSavedListDTO> getAllEventsWithThumbnails() {
+//        return eventRepository.findAllWithThumbnailAndCategory();
+//    }
 
     @Override
-    public Page<EventSavedListDTO> getSavedEventList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("eventId"))); // 페이지, 크기, 정렬 방식
-        Page<Event> eventPage = eventRepository.findAll(pageable); // 페이징된 데이터 조회
+    public Page<EventSavedListDTO> getSavedEventList(int page, int size, String title, String genre) {
+        Pageable pageable = PageRequest.of(page, size); // 0-based index를 사용
+        Page<Event> eventPage;
 
-        return eventPage.map(event -> new EventSavedListDTO(event));
+        // title과 genre 조건에 따라 쿼리 실행
+        if (title != null && !title.isEmpty() && genre != null && !genre.isEmpty()) {
+            eventPage = eventRepository.findByTitleContainingAndCategory_CodeName(title, genre, pageable);
+        } else if (title != null && !title.isEmpty()) {
+            eventPage = eventRepository.findByTitleContaining(title, pageable);
+        } else if (genre != null && !genre.isEmpty()) {
+            eventPage = eventRepository.findByCategory_CodeName(genre, pageable);
+        } else {
+            eventPage = eventRepository.findAll(pageable); // 조건 없이 모든 이벤트 반환
+        }
+
+        // ModelMapper를 사용하여 Event 엔티티를 EventSavedListDTO로 변환
+        ModelMapper modelMapper = new ModelMapper();
+        Page<EventSavedListDTO> eventSavedListDTOPage = eventPage.map(event -> {
+            EventSavedListDTO dto = modelMapper.map(event, EventSavedListDTO.class);
+            // genre 값 설정 (카테고리 코드명)
+            dto.setGenre(event.getCategory() != null ? event.getCategory().getCodeName() : null);
+            // thumbnailUrl 설정 (썸네일 이미지)
+            dto.setThumbnailUrl(event.getImages() != null && !event.getImages().isEmpty() ?
+                    event.getImages().stream().filter(Image::isThumbnail).findFirst().map(Image::getFilePath).orElse(null) :
+                    null);
+            return dto;
+        });
+
+        return eventSavedListDTOPage;
     }
+
 
     @Override
     public EventDTO getOneEvents(Long eventId) {

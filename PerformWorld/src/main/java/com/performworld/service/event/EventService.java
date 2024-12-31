@@ -15,8 +15,10 @@ public interface EventService {
     List<EventDTO> getAllEvents();
     void deleteEvent(Long eventId);
     EventDTO getOneEvents(Long eventId);
-    List<EventSavedListDTO> getAllEventsWithThumbnails();
+//    List<EventSavedListDTO> getAllEventsWithThumbnails();
 
-    Page<EventSavedListDTO> getSavedEventList(int page, int size);
+//    Page<EventSavedListDTO> getSavedEventList(int page, int size);
+    Page<EventSavedListDTO> getSavedEventList(int page, int size, String title, String genre);
+
 
 }
