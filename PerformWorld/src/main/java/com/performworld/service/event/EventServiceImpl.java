@@ -6,6 +6,7 @@ import com.performworld.domain.Event;
 import com.performworld.domain.Image;
 import com.performworld.domain.SystemCode;
 import com.performworld.dto.event.EventDTO;
+import com.performworld.dto.event.EventSavedListDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.repository.event.EventRepository;
 import com.performworld.repository.image.ImageRepository;
@@ -15,6 +16,10 @@ import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -89,17 +94,14 @@ public class EventServiceImpl implements EventService{
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             return (EventDTO) unmarshaller.unmarshal(new StringReader(eventXml));
         } catch (Exception e) {
+            log.error("XML parsing error: {}", eventXml);
             throw new RuntimeException("XML 데이터를 EventDTO로 변환하는 중 오류 발생: " + e.getMessage(), e);
         }
     }
 
     private Event convertToEntity(EventDTO dto) {
-        log.info("장르:" + dto.getGenreName());
-        log.info("코드:" + dto.getLocation());
         SystemCode category = systemCodeRepository.findByCodeName(dto.getGenreName())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리 코드가 존재하지 않습니다: " + dto.getGenreName()));
-        SystemCode location = systemCodeRepository.findByCodeName(dto.getLocation())
-                .orElseThrow(() -> new IllegalArgumentException("지역 코드가 존재하지 않습니다: " + dto.getLocation()));
 
         int runtimeMinutes = parseRuntimeToMinutes(dto.getRuntime());
 
@@ -109,7 +111,7 @@ public class EventServiceImpl implements EventService{
                 .prfpdfrom(dto.getPrfpdfrom())
                 .prfpdto(dto.getPrfpdto())
                 .casting(dto.getCasting())
-                .location(location.getCodeName())
+                .location(dto.getFcltynm())
                 .luntime(runtimeMinutes)
                 .images(new ArrayList<>())
                 .build();
@@ -175,7 +177,7 @@ public class EventServiceImpl implements EventService{
                 .prfpdfrom(event.getPrfpdfrom())
                 .prfpdto(event.getPrfpdto())
                 .casting(event.getCasting())
-                .location(event.getLocation())
+                .fcltynm(event.getLocation())
                 .runtime(String.valueOf(event.getLuntime()));
 
         Optional<SystemCode> systemCode = systemCodeRepository.findByCode(event.getCategory().getCode());
@@ -196,5 +198,18 @@ public class EventServiceImpl implements EventService{
     @Transactional
     public void deleteEvent(Long eventId) {
         eventRepository.deleteById(eventId);
+    }
+
+    @Override
+    public List<EventSavedListDTO> getAllEventsWithThumbnails() {
+        return eventRepository.findAllWithThumbnailAndCategory();
+    }
+
+    @Override
+    public Page<EventSavedListDTO> getSavedEventList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("eventId"))); // 페이지, 크기, 정렬 방식
+        Page<Event> eventPage = eventRepository.findAll(pageable); // 페이징된 데이터 조회
+
+        return eventPage.map(event -> new EventSavedListDTO(event));
     }
 }
