@@ -1,6 +1,5 @@
 package com.performworld.controller.admin;
 
-import com.performworld.domain.User;
 import com.performworld.dto.admin.TierDTO;
 import com.performworld.dto.user.UserDto;
 import com.performworld.service.admin.TierService;
@@ -20,6 +19,7 @@ public class AdminController {
     private final TierService tierService;
     private final UserListService userListService;  // UserListService 주입
 
+    // Tier와 사용자 목록 조회
     @GetMapping("/userlist")
     public String getTierAndUserList(Model model) {
         // Tier 목록과 사용자 목록을 각각 가져옵니다.
@@ -44,20 +44,22 @@ public class AdminController {
         return tierService.addTier(newTier);  // Tier 등록 서비스 호출
     }
 
-    // 사용자 추가 처리 (POST 요청으로 사용자 추가)
-    @PostMapping("/addUser")
+    // 사용자 정보 수정 처리
+    @PostMapping("/updateUser")
     @ResponseBody
-    public User addUser(@RequestParam String userId,
-                        @RequestParam String name,
-                        @RequestParam String email,
-                        @RequestParam String password,
-                        @RequestParam String phoneNumber,
-                        @RequestParam String address1,
-                        @RequestParam String address2,
-                        @RequestParam String postcode,
-                        @RequestParam Long tierId) {  // tierName에서 tierId로 수정
-        // tierId를 사용하여 UserDto 객체 생성
-        UserDto newUser = new UserDto(userId, name, email, password, phoneNumber, address1, address2, postcode, tierId.toString());
-        return userListService.addUser(newUser);  // 사용자 추가 서비스 호출
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+        // 사용자 정보 업데이트 서비스 호출
+        UserDto updatedUser = userListService.updateUser(userDto);
+        return updatedUser;  // 수정된 사용자 객체 반환
     }
+
+    // 특정 사용자 정보 가져오기
+    @GetMapping("/getUser/{userId}")
+    @ResponseBody
+    public UserDto getUser(@PathVariable Long userId) {
+        // 특정 사용자 정보 조회
+        return userListService.getUserById(userId);
+    }
+
+
 }
