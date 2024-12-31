@@ -48,15 +48,16 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
                 // XML 파싱
+
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-
+                console.log(xmlDoc)
                 // 공연 데이터 처리 (db 태그를 사용)
                 const performances = xmlDoc.getElementsByTagName("db");
                 // 기존 테이블 내용 삭제
                 eventListContainer.innerHTML = '';
 
-                if (performances.length > 1) {
+                if (performances.length > 0) {
                     Array.from(performances).forEach(performance => {
                         const row = document.createElement("tr");
 
