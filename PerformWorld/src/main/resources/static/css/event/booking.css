@@ -2,6 +2,30 @@
     min-width: 300px;
 }
 
+.schedule-item {
+    max-width: 305px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.schedule-item:hover {
+    background-color: #f1f1f1;
+}
+
+.schedule-item.active {
+    background-color: #ccc;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.seatSelBox {
+    min-width: 400px !important;
+}
+
 .seat-stage {
     width: 100%;
     height: 70px;
@@ -41,20 +65,20 @@
 }
 
 .seat.selected {
-    background-color: #4CAF50;
+    background-color: dimgray;
     color: white;
 }
 
 .vip-seat {
-    background-color: gold;
+    background-color: mediumorchid;
 }
 
 .r-seat {
-    background-color: lightblue;
+    background-color: mediumseagreen;
 }
 
 .s-seat {
-    background-color: lightgreen;
+    background-color: skyblue;
 }
 
 .seat-info {

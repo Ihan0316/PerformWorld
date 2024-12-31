@@ -7,12 +7,16 @@ const init = () => {
 
     const eventSchedules = [
         {
-            eventDate: "2024-12-31T14:00:00",
+            eventDate: "2025-01-01T14:00:00",
+            eventCast: "출연진, 출연진, 출연진, 출연진, 출연진, 출연진, 출연진",
+        },
+        {
+            eventDate: "2025-01-01T19:00:00",
             eventCast: "출연진 A",
         },
         {
-            eventDate: "2024-12-31T19:00:00",
-            eventCast: "출연진 B",
+            eventDate: "2025-01-02T19:30:00",
+            eventCast: "출연진 B, 출연진 C",
         }
     ];
 
@@ -74,14 +78,47 @@ const init = () => {
                     const scheduleElement = document.createElement("div");
                     scheduleElement.classList.add("schedule-item");
                     scheduleElement.innerHTML = `
-                    <p><strong>시간:</strong> ${schedule.eventDate.split('T')[1].substring(0, 5)}</p>
-                    <p><strong>출연진:</strong> ${schedule.eventCast}</p>
-                `;
+                <div><strong>${schedule.eventDate.split('T')[1].substring(0, 5)}</strong></div>
+                <div><span>${schedule.eventCast}</span></div>
+            `;
+
+                    // 클릭 가능한 이벤트 핸들러 추가
+                    scheduleElement.addEventListener("click", function() {
+                        // 이전에 클릭한 항목이 있다면 active 클래스를 제거
+                        const activeItem = document.querySelector(".schedule-item.active");
+                        if (activeItem) {
+                            activeItem.classList.remove("active");
+                        }
+
+                        // 클릭된 항목에 active 클래스 추가
+                        scheduleElement.classList.add("active");
+
+                        // 회차 선택이 완료되면 좌석 선택 UI 보이기
+                        document.querySelector(".seatSelBox").classList.remove("d-none");
+
+                        // 좌석 초기화
+                        selectedSeats = [];
+                        // 선택된 좌석 UI 초기화
+                        const selectedSeatElements = document.querySelectorAll(".seat.selected");
+                        selectedSeatElements.forEach(seat => {
+                            seat.classList.remove("selected");
+                        });
+                        // 배송 여부와 결제하기 UI 숨기기
+                        document.querySelector(".dlvSelBox").classList.add("d-none");
+                        document.querySelector(".booking-footer").classList.add("d-none");
+                    });
+
                     scheduleInfoDiv.appendChild(scheduleElement);
                 });
             } else {
-                scheduleInfoDiv.innerHTML = '<p>선택한 날짜에 공연 정보가 없습니다.</p>';
+                scheduleInfoDiv.innerHTML = '<div>선택한 날짜에 공연 정보가 없습니다.</div>';
             }
+
+            // 날짜 변경 시 좌석 선택창 숨기기
+            document.querySelector(".seatSelBox").classList.add("d-none");
+            // 배송 여부와 결제하기 UI 숨기기
+            document.querySelector(".dlvSelBox").classList.add("d-none");
+            document.querySelector(".booking-footer").classList.add("d-none");
         }
     });
 
@@ -163,6 +200,16 @@ const init = () => {
                 selectedSeats.push(this.getAttribute("data-seat-id"));
             } else {
                 alert("선택 가능한 좌석 수를 초과했습니다.");
+            }
+
+            if (selectedSeats.length > 0) {
+                // 좌석 선택이 완료되면 배송 여부와 결제 UI 보이기
+                document.querySelector(".dlvSelBox").classList.remove("d-none");
+                document.querySelector(".booking-footer").classList.remove("d-none");
+            } else {
+                // 좌석이 선택되지 않으면 배송 여부와 결제 UI 숨기기
+                document.querySelector(".dlvSelBox").classList.add("d-none");
+                document.querySelector(".booking-footer").classList.add("d-none");
             }
 
             console.log(selectedSeats);
