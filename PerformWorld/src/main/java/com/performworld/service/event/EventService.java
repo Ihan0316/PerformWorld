@@ -14,6 +14,7 @@ public interface EventService {
     void saveEvent(String eventXml);
     List<EventDTO> getAllEvents();
     void deleteEvent(Long eventId);
+    EventDTO getOneEvents(Long eventId);
     List<EventSavedListDTO> getAllEventsWithThumbnails();
 
     Page<EventSavedListDTO> getSavedEventList(int page, int size);

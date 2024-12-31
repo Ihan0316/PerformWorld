@@ -1,5 +1,6 @@
 package com.performworld.controller.event;
 
+import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSavedListDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
@@ -8,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,6 +76,18 @@ public class EventRestController {
         eventService.deleteEvent(eventId);  // 서비스에서 이벤트 삭제
         return ResponseEntity.ok("Event deleted successfully");
     }
+
+    @PostMapping ("/details")
+    public EventDTO getOneEvents(@RequestBody EventDTO eventDTO) {
+        // 상세 조회 API 호출 및 XML 반환
+        return eventService.getOneEvents(eventDTO.getEventId());
+
+    }
+
+
+
+
+
 
 
 

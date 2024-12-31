@@ -173,6 +173,7 @@ public class EventServiceImpl implements EventService{
 
     private EventDTO convertToDTO(Event event) {
         EventDTO.EventDTOBuilder eventDTOBuilder = EventDTO.builder()
+                .eventId(event.getEventId())
                 .title(event.getTitle())
                 .prfpdfrom(event.getPrfpdfrom())
                 .prfpdto(event.getPrfpdto())
@@ -212,4 +213,14 @@ public class EventServiceImpl implements EventService{
 
         return eventPage.map(event -> new EventSavedListDTO(event));
     }
+
+    @Override
+    public EventDTO getOneEvents(Long eventId) {
+        Event events = eventRepository.findById(eventId).orElseThrow();
+        return convertToDTO(events);
+    }
+
+
+
+
 }
