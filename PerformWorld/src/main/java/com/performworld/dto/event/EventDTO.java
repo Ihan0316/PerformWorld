@@ -17,6 +17,8 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EventDTO {
 
+    private Long eventId;
+
     @XmlElement(name = "genrenm")
     private String genreName;
 
@@ -32,8 +34,8 @@ public class EventDTO {
     @XmlElement(name = "prfcast")
     private String casting;
 
-    @XmlElement(name = "area")
-    private String location;
+    @XmlElement(name = "fcltynm")
+    private String fcltynm; //공연장소
 
     @XmlElement(name = "prfruntime")
     private String runtime;

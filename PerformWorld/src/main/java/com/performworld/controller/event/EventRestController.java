@@ -1,19 +1,16 @@
 package com.performworld.controller.event;
 
-import com.performworld.domain.Event;
-import com.performworld.dto.event.EventDTO;
+import com.performworld.dto.event.EventSavedListDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/event")
@@ -56,24 +53,22 @@ public class EventRestController {
 
     @PostMapping("/save")
     public ResponseEntity<String> saveEvent(@RequestBody String eventXml) {
-        log.info("컨트롤러에서 저장하기 위해 받은 xml"+eventXml);
         eventService.saveEvent(eventXml);
         return ResponseEntity.ok("이벤트가 성공적으로 저장되었습니다.");
     }
 
-    // 모든 이벤트를 가져오는 API
-    @GetMapping("/savedEventList")
-    public ResponseEntity<List<EventDTO>> getAllEvents() {
-        List<EventDTO> eventDTOList = eventService.getAllEvents();
-
-        // 로그에 이벤트 목록을 출력
-        log.info("Returning event DTO list: " + eventDTOList);  // 응답 로그 출력
-
-        // EventDTO 목록을 클라이언트에게 반환
-        return ResponseEntity.ok(eventDTOList);
+    // DB에 저장된 event 목록 가져오기
+    @GetMapping(value="/savedEventList", produces = "application/json")
+    public ResponseEntity<Page<EventSavedListDTO>> getSavedEventList(
+            @RequestParam(defaultValue = "1") int page, // 기본 페이지는 1
+            @RequestParam(defaultValue = "5") int size  // 기본 페이지 크기는 5
+    ) {
+        // 서비스에서 페이징된 이벤트 목록을 반환
+        Page<EventSavedListDTO> eventPage = eventService.getSavedEventList(page - 1, size); // 0-based index로 전달
+        return ResponseEntity.ok(eventPage); // 페이징된 데이터 반환
     }
 
-    // 이벤트 삭제 API
+    // 이벤트 삭제
     @DeleteMapping("/deleteEvent/{eventId}")
     public ResponseEntity<String> deleteEvent(@PathVariable Long eventId) {
         eventService.deleteEvent(eventId);  // 서비스에서 이벤트 삭제
