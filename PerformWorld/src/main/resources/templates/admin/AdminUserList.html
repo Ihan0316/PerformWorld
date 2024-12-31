@@ -11,12 +11,53 @@
 <div id="fh5co-main" layout:fragment="content">
   <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
     <div class="row">
-      <!-- Tier 조회 섹션 -->
-      <div class="col-md-12">
+
+      <!-- User 조회 섹션 (왼쪽) -->
+      <div class="col-md-6">
+
+        <!-- User 조회 섹션 -->
+        <h2>User 조회</h2>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>User ID</th>
+                <th>이름</th>
+                <th>Email</th>
+                <th>전화번호</th>
+                <th>주소</th>
+                <th>우편번호</th>
+                <th>Tier</th>
+                <th>삭제</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user : ${users}">
+                <td th:text="${user.userId}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.address1} + ' ' + ${user.address2}"></td>
+                <td th:text="${user.postcode}"></td>
+                <td th:text="${user.tierName}"></td>
+                <td>
+                  <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tier 및 Seat 조회 섹션 (오른쪽) -->
+      <div class="col-md-6">
+        <!-- Tier 조회 섹션 -->
         <h2>Tier 조회</h2>
         <div class="row">
           <div class="col-md-12 text-end">
-            <button class="btn btn-primary add-tier-btn">Add Tier</button>
+            <button class="btn btn-primary add-tier-btn" onclick="openAddTierModal()">Add Tier</button>
           </div>
         </div>
         <!-- Tier 조회 테이블 -->
@@ -44,83 +85,74 @@
             </table>
           </div>
         </div>
-      </div>
 
-      <hr> <!-- 구분선 추가 -->
+        <hr> <!-- 구분선 추가 -->
 
-      <!-- User 조회 섹션 -->
-      <div class="col-md-12">
-        <h2>User 조회</h2>
-        <!-- User 조회 테이블 -->
+        <h2>Seat 조회</h2>
+        <!-- Seat 조회 테이블 -->
         <div class="row">
           <div class="col-md-12">
             <table class="table table-striped">
               <thead>
               <tr>
-                <th>User ID</th>
-                <th>이름</th>
-                <th>Email</th>
-                <th>전화번호</th>
-                <th>주소</th>
-                <th>우편번호</th>
-                <th>Tier</th>
+                <th>Seat ID</th>
+                <th>섹션</th>
+                <th>가격</th>
               </tr>
               </thead>
               <tbody>
-              <tr th:each="user : ${users}">
-                <td th:text="${user.userId}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.phoneNumber}"></td>
-                <td th:text="${user.address1} + ' ' + ${user.address2}"></td>
-                <td th:text="${user.postcode}"></td>
-                <td th:text="${user.tierName}"></td>
+              <tr th:each="seat : ${seats}">
+                <td th:text="${seat.seatId}"></td>
+                <td th:text="${seat.section}"></td>
+                <td th:text="${seat.price} + ' 원'"></td> <!-- 가격 표시 -->
               </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Tier 추가 모달 -->
-  <div id="addTierModal" class="modal" style="display: none;">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Tier 추가</h4>
-          <button type="button" class="close" onclick="closeAddTierModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="addTierForm">
-            <div class="form-group">
-              <label for="tierName">Tier 이름</label>
-              <input type="text" class="form-control" id="tierName" required>
-            </div>
-            <div class="form-group">
-              <label for="minSpent">최소 소비 금액</label>
-              <input type="number" class="form-control" id="minSpent" required>
-            </div>
-            <div class="form-group">
-              <label for="maxSpent">최대 소비 금액</label>
-              <input type="number" class="form-control" id="maxSpent" required>
-            </div>
-            <div class="form-group">
-              <label for="discountRate">할인율 (%)</label>
-              <input type="number" class="form-control" id="discountRate" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Tier 추가</button>
-          </form>
+    </div> <!-- row end -->
+
+    <!-- Tier 추가 모달 -->
+    <div id="addTierModal" class="modal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tier 추가</h4>
+            <button type="button" class="close" onclick="closeAddTierModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="addTierForm">
+              <div class="form-group">
+                <label for="tierName">Tier 이름</label>
+                <input type="text" class="form-control" id="tierName" required>
+              </div>
+              <div class="form-group">
+                <label for="minSpent">최소 소비 금액</label>
+                <input type="number" class="form-control" id="minSpent" required>
+              </div>
+              <div class="form-group">
+                <label for="maxSpent">최대 소비 금액</label>
+                <input type="number" class="form-control" id="maxSpent" required>
+              </div>
+              <div class="form-group">
+                <label for="discountRate">할인율 (%)</label>
+                <input type="number" class="form-control" id="discountRate" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Tier 추가</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
+  </div> <!-- fh5co-main end -->
 </div>
 
 <th:block layout:fragment="javascript">
   <script th:src="@{/js/admin/tier-management.js}"></script>
+  <script th:src="@{/js/admin/user-management.js}"></script>
 </th:block>
 </body>
 </html>

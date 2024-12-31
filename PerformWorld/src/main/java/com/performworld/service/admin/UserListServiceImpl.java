@@ -1,14 +1,12 @@
 package com.performworld.service.admin;
 
-import com.performworld.domain.Tier;
 import com.performworld.domain.User;
 import com.performworld.dto.user.UserDto;
-import com.performworld.repository.admin.TierRepository;
 import com.performworld.repository.admin.UserListRepository;
+import com.performworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +17,7 @@ import java.util.stream.Collectors;
 public class UserListServiceImpl implements UserListService {
 
     private final UserListRepository userListRepository;
-    private final TierRepository tierRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -38,5 +36,11 @@ public class UserListServiceImpl implements UserListService {
                         user.getTier().getTierName())
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    // 사용자 삭제 메서드
+    public void deleteUserById(String userId) {
+        userRepository.deleteById(userId);  // 사용자 ID로 삭제
     }
 }

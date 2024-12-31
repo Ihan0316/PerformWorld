@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface UserListService {
 
-    List<UserDto> getAllUsers();  // 모든 사용자 조회
+    List<UserDto> getAllUsers();
+
+    void deleteUserById(String userId);// 모든 사용자 조회
 }
