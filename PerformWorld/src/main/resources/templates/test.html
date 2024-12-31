@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-    <!-- css import -->
-    <link rel="stylesheet" th:href="@{/css/test.css}">
 </head>
 <body>
 <div layout:fragment="content">
@@ -46,13 +44,7 @@
         <input type="date" id="birth" name="birth"><br/>
 
         <label for="address">주소:</label>
-        <select id="address" name="address">
-            <option value="">전체</option>
-            <option value="busan">부산</option>
-            <option value="seoul">서울</option>
-            <option value="gyeongnam">경남</option>
-            <option value="gyeonggi">경기</option>
-        </select><br/>
+        <select id="address" name="address"></select><br/>
 
         <label>파일 업로드:</label>
         <div id="fileInputs">
