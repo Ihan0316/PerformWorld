@@ -1,6 +1,7 @@
 package com.performworld.controller.event;
 
 import com.performworld.domain.Event;
+import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +56,32 @@ public class EventRestController {
 
     @PostMapping("/save")
     public ResponseEntity<String> saveEvent(@RequestBody String eventXml) {
-        // XML 데이터를 데이터베이스에 저장
         log.info("컨트롤러에서 저장하기 위해 받은 xml"+eventXml);
         eventService.saveEvent(eventXml);
         return ResponseEntity.ok("이벤트가 성공적으로 저장되었습니다.");
     }
+
+    // 모든 이벤트를 가져오는 API
+    @GetMapping("/savedEventList")
+    public ResponseEntity<List<EventDTO>> getAllEvents() {
+        List<EventDTO> eventDTOList = eventService.getAllEvents();
+
+        // 로그에 이벤트 목록을 출력
+        log.info("Returning event DTO list: " + eventDTOList);  // 응답 로그 출력
+
+        // EventDTO 목록을 클라이언트에게 반환
+        return ResponseEntity.ok(eventDTOList);
+    }
+
+    // 이벤트 삭제 API
+    @DeleteMapping("/deleteEvent/{eventId}")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId) {
+        eventService.deleteEvent(eventId);  // 서비스에서 이벤트 삭제
+        return ResponseEntity.ok("Event deleted successfully");
+    }
+
+
+
+
+
 }

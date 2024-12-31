@@ -23,6 +23,12 @@ public class EventDTO {
     @XmlElement(name = "prfnm")
     private String title;
 
+    @XmlElement(name = "prfpdfrom")
+    private String prfpdfrom;
+
+    @XmlElement(name = "prfpdto")
+    private String prfpdto;
+
     @XmlElement(name = "prfcast")
     private String casting;
 
