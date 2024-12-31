@@ -22,7 +22,7 @@ public class UserRestController {
     public UserDto getInfo(@RequestBody UserDto userDTO) {
         log.info(userDTO);
         return userService.getUserInfo(userDTO);
-    }
+}
 
     // 비밀번호 변경
     @PostMapping("/changePw")
