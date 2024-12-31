@@ -47,5 +47,5 @@ public class Event extends BaseEntity {
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Image> image = new ArrayList<>();  // Images 테이블과의 연관
+    private List<Image> images = new ArrayList<>();  // Images 테이블과의 연관
 }

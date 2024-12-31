@@ -136,7 +136,7 @@ public class EventService {
                 .casting(dto.getCasting())
                 .location(location.getCodeName())
                 .luntime(runtimeMinutes)
-                .image(new ArrayList<>()) // 이미지는 아래에서 추가
+                .images(new ArrayList<>()) // 이미지는 아래에서 추가
                 .build();
 
         String posterUrl = dto.getPoster();  // poster는 EventDTO에서 이미 매핑됨
@@ -146,7 +146,7 @@ public class EventService {
                     .isThumbnail(true) // 썸네일로 설정
                     .event(event) // 연관 관계 설정
                     .build();
-            event.getImage().add(image);
+            event.getImages().add(image);
         }
 
         // styurls 추출 (상세보기 이미지들)
@@ -157,7 +157,7 @@ public class EventService {
                     .isThumbnail(false) // 썸네일이 아니므로 false
                     .event(event) // 연관 관계 설정
                     .build();
-            event.getImage().add(image);
+            event.getImages().add(image);
         }
         log.info("save이벤트에 넘어온 데이터"+event);
         return event;
