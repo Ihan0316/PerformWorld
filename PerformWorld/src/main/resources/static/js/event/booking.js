@@ -1,4 +1,158 @@
 const init = () => {
+
+//     // 여러 티켓팅의 날짜 범위 예시
+//     const ticketingPeriods = [
+//         { start: "2024-12-01", end: "2024-12-05" }, // 1차 티켓팅 범위
+//         { start: "2024-12-03", end: "2024-12-07" }, // 2차 티켓팅 범위
+//         { start: "2024-12-06", end: "2024-12-10" }  // 3차 티켓팅 범위
+//     ];
+//
+// // 날짜 범위의 합집합을 계산하는 함수
+//     function getUnionPeriod(periods) {
+//         let minDate = periods[0].start;
+//         let maxDate = periods[0].end;
+//
+//         // 모든 티켓팅 범위를 합치기
+//         periods.forEach(period => {
+//             if (new Date(period.start) < new Date(minDate)) {
+//                 minDate = period.start; // 더 이른 날짜로 갱신
+//             }
+//             if (new Date(period.end) > new Date(maxDate)) {
+//                 maxDate = period.end; // 더 늦은 날짜로 갱신
+//             }
+//         });
+//
+//         return { start: minDate, end: maxDate };
+//     }
+//
+// // 합집합 범위 계산
+//     const unionPeriod = getUnionPeriod(ticketingPeriods);
+//     console.log(unionPeriod);  // { start: '2024-12-01', end: '2024-12-10' }
+//
+// // flatpickr로 날짜 범위 설정
+//     getTicketingInfo().then(res => {
+//         console.log(res);
+//         const eventPeriodStart = unionPeriod.start;  // 합집합 시작일
+//         const eventPeriodEnd = unionPeriod.end;      // 합집합 종료일
+//
+//         // flatpickr 초기화
+//         const fp = flatpickr("#datepicker", {
+//             inline: true,           // 달력을 div에 바로 표시
+//             dateFormat: "Y-m-d",    // 날짜 형식 (연도-월-일)
+//             minDate: eventPeriodStart, // 티켓팅 시작일을 최소 날짜로 설정
+//             maxDate: eventPeriodEnd,  // 티켓팅 종료일을 최대 날짜로 설정
+//             disableMobile: true,    // 모바일에서의 UI 변경 방지
+//             onReady: function(selectedDates, dateStr, instance) {
+//                 const year = instance.currentYear;
+//                 const month = instance.currentMonth;
+//                 instance.calendarContainer.querySelector('.flatpickr-monthDropdown-month').textContent = `${year}년 ${month + 1}월`;
+//
+//                 // 월 선택 비활성화
+//                 const selectElement = instance.calendarContainer.querySelector('.flatpickr-monthDropdown-months');
+//                 if (selectElement) {
+//                     selectElement.disabled = true;
+//                 }
+//
+//                 // 월 선택 드롭다운 스타일링
+//                 const monthDropdown = instance.calendarContainer.querySelector('.flatpickr-monthDropdown-months');
+//                 if (monthDropdown) {
+//                     monthDropdown.style.webkitAppearance = "none";
+//                     monthDropdown.style.mozAppearance = "none";
+//                     monthDropdown.style.oAppearance = "none";
+//                     monthDropdown.style.appearance = "none";
+//                 }
+//
+//                 // 날짜 입력창 숨기기
+//                 const numInputWrapper = instance.calendarContainer.querySelector('.numInputWrapper');
+//                 if (numInputWrapper) {
+//                     numInputWrapper.style.display = "none";
+//                 }
+//             },
+//             onMonthChange: function(selectedDates, dateStr, instance) {
+//                 const year = instance.currentYear;
+//                 const month = instance.currentMonth;
+//                 instance.calendarContainer.querySelector(`.flatpickr-monthDropdown-months option[value="${month}"]`).textContent = `${year}년 ${month + 1}월`;
+//             },
+//             onChange: function(selectedDates, dateStr, instance) {
+//                 // 선택된 날짜를 기준으로 회차 정보 필터링
+//                 const selectedDate = new Date(selectedDates[0]).toLocaleDateString();
+//
+//                 // 선택된 날짜에 맞는 공연 회차 정보 필터링
+//                 const selectedSchedules = eventSchedules.filter(schedule => {
+//                     const eventDate = new Date(schedule.eventDate).toLocaleDateString();
+//                     return eventDate === selectedDate; // 날짜만 비교
+//                 });
+//
+//                 // 회차 정보 표시
+//                 const scheduleInfoDiv = document.querySelector(".scheduleInfo");
+//                 scheduleInfoDiv.innerHTML = ''; // 이전 정보 지우기
+//
+//                 if (selectedSchedules.length > 0) {
+//                     selectedSchedules.forEach(schedule => {
+//                         const scheduleElement = document.createElement("div");
+//                         scheduleElement.classList.add("schedule-item");
+//                         scheduleElement.innerHTML = `
+//                         <div><strong>${schedule.eventDate.split('T')[1].substring(0, 5)}</strong></div>
+//                         <div><span>${schedule.eventCast}</span></div>
+//                     `;
+//
+//                         // 클릭 가능한 이벤트 핸들러 추가
+//                         scheduleElement.addEventListener("click", function() {
+//                             // 이전에 클릭한 항목이 있다면 active 클래스를 제거
+//                             const activeItem = document.querySelector(".schedule-item.active");
+//                             if (activeItem) {
+//                                 activeItem.classList.remove("active");
+//                             }
+//
+//                             // 클릭된 항목에 active 클래스 추가
+//                             scheduleElement.classList.add("active");
+//
+//                             // 회차 선택이 완료되면 좌석 선택 UI 보이기
+//                             document.querySelector(".seatSelBox").classList.remove("d-none");
+//
+//                             // 좌석 초기화
+//                             selectedSeats = [];
+//                             // 선택된 좌석 UI 초기화
+//                             const selectedSeatElements = document.querySelectorAll(".seat.selected");
+//                             selectedSeatElements.forEach(seat => {
+//                                 seat.classList.remove("selected");
+//                             });
+//                             // 배송 여부와 결제하기 UI 숨기기
+//                             document.querySelector(".dlvSelBox").classList.add("d-none");
+//                             document.querySelector(".booking-footer").classList.add("d-none");
+//                         });
+//
+//                         scheduleInfoDiv.appendChild(scheduleElement);
+//                     });
+//                 } else {
+//                     scheduleInfoDiv.innerHTML = '<div>선택한 날짜에 공연 정보가 없습니다.</div>';
+//                 }
+//
+//                 // 날짜 변경 시 좌석 선택창 숨기기
+//                 document.querySelector(".seatSelBox").classList.add("d-none");
+//                 // 배송 여부와 결제하기 UI 숨기기
+//                 document.querySelector(".dlvSelBox").classList.add("d-none");
+//                 document.querySelector(".booking-footer").classList.add("d-none");
+//             }
+//         });
+//     }).catch(e => {
+//         alert("티켓팅 정보를 불러오는데 실패했습니다.");
+//     });
+
+
+    // 티켓팅 목록 가져오기
+    async function getTicketingInfo() {
+        const res = await axios({
+            method : 'post',
+            url : '/book/getEventTicketing',
+            data : { eventId: eventId },
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -174,7 +328,6 @@ const init = () => {
             });
         }
     });
-    console.log(seatData);
 
     const seatContainer = document.getElementById("seat-container");
 
