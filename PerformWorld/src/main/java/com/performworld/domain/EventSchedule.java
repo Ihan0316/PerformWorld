@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "event_schedules")
 @Getter
-@ToString
+@ToString(exclude = "event")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,7 +21,7 @@ public class EventSchedule extends BaseEntity {
     @Column(name = "schedule_id")
     private Long scheduleId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     private Event event;  // Events 테이블과의 연관
 

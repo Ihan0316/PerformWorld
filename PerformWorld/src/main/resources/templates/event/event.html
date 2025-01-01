@@ -189,8 +189,6 @@
             function loadEvents(page) {
                 const titleSearch = document.getElementById('titleSearch').value.toLowerCase(); // 제목 검색
                 const genreFilter = document.getElementById('genreFilter').value; // 장르 선택
-                console.log("titleSearch"+titleSearch)
-                console.log("genreFilter"+genreFilter)
                 let url = `/event/savedEventList?page=${page}&size=${eventsPerPage}`;
 
                 // 제목이 입력되었으면 title 파라미터 추가
@@ -212,8 +210,6 @@
                 })
                     .then(response => response.json())  // JSON 형식으로 응답 처리
                     .then(data => {
-                        console.log("API 응답 데이터:", data); // 전체 응답 데이터 출력
-                        console.log("첫 번째 이벤트 데이터:", data.content[0]); // 첫 번째 이벤트 데이터 출력
                         allEvents = data.content; // 필터링된 이벤트 목록 저장
                         totalPages = Math.ceil(data.totalElements / eventsPerPage); // 전체 페이지 수 계산
                         renderTable(allEvents); // 테이블 렌더링
