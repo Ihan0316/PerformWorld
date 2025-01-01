@@ -23,9 +23,15 @@ public class EventController {
         return "event/event";
     }
 
-    @GetMapping("/main")
+    @GetMapping("/theater")
     public String main() {
-        return "/event/main";
+        return "/event/theater";
+    }
+
+    @GetMapping("/details/{eventId}")
+    public String details(@PathVariable Long eventId, Model model) {
+        model.addAttribute("eventId", eventId);
+        return "/event/details"; // HTML 템플릿
     }
 
     // 예매하기
