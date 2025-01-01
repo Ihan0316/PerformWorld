@@ -1,6 +1,6 @@
 package com.performworld.controller.eventSchedule;
 
-import com.performworld.domain.EventSchedule;
+import com.performworld.dto.event.EventScheduleDTO;
 import com.performworld.service.eventSchedule.EventScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +14,14 @@ import java.util.List;
 @RequestMapping("/eventSchedule")
 @RequiredArgsConstructor
 public class EventScheduleRestController {
+
     private final EventScheduleService eventScheduleService;
+
+    // 공연 날짜별 회차 목록 조회
+    @PostMapping("/getScheduleList")
+    public List<EventScheduleDTO> getScheduleList(@RequestBody EventScheduleDTO scheduleDTO) {
+        return eventScheduleService.getScheduleList(scheduleDTO);
+    }
 
     @PostMapping("/saveEventSchedule")
     public String createSchedules(@RequestBody String xmlData) {
@@ -26,5 +33,4 @@ public class EventScheduleRestController {
             return "Error creating schedules: " + e.getMessage();
         }
     }
-
 }
