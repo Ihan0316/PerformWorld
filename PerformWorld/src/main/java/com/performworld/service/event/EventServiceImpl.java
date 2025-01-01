@@ -108,6 +108,7 @@ public class EventServiceImpl implements EventService{
         int runtimeMinutes = parseRuntimeToMinutes(dto.getRuntime());
 
         Event event = Event.builder()
+                .mt20id(dto.getMt20id())
                 .category(category)
                 .title(dto.getTitle())
                 .prfpdfrom(dto.getPrfpdfrom())

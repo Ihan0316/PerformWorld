@@ -34,6 +34,8 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     // 모든 이벤트 반환 (Event 엔티티 반환)
     Page<Event> findAll(Pageable pageable);
 
+    Optional<Event> findByMt20id(String externalId);
+
 
 }
 

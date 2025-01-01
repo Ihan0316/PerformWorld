@@ -19,6 +19,9 @@ public class EventDTO {
 
     private Long eventId;
 
+    @XmlElement(name = "mt20id")
+    private String mt20id;
+
     @XmlElement(name = "genrenm")
     private String genreName;
 
