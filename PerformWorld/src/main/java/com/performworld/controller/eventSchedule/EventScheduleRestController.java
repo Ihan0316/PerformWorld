@@ -16,15 +16,15 @@ import java.util.List;
 public class EventScheduleRestController {
     private final EventScheduleService eventScheduleService;
 
-//    @PostMapping("/saveEventSchedule")
-//    public String createSchedules(@RequestBody String xmlData) {
-//        try {
-//            List<EventSchedule> schedules = ScheduleUtils.parseAndCreateSchedules(xmlData);
-//            eventScheduleService.saveSchedules(schedules);
-//            return "Schedules created successfully!";
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "Error creating schedules: " + e.getMessage();
-//        }
-//    }
+    @PostMapping("/saveEventSchedule")
+    public String createSchedules(@RequestBody String xmlData) {
+        try {
+            eventScheduleService.saveSchedulesFromXml(xmlData);
+            return "Schedules created successfully!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error creating schedules: " + e.getMessage();
+        }
+    }
+
 }

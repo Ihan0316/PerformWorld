@@ -4,6 +4,7 @@ import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSavedListDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
+import com.performworld.service.eventSchedule.EventScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.util.List;
 public class EventRestController {
 
     private final EventService eventService;
+    private final EventScheduleService eventScheduleService;
 
     @GetMapping("/searchList2")
     public EventSearchListDTO getPerformances(
@@ -56,6 +58,7 @@ public class EventRestController {
     @PostMapping("/save")
     public ResponseEntity<String> saveEvent(@RequestBody String eventXml) {
         eventService.saveEvent(eventXml);
+        eventScheduleService.saveSchedulesFromXml(eventXml);
         return ResponseEntity.ok("이벤트가 성공적으로 저장되었습니다.");
     }
 

@@ -5,5 +5,5 @@ import com.performworld.domain.EventSchedule;
 import java.util.List;
 
 public interface EventScheduleService {
-    void saveSchedules(List<EventSchedule> schedules);
+    void saveSchedulesFromXml(String xmlData);
 }

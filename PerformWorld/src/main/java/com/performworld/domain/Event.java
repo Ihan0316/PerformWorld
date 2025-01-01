@@ -23,6 +23,9 @@ public class Event extends BaseEntity {
     @Column(name = "event_id")
     private Long eventId;
 
+    @Column(name = "mt20id", unique = true, nullable = false)
+    private String mt20id; // 공연 코드
+
     @ManyToOne
     @JoinColumn(name = "category", referencedColumnName = "code")
     private SystemCode category;  // SystemCode 테이블과의 연관
@@ -48,4 +51,8 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Image> images = new ArrayList<>();  // Images 테이블과의 연관
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<EventSchedule> eventSchedules = new ArrayList<>();
 }
