@@ -1,5 +1,6 @@
 package com.performworld.controller.event;
 
+import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSavedListDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
@@ -8,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,13 +60,15 @@ public class EventRestController {
     }
 
     // DB에 저장된 event 목록 가져오기
-    @GetMapping(value="/savedEventList", produces = "application/json")
+    @GetMapping(value = "/savedEventList", produces = "application/json")
     public ResponseEntity<Page<EventSavedListDTO>> getSavedEventList(
             @RequestParam(defaultValue = "1") int page, // 기본 페이지는 1
-            @RequestParam(defaultValue = "5") int size  // 기본 페이지 크기는 5
+            @RequestParam(defaultValue = "5") int size, // 기본 페이지 크기는 5
+            @RequestParam(required = false, defaultValue = "") String title, // 제목 검색 (optional)
+            @RequestParam(required = false, defaultValue = "") String genre // 장르 필터 (optional)
     ) {
-        // 서비스에서 페이징된 이벤트 목록을 반환
-        Page<EventSavedListDTO> eventPage = eventService.getSavedEventList(page - 1, size); // 0-based index로 전달
+        page = Math.max(page - 1, 0);
+        Page<EventSavedListDTO> eventPage = eventService.getSavedEventList(page , size, title, genre); // 0-based index로 전달
         return ResponseEntity.ok(eventPage); // 페이징된 데이터 반환
     }
 
@@ -74,6 +78,18 @@ public class EventRestController {
         eventService.deleteEvent(eventId);  // 서비스에서 이벤트 삭제
         return ResponseEntity.ok("Event deleted successfully");
     }
+
+    @PostMapping ("/details")
+    public EventDTO getOneEvents(@RequestBody EventDTO eventDTO) {
+        // 상세 조회 API 호출 및 XML 반환
+        return eventService.getOneEvents(eventDTO.getEventId());
+
+    }
+
+
+
+
+
 
 
 

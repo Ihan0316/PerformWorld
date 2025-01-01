@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function fetchPerformances(performName, startDate, endDate, locationCode, page) {
         // API URL 설정
         const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&page=${page}&size=${pageSize}`;
-        console.log("현재페이지 : " + page)
         fetch(apiUrl)
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
@@ -51,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-                console.log(xmlDoc)
                 // 공연 데이터 처리 (db 태그를 사용)
                 const performances = xmlDoc.getElementsByTagName("db");
                 // 기존 테이블 내용 삭제
@@ -153,7 +151,6 @@ document.addEventListener("DOMContentLoaded", function () {
     eventListContainer.addEventListener("click", function (e) {
         if (e.target.classList.contains("add-btn")) {
             const eventID = e.target.getAttribute("data-id");
-            console.log("eventID:" + eventID)
             if (eventID) {
                 fetchEventDetails(eventID)
                     .then((eventData) => saveEvent(eventData))
@@ -178,8 +175,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const xmlString = await response.text();
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-
-        console.log("상세 조회 결과:", xmlDoc);
 
         // 필요한 데이터 추출
         const genrenm = xmlDoc.getElementsByTagName("genrenm")[0]?.textContent || '';
@@ -230,7 +225,6 @@ document.addEventListener("DOMContentLoaded", function () {
     </event>
 `;
 
-        console.log("결과"+xmlString);
         // XML 형식으로 서버에 전송
         const response = await fetch(saveApiUrl, {
             method: "POST",
