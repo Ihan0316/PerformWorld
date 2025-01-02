@@ -246,8 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
             throw new Error(`저장 실패: ${response.status} - ${errorText}`);
 
         }
-
-        alert("이벤트가 성공적으로 저장되었습니다.");
+        alert("공연을 저장했습니다.")
     }
 
     async function getRegionList() {
