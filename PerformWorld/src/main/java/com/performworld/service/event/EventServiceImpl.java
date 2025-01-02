@@ -47,25 +47,25 @@ public class EventServiceImpl implements EventService{
     private final SystemCodeRepository systemCodeRepository;
     private final ImageRepository imageRepository;
 
-    @Override
-    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size) {
-        log.info("API 호출을 시작합니다...");
-
-        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shprfnm=%s",
-                apiUrl, apiKey, stdate, eddate, Page, Size, signgucode, shprfnm);
-
-        log.info("API 호출 URL: {}", url);
-
-        try {
-            String xmlResponse = restTemplate.getForObject(url, String.class);
-
-            XmlMapper xmlMapper = new XmlMapper();
-            return xmlMapper.readValue(xmlResponse, EventSearchListDTO.class);
-        } catch (Exception e) {
-            log.error("API 호출 또는 데이터 파싱 중 오류 발생: {}", e.getMessage(), e);
-            throw new RuntimeException("공공데이터 API 호출 실패", e);
-        }
-    }
+//    @Override
+//    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size) {
+//        log.info("API 호출을 시작합니다...");
+//
+//        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shprfnm=%s",
+//                apiUrl, apiKey, stdate, eddate, Page, Size, signgucode, shprfnm);
+//
+//        log.info("API 호출 URL: {}", url);
+//
+//        try {
+//            String xmlResponse = restTemplate.getForObject(url, String.class);
+//
+//            XmlMapper xmlMapper = new XmlMapper();
+//            return xmlMapper.readValue(xmlResponse, EventSearchListDTO.class);
+//        } catch (Exception e) {
+//            log.error("API 호출 또는 데이터 파싱 중 오류 발생: {}", e.getMessage(), e);
+//            throw new RuntimeException("공공데이터 API 호출 실패", e);
+//        }
+//    }
 
     @Override
     public String getEventDetails(String eventID) {
@@ -81,7 +81,7 @@ public class EventServiceImpl implements EventService{
 
         Optional<Event> existingEvent = eventRepository.findByTitle(event.getTitle());
         if (existingEvent.isPresent()) {
-            throw new DuplicateEventException("이미 존재하는 공연 제목입니다: " + event.getTitle());
+            throw new DuplicateEventException("이미 존재하는 공연 제목입니다");
         }
 
         log.info("saveEvent Service단" + event);
@@ -216,11 +216,11 @@ public class EventServiceImpl implements EventService{
 
         // title과 genre 조건에 따라 쿼리 실행
         if (title != null && !title.isEmpty() && genre != null && !genre.isEmpty()) {
-            eventPage = eventRepository.findByTitleContainingAndCategory_CodeName(title, genre, pageable);
+            eventPage = eventRepository.findByTitleContainingAndCategory_Code(title, genre, pageable);
         } else if (title != null && !title.isEmpty()) {
             eventPage = eventRepository.findByTitleContaining(title, pageable);
         } else if (genre != null && !genre.isEmpty()) {
-            eventPage = eventRepository.findByCategory_CodeName(genre, pageable);
+            eventPage = eventRepository.findByCategory_Code(genre, pageable);
         } else {
             eventPage = eventRepository.findAll(pageable); // 조건 없이 모든 이벤트 반환
         }

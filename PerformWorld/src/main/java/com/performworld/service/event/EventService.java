@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface EventService {
 
-    EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size);
+//    EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, String genreSelect, int Page, int Size);
     String getEventDetails(String eventID);
     void saveEvent(String eventXml);
     List<EventDTO> getAllEvents();

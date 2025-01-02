@@ -23,7 +23,7 @@ public class EventSavedListDTO {
         this.prfpdfrom = event.getPrfpdfrom();
         this.prfpdto = event.getPrfpdto();
         this.location = event.getLocation();
-        this.genre = event.getCategory() != null ? event.getCategory().getCodeName() : null; // 카테고리 정보 처리
+        this.genre = event.getCategory() != null ? event.getCategory().getCode() : null; // 카테고리 정보 처리
         this.thumbnailUrl = event.getImages() != null && !event.getImages().isEmpty() ? event.getImages().get(0).getFilePath() : null; // 첫 번째 이미지의 파일 경로
     }
 

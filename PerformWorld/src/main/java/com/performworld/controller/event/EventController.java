@@ -47,6 +47,7 @@ public class EventController {
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam String locationCode,
+            @RequestParam String genreSelect,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
 
@@ -54,8 +55,9 @@ public class EventController {
         endDate = endDate.replace("-", "");
         try {
             // 공연 검색 서비스 호출
-            EventSearchListDTO eventSearchListDTO = eventService.getPerformances(startDate, endDate, performName, locationCode,page,size);
-            return ResponseEntity.ok(eventSearchListDTO);
+//            EventSearchListDTO eventSearchListDTO = eventService.getPerformances(startDate, endDate, performName, locationCode, genreSelect, page,size);
+//            return ResponseEntity.ok(eventSearchListDTO);
+            return null;
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

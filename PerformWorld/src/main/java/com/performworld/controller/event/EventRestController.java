@@ -37,10 +37,11 @@ public class EventRestController {
             log.info("공연 목록 API 호출 시작 - 시작일: {}, 종료일: {}, 공연명: {}, 지역코드: {}",
                     stdate, eddate, shprfnm, signgucode);
 
-            EventSearchListDTO performances = eventService.getPerformances(stdate, eddate, shprfnm, signgucode ,page , size);
+//            EventSearchListDTO performances = eventService.getPerformances(stdate, eddate, shprfnm, signgucode ,page , size);
 
-            log.info("공연 목록 API 호출 성공 - 결과 수: {}", performances.getPerformances().size());
-            return performances;
+//            log.info("공연 목록 API 호출 성공 - 결과 수: {}", performances.getPerformances().size());
+//            return performances;
+            return null;
 
         } catch (Exception e) {
             log.error("공연 목록 API 호출 중 오류 발생: {}", e.getMessage(), e);

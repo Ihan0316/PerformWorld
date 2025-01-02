@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                     .catch((error) => {
                         console.error("상세 조회 또는 저장 실패:", error);
-                        alert(error);
+                        // alert(error);
                         alert("저장에 실패했습니다.");
                     });
             }
@@ -240,9 +240,99 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!response.ok) {
             const errorText = await response.text();  // 응답 본문을 텍스트로 읽기
+            alert("저장에 실패 했습니다. "+ errorText)
             throw new Error(`저장 실패: ${response.status} - ${errorText}`);
+
         }
 
         alert("이벤트가 성공적으로 저장되었습니다.");
     }
+
+    async function getRegionList() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'RGN' },  // 장르 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    getRegionList().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='location-code']");
+        const optionElement = document.createElement("option");
+        optionElement.value = ""
+        optionElement.textContent = "지역 선택";  // 이름
+        selectElement.appendChild(optionElement);
+        for(const region of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = region.code;  // 코드
+            optionElement.textContent = region.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+
+    async function getCategoryList() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'CTG' },  // 장르 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
+    getCategoryList().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='genre-code']");
+        const optionElement = document.createElement("option");
+        optionElement.value = ""
+        optionElement.textContent = "장르 선택";  //
+        selectElement.appendChild(optionElement);
+        for(const genre of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = genre.code;  // 코드
+            optionElement.textContent = genre.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+
+    async function getCategoryList2() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'CTG' },  // 장르 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
+    getCategoryList2().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='genre-select']");
+        const optionElement = document.createElement("option");
+        optionElement.value = ""
+        optionElement.textContent = "장르 선택";  //
+        selectElement.appendChild(optionElement);
+        for(const category of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = category.code;  // 코드
+            optionElement.textContent = category.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
 });
