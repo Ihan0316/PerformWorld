@@ -1,5 +1,6 @@
-package com.performworld.controller.event;
+package com.performworld.controller.ticket;
 
+import com.performworld.dto.ticket.BookingDTO;
 import com.performworld.dto.ticket.TicketingDTO;
 import com.performworld.service.event.BookService;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,17 @@ public class BookRestController {
         return bookService.findRecentTicketing(ticketingDTO.getEventId());
     }
 
-    // 특정 공연의 모든 티켓팅 조회
+    // 특정 공연의 오픈된 모든 티켓팅 조회
     @PostMapping("/getEventTicketing")
     public List<TicketingDTO> getEventTicketing(@RequestBody TicketingDTO ticketingDTO) {
         log.info(ticketingDTO);
         return bookService.getEventTicketing(ticketingDTO.getEventId());
+    }
+
+    // 특정 회차의 예매정보 조회
+    @PostMapping("/getBookedList")
+    public List<BookingDTO> getBookedList(@RequestBody BookingDTO bookingDTO) {
+        log.info(bookingDTO);
+        return bookService.getBookedList(bookingDTO.getScheduleId());
     }
 }

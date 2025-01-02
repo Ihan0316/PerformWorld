@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<body>
+
+<div id="fh5co-main" layout:fragment="content">
+  <div class="fh5co-narrow-content">
+    <div class="row row-bottom-padded-md">
+      <div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
+        <img class="img-responsive poster" alt="Event Poster">
+      </div>
+
+      <div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
+        <h2 class="fh5co-heading title"></h2>
+        <p class="description"></p>
+        <p class="genre"></p>
+        <p class="date"></p>
+        <p class="location"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<th:block layout:fragment="javascript">
+
+  <script th:src="@{/js/event/details.js}"></script>
+  <script th:inline="javascript">
+    const eventId = [[${eventId}]];
+  </script>
+
+</th:block>
+
+</body>
+</html>
+

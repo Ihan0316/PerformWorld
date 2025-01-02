@@ -1,8 +1,7 @@
 package com.performworld.repository.event;
 
-import com.performworld.domain.QEvent;
-import com.performworld.domain.QTicketing;
-import com.performworld.domain.Ticketing;
+import com.performworld.domain.*;
+import com.performworld.dto.ticket.BookingDTO;
 import com.performworld.dto.ticket.TicketingDTO;
 import com.querydsl.core.Tuple;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -50,7 +49,7 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                 .collect(Collectors.toList());
     }
 
-    // 해당 공연, 모든 티켓팅 조회
+    // 해당 공연, 오픈된 모든 티켓팅 조회
     @Override
     public List<TicketingDTO> getEventTicketing(Long eventId) {
         QTicketing ticketing = QTicketing.ticketing;
@@ -60,6 +59,7 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
         List<Tuple> result = from(ticketing)
                 .leftJoin(ticketing.event, event)
                 .where(ticketing.event.eventId.eq(eventId))
+                .where(ticketing.openDatetime.before(LocalDateTime.now()))
                 .orderBy(ticketing.ticketingId.asc())
 
                 .select(
@@ -79,6 +79,35 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                         .eventPeriodEnd(tuple.get(ticketing.eventPeriodEnd))
                         .eventId(tuple.get(event.eventId))
                         .eventName(tuple.get(event.title))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    // 특정 회차의 예매정보 조회
+    @Override
+    public List<BookingDTO> getBookedList(Long scheduleId) {
+        QBooking booking = QBooking.booking;
+        QEventSchedule schedule = QEventSchedule.eventSchedule;
+
+        List<Tuple> result = from(booking)
+                .leftJoin(booking.eventSchedule, schedule)
+                .where(booking.eventSchedule.scheduleId.eq(scheduleId))
+                .where(booking.status.code.in("Y", "P"))
+
+                .select(
+                        booking.bookingId
+                        , booking.user.userId
+                        , schedule.scheduleId
+                        , booking.seat.seatId
+                        , booking.status.code
+                ).fetch();
+
+        return result.stream().map(tuple -> BookingDTO.builder()
+                        .bookingId(tuple.get(booking.bookingId))
+                        .userId(tuple.get(booking.user.userId))
+                        .scheduleId(tuple.get(schedule.scheduleId))
+                        .seatId(tuple.get(booking.seat.seatId))
+                        .status(tuple.get(booking.status.code))
                         .build())
                 .collect(Collectors.toList());
     }
