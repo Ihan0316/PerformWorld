@@ -30,12 +30,9 @@ public class AdminRestController {
     private final UserListService userListService;
     private final SeatService seatService;
 
-    // 모든 데이터 불러오기 (페이징 처리된 좌석 데이터 반영)
     @PostMapping("/getAllData")
     @ResponseBody
-    public Map<String, Object> getTierAndUserList(@RequestBody Map<String, Object> requestData) {
-        String tierFilter = (String) requestData.get("tierFilter");  // 예시: 티어 필터링
-        log.info("Received tierFilter: {}", tierFilter);
+    public Map<String, Object> getTierAndUserList() {
 
         // 페이징 처리된 좌석 요청 데이터
         PagingRequestDTO pagingRequest = new PagingRequestDTO();

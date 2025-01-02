@@ -12,9 +12,7 @@ window.onload = function() {
 // User, Tier, Seat 데이터를 한 번에 가져오는 함수
 async function getAllData() {
     try {
-        const response = await axios.post('/admin/getAllData', {
-            tierFilter: '',  // 티어 필터링 값을 비워둡니다.
-        });
+        const response = await axios.post('/admin/getAllData', {});
 
         const { tiers, users, seats } = response.data;
 
