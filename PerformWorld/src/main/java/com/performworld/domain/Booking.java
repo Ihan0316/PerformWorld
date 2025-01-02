@@ -3,8 +3,6 @@ package com.performworld.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "bookings")
 @Getter
@@ -37,6 +35,7 @@ public class Booking extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private Long totalPrice;  // 총 예매 금액
 
-    @Column(name = "status", length = 50)
-    private String status;  // 예매 상태 (예: 예약 완료, 취소 등)
+    @ManyToOne
+    @JoinColumn(name = "status", referencedColumnName = "code")
+    private SystemCode status;  // 예매 상태
 }
