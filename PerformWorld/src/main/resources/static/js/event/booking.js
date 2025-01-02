@@ -374,13 +374,61 @@ const init = () => {
     });
 
     // 결제하기
-    document.querySelector(".payBtn").addEventListener("click", function(e) {
+    document.querySelector(".payBtn").addEventListener("click", async function(e) {
         const postcode = document.querySelector("input[name='postcode']").value;
         if(document.querySelector("input[name='isDelivery']").checked &&
             (postcode == null || postcode === '')) {
             alert("배송지를 선택해주세요.");
             return;
         }
+
+        // 결제 api
+        const res = await PortOne.requestPayment({
+            storeId: "",
+            channelKey: "",
+            paymentId: `pay${crypto.randomUUID()}`,
+            orderName: "나이키 와플 트레이너 2 SD",
+            totalAmount: 1000,
+            currency: "CURRENCY_KRW",
+            payMethod: "CARD",
+            customer: {
+              fullName: "포트원",
+              phoneNumber: "010-0000-0000",
+              email: "test@test.com",
+            },
+//            virtualAccount: {
+//                bank: `SHINHAN`,
+//                accountExpiry: {
+//                    dueDate: `2025-01-12T23:59:59+09:00`,  //입금기한
+//                },
+//                cashReceipt: {
+//                    type: `PERSONAL`,
+//                    customerIdentityNumber: `010-1234-0000`,
+//                },
+//                remitteeName: `테스트`,
+//            },
+        });
+        if (res.code !== undefined) {
+            return alert(res.message);
+        }
+
+        // 결제내역 단건 조회 api
+        const PORTONE_API_SECRET = "";
+        const paymentResponse = await fetch(
+            `https://api.portone.io/payments/${res.paymentId}`,
+            {
+                headers: {
+                    Authorization: `PortOne ${PORTONE_API_SECRET}`
+                }
+            },
+        );
+        if (!paymentResponse.ok) {
+            throw new Error(`paymentResponse: ${await paymentResponse.json()}`);
+        }
+        const payment = await paymentResponse.json();
+        console.log(payment)
+
+        // 결제정보 DB 저장
     });
 }
 
