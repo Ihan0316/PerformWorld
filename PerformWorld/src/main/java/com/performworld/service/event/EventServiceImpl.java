@@ -184,6 +184,7 @@ public class EventServiceImpl implements EventService{
                 .fcltynm(event.getLocation())
                 .runtime(String.valueOf(event.getLuntime()));
 
+
         Optional<SystemCode> systemCode = systemCodeRepository.findByCode(event.getCategory().getCode());
         systemCode.ifPresent(code -> eventDTOBuilder.genreName(code.getCodeName()));
 
@@ -241,14 +242,34 @@ public class EventServiceImpl implements EventService{
         return eventSavedListDTOPage;
     }
 
-
+    // 목록에 포스트 이미지 조회
     @Override
     public EventDTO getOneEvents(Long eventId) {
         Event events = eventRepository.findById(eventId).orElseThrow();
         return convertToDTO(events);
     }
 
+//    @Override
+//    public EventDTO getOneImages(Long imageUrls) {
+//        Event events = eventRepository.findById(imageUrls).orElseThrow();
+//        return convertToDTO(events);
+//    }
 
+    // 상세 페이지에 상세이미지 조회
+    @Override
+    public EventDTO getOneImages(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event 데이터를 불러올수 없습니다: " + eventId));
+
+        List<String> imageUrls = imageRepository.findByEventEventId(eventId).stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+
+        return EventDTO.builder()
+                .eventId(event.getEventId())
+                .imageUrls(imageUrls)
+                .build();
+    }
 
 
 }

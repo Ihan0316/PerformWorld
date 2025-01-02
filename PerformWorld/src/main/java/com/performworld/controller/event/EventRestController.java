@@ -84,6 +84,14 @@ public class EventRestController {
         return ResponseEntity.ok("Event deleted successfully");
     }
 
+    // DB에 저장된 event 목록 가져오기
+    @GetMapping( "/getEventList")
+    public List<EventDTO> getAllEvent() {
+
+        return eventService.getAllEvents();// 서비스에서 eventId로 이벤트 가져오기
+    }
+
+    // 목록에 포스트 이미지 조회
     @PostMapping ("/details/{eventId}")
     public EventDTO getOneEvents(@PathVariable Long eventId) {
         // 상세 조회 API 호출 및 XML 반환
@@ -91,14 +99,14 @@ public class EventRestController {
 
     }
 
-    // DB에 저장된 event 목록 가져오기
-    @GetMapping( "/getEventList")
-    public List<EventDTO> getAllEvent() {
-
-       return eventService.getAllEvents();// 서비스에서 eventId로 이벤트 가져오기
-
-
+    // 상세이미지 조회
+    @PostMapping("/details/{eventId}/images")
+    public ResponseEntity<EventDTO> getOneImages(@PathVariable Long eventId) {
+        EventDTO eventDTO = eventService.getOneImages(eventId);
+        return ResponseEntity.ok(eventDTO);
     }
+
+
 
 
 

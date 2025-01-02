@@ -144,3 +144,12 @@ div.header_naviWrapper__6fe56 {
 .js .animate-box {
     opacity: 1 !important; /* opacity: 1로 설정하고 !important로 우선 적용 */
 }
+
+.detail-image {
+    max-width: 80%;
+    margin: 10px auto;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
