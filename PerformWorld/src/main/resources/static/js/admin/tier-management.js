@@ -1,65 +1,54 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // 모달 열기
-    function openAddTierModal() {
-        document.getElementById('addTierModal').style.display = 'block';  // 모달 열기
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("addTierModal");
+    const form = document.getElementById("addTierForm");
+    const addTierButton = document.querySelector(".addTierBtn");  // 클래스 이름을 사용하여 선택
+
+    function toggleModal(show) {
+        modal.style.display = show ? "block" : "none";
     }
 
-    // 모달 닫기
-    function closeAddTierModal() {
-        document.getElementById('addTierModal').style.display = 'none';  // 모달 닫기
-    }
+    document.querySelector(".add-tier-btn").addEventListener("click", () => toggleModal(true));
+    document.querySelector(".close").addEventListener("click", () => toggleModal(false));
 
-    // Add Tier 버튼 클릭 시, 모달 열기
-    document.querySelector(".add-tier-btn").addEventListener("click", openAddTierModal);
-
-    // 모달 외부 클릭 시 모달 닫기
-    document.getElementById('addTierModal').addEventListener('click', function(event) {
-        if (event.target === document.getElementById('addTierModal')) {
-            closeAddTierModal();
-        }
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) toggleModal(false);
     });
 
-    // 폼 제출 시 처리
-    document.getElementById("addTierForm").addEventListener("submit", function(e) {
+    addTierButton.addEventListener("click", async (e) => {
         e.preventDefault();
 
-        var tierData = {
-            tierName: document.getElementById("tierName").value,
-            minSpent: document.getElementById("minSpent").value,
-            maxSpent: document.getElementById("maxSpent").value,
-            discountRate: document.getElementById("discountRate").value
-        };
+        const tierName = document.getElementById("tierName").value.trim();
+        const minSpent = parseFloat(document.getElementById("minSpent").value.trim());
+        const maxSpent = parseFloat(document.getElementById("maxSpent").value.trim());
+        const discountRate = parseFloat(document.getElementById("discountRate").value.trim());
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/admin/addTier", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                alert("새 Tier가 추가되었습니다!");
+        if (!tierName || isNaN(minSpent) || isNaN(maxSpent) || isNaN(discountRate) || minSpent >= maxSpent || discountRate < 0 || discountRate > 100) {
+            alert("유효한 값을 입력하세요.");
+            return;
+        }
 
-                // 폼 초기화
-                document.getElementById("addTierForm").reset();
+        try {
+            addTierButton.disabled = true;
+            const response = await axios.post("/admin/addTier", { tierName, minSpent, maxSpent, discountRate });
+            alert("새 Tier가 추가되었습니다!");
+            form.reset();
+            toggleModal(false);
 
-                // 모달 닫기
-                closeAddTierModal();
-
-                // 새 Tier를 목록에 추가
-                var tbody = document.querySelector("table tbody");
-                var newRow = document.createElement("tr");
-
-                newRow.innerHTML = `
-                    <td>${response.tierId}</td>
-                    <td>${response.tierName}</td>
-                    <td>${response.minSpent} 원</td>
-                    <td>${response.maxSpent} 원</td>
-                    <td>${response.discountRate}%</td>
-                `;
-                tbody.appendChild(newRow);
-            } else {
-                alert("새 Tier 추가에 실패했습니다.");
-            }
-        };
-        xhr.send(`tierName=${tierData.tierName}&minSpent=${tierData.minSpent}&maxSpent=${tierData.maxSpent}&discountRate=${tierData.discountRate}`);
+            const tbody = document.querySelector("#tierTable tbody");
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${response.data.tierId}</td>
+                <td>${response.data.tierName}</td>
+                <td>${response.data.minSpent} 원</td>
+                <td>${response.data.maxSpent} 원</td>
+                <td>${response.data.discountRate}%</td>
+            `;
+            tbody.appendChild(newRow);
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
+            alert(`오류: ${errorMessage}`);
+        } finally {
+            addTierButton.disabled = false;
+        }
     });
 });
