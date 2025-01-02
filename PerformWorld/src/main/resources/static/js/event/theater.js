@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const res = await axios({
                 method: 'get',
-                url: '/event/savedEventList',
+                url: '/event/getEventList',
                 headers: {
                     'Content-Type': 'application/json'
                 }
