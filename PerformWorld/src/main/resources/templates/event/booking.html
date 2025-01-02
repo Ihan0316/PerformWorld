@@ -85,6 +85,7 @@
 
 	<!-- js import -->
 	<th:block layout:fragment="javascript">
+		<script th:src="@{https://cdn.portone.io/v2/browser-sdk.js}"></script>
 		<script th:inline="javascript">
 			const loginUser = [[${session.user}]];
 			console.log(loginUser);
