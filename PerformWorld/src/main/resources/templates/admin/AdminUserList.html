@@ -11,10 +11,7 @@
 <div id="fh5co-main" layout:fragment="content">
   <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
     <div class="row">
-<!--      데이터 조회전 대기-->
-      <div id="loadingSpinner" style="display:none;">
-        <p>Loading...</p> <!-- 간단한 로딩 메시지. 스피너를 사용할 수도 있음 -->
-      </div>
+
       <!-- User 조회 섹션 (상단) -->
       <h2>User 조회</h2>
       <div class="col-md-12">
@@ -110,6 +107,12 @@
               </tr>
               </tbody>
             </table>
+            <!-- Seat 테이블 하단에 페이지네이션 버튼 -->
+            <div id="seatPagination" style="text-align: center;">
+              <button id="prevPage" class="btn btn-secondary">이전</button>
+              <span id="pageNumbers"></span> <!-- 동적으로 페이지 번호 표시 -->
+              <button id="nextPage" class="btn btn-secondary">다음</button>
+            </div>
           </div>
         </div>
       </div> <!-- Seat 조회 섹션 end -->
@@ -154,7 +157,7 @@
   <th:block layout:fragment="javascript">
     <script th:src="@{/js/admin/tier-management.js}"></script>
     <script th:src="@{/js/admin/user-management.js}"></script>
-    <script th:src="@{/js/admin/all-management.js}"></script>
+    <script th:src="@{/js/admin/data.js}"></script>
   </th:block>
 </body>
 </html>

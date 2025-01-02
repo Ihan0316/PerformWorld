@@ -1,5 +1,7 @@
 package com.performworld.controller.admin;
 
+import com.performworld.dto.admin.PagingRequestDTO;
+import com.performworld.dto.admin.PagingResponseDTO;
 import com.performworld.dto.admin.SeatDTO;
 import com.performworld.dto.admin.TierDTO;
 import com.performworld.dto.user.UserDTO;
@@ -28,24 +30,28 @@ public class AdminRestController {
     private final UserListService userListService;
     private final SeatService seatService;
 
-    // 모든 데이터 불러오기
+    // 모든 데이터 불러오기 (페이징 처리된 좌석 데이터 반영)
     @PostMapping("/getAllData")
     @ResponseBody
     public Map<String, Object> getTierAndUserList(@RequestBody Map<String, Object> requestData) {
-        // 클라이언트에서 요청한 파라미터를 사용할 수 있음
         String tierFilter = (String) requestData.get("tierFilter");  // 예시: 티어 필터링
         log.info("Received tierFilter: {}", tierFilter);
 
+        // 페이징 처리된 좌석 요청 데이터
+        PagingRequestDTO pagingRequest = new PagingRequestDTO();
+        pagingRequest.setPage(0);  // 처음에는 첫 번째 페이지 (혹은 클라이언트에서 페이지 번호를 받을 수 있음)
+        pagingRequest.setSize(10); // 페이지 당 10개 항목
+
         // Tier 목록과 사용자 목록을 각각 가져옵니다.
         List<TierDTO> tierDTOs = tierService.getAllTiers();
-        List<UserDTO> userDTOs = userListService.getAllUsers();  // UserDto 객체를 사용
-        List<SeatDTO> seats = seatService.getAllSeats(); // 좌석 목록 추가
+        List<UserDTO> userDTOs = userListService.getAllUsers();
+        PagingResponseDTO<SeatDTO> seatPagedResponse = seatService.getPagedSeats(pagingRequest);
 
         // 결과를 Map에 담아 반환
         Map<String, Object> response = new HashMap<>();
         response.put("tiers", tierDTOs);
-        response.put("users", userDTOs);  // UserDto 객체 목록
-        response.put("seats", seats);    // 좌석 목록
+        response.put("users", userDTOs);
+        response.put("seats", seatPagedResponse.getContent()); // 페이징 처리된 좌석 목록
 
         return response;
     }
@@ -74,4 +80,12 @@ public class AdminRestController {
             return "사용자 삭제에 실패했습니다.";
         }
     }
+
+    // 페이징
+    @PostMapping("/paged")
+    public ResponseEntity<PagingResponseDTO<SeatDTO>> getPagedSeats(@RequestBody PagingRequestDTO request) {
+        PagingResponseDTO<SeatDTO> response = seatService.getPagedSeats(request);
+        return ResponseEntity.ok(response);
+    }
+
 }
