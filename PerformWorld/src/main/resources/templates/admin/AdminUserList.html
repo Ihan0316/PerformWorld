@@ -5,54 +5,51 @@
       layout:decorate="~{layout/base.html}">
 <head>
   <meta charset="UTF-8">
-  <title>Tier 및 User 조회</title>
+  <title>Tier,User,Seat 조회</title>
 </head>
 <body>
 <div id="fh5co-main" layout:fragment="content">
   <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
     <div class="row">
-
-      <!-- User 조회 섹션 (왼쪽) -->
-      <div class="col-md-6">
-
-        <!-- User 조회 섹션 -->
-        <h2>User 조회</h2>
-        <div class="row">
-          <div class="col-md-12">
-            <table class="table table-striped">
-              <thead>
-              <tr>
-                <th>User ID</th>
-                <th>이름</th>
-                <th>Email</th>
-                <th>전화번호</th>
-                <th>주소</th>
-                <th>우편번호</th>
-                <th>Tier</th>
-                <th>삭제</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="user : ${users}">
-                <td th:text="${user.userId}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.phoneNumber}"></td>
-                <td th:text="${user.address1} + ' ' + ${user.address2}"></td>
-                <td th:text="${user.postcode}"></td>
-                <td th:text="${user.tierName}"></td>
-                <td>
-                  <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <!-- User 조회 섹션 (상단) -->
+      <h2>User 조회</h2>
+      <div class="col-md-12">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>User ID</th>
+            <th>이름</th>
+            <th>Email</th>
+            <th>전화번호</th>
+            <th>주소</th>
+            <th>우편번호</th>
+            <th>Tier</th>
+            <th>삭제</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.phoneNumber}"></td>
+            <td th:text="${user.address1} + ' ' + ${user.address2}"></td>
+            <td th:text="${user.postcode}"></td>
+            <td th:text="${user.tierName}"></td>
+            <td>
+              <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
+    </div> <!-- User 조회 섹션 end -->
 
-      <!-- Tier 및 Seat 조회 섹션 (오른쪽) -->
-      <div class="col-md-6">
+    <hr> <!-- 구분선 추가 -->
+
+    <!-- Tier 및 Seat 조회 섹션 (옆에 배치) -->
+    <div class="row">
+      <div class="col-md-8">
         <!-- Tier 조회 섹션 -->
         <h2>Tier 조회</h2>
         <div class="row">
@@ -85,9 +82,10 @@
             </table>
           </div>
         </div>
+      </div> <!-- Tier 조회 섹션 end -->
 
-        <hr> <!-- 구분선 추가 -->
-
+      <div class="col-md-4">
+        <!-- Seat 조회 섹션 -->
         <h2>Seat 조회</h2>
         <!-- Seat 조회 테이블 -->
         <div class="row">
@@ -110,9 +108,8 @@
             </table>
           </div>
         </div>
-      </div>
-
-    </div> <!-- row end -->
+      </div> <!-- Seat 조회 섹션 end -->
+    </div> <!-- Tier 및 Seat 조회 섹션 end -->
 
     <!-- Tier 추가 모달 -->
     <div id="addTierModal" class="modal" style="display: none;">
@@ -148,11 +145,10 @@
     </div>
 
   </div> <!-- fh5co-main end -->
-</div>
 
-<th:block layout:fragment="javascript">
-  <script th:src="@{/js/admin/tier-management.js}"></script>
-  <script th:src="@{/js/admin/user-management.js}"></script>
-</th:block>
+  <th:block layout:fragment="javascript">
+    <script th:src="@{/js/admin/tier-management.js}"></script>
+    <script th:src="@{/js/admin/user-management.js}"></script>
+  </th:block>
 </body>
 </html>

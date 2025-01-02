@@ -1,5 +1,68 @@
 const init = () => {
 
+    // 좌석 선택 개수
+    let selectedSeats = [];
+
+    // 좌석선택
+    getSeatList().then(res => {
+        console.log(res)
+
+        res.forEach(seat => {
+            const seatElement = document.createElement("div");
+            seatElement.classList.add("seat");
+            seatElement.setAttribute("data-seat-id", seat.seatId);
+            seatElement.setAttribute("data-grade", seat.section);
+            seatElement.setAttribute("data-price", seat.price);
+            seatElement.textContent = seat.seatId; // 좌석 ID 표시
+
+            // 좌석 클릭 시 선택 상태 변경
+            seatElement.addEventListener("click", function() {
+                // 이미 선택된 좌석인 경우
+                if (this.classList.contains("selected")) {
+                    this.classList.remove("selected");
+                    selectedSeats = selectedSeats.filter(seat => seat !== this.getAttribute("data-seat-id"));
+                }
+                // 선택된 좌석이 2개 미만일 때만 선택
+                else if (selectedSeats.length < 2) {
+                    this.classList.add("selected");
+                    selectedSeats.push(this.getAttribute("data-seat-id"));
+                } else {
+                    alert("선택 가능한 좌석 수를 초과했습니다.");
+                }
+
+                if (selectedSeats.length > 0) {
+                    // 좌석 선택이 완료되면 배송 여부와 결제 UI 보이기
+                    document.querySelector(".dlvSelBox").classList.remove("d-none");
+                    document.querySelector(".booking-footer").classList.remove("d-none");
+                } else {
+                    // 좌석이 선택되지 않으면 배송 여부와 결제 UI 숨기기
+                    document.querySelector(".dlvSelBox").classList.add("d-none");
+                    document.querySelector(".booking-footer").classList.add("d-none");
+                }
+
+                console.log(selectedSeats);
+            });
+
+            // 좌석 구역별 색상 구분
+            switch (seat.section) {
+                case 'VIP':
+                    seatElement.classList.add("vip-seat");
+                    break;
+                case 'R':
+                    seatElement.classList.add("r-seat");
+                    break;
+                case 'S':
+                    seatElement.classList.add("s-seat");
+                    break;
+            }
+
+            document.getElementById("seat-container").appendChild(seatElement);
+        });
+
+    }).catch(e => {
+        alert("좌석 정보를 가져오는데 실패했습니다.");
+    });
+
     getTicketingInfo().then(res => {
         console.log(res);
         const datePeriod = getMixMaxDate(res);
@@ -165,115 +228,16 @@ const init = () => {
     }
 
     // 좌석 정보 가져오기
-
-
-    // 좌석 선택 개수 추적 변수
-    let selectedSeats = [];
-
-    // 좌석 데이터 생성 (기존 코드 그대로 사용)
-    const seatData = [];
-    const sections = ['A', 'B', 'C', 'D', 'E'];
-    const prices = {
-        VIP: 100000,
-        R: 70000,
-        S: 50000
-    };
-
-    // 각 구역마다 10개의 좌석을 생성
-    sections.forEach((section) => {
-        let grade = ''; // 좌석 등급
-        let seatCount = 10;  // 각 구역에 10개씩 좌석을 생성
-
-        // 구역에 따라 좌석 등급을 결정
-        for (let i = 1; i <= seatCount; i++) {
-            const seatId = `${section}${i}`;
-            let price = prices['R'];  // 기본적으로 R 등급을 설정
-
-            // 1번, 10번 좌석은 S 등급
-            if (i === 1 || i === 10) {
-                grade = 'S';
-                price = prices['S'];
+    async function getSeatList() {
+        const res = await axios({
+            method : 'post',
+            url : '/seat/getSeatList',
+            headers : {
+                'Content-Type' : 'application/json'
             }
-            // E 구역은 전체 S 등급
-            else if (section === 'E') {
-                grade = 'S';
-                price = prices['S'];
-            }
-            // 3번부터 8번까지는 VIP 등급 (D 구역 제외)
-            else if (i >= 3 && i <= 8 && section !== 'D') {
-                grade = 'VIP';
-                price = prices['VIP'];
-            }
-            // 그 외 좌석은 R 등급
-            else {
-                grade = 'R';
-                price = prices['R'];
-            }
-
-            // 좌석 객체 추가
-            seatData.push({
-                seatId: seatId,
-                section: section,
-                price: price,
-                grade: grade
-            });
-        }
-    });
-
-    const seatContainer = document.getElementById("seat-container");
-
-    // 좌석 생성 및 클릭 이벤트 처리
-    seatData.forEach(seat => {
-        const seatElement = document.createElement("div");
-        seatElement.classList.add("seat");
-        seatElement.setAttribute("data-seat-id", seat.seatId);
-        seatElement.setAttribute("data-grade", seat.grade);
-        seatElement.setAttribute("data-price", seat.price);
-        seatElement.textContent = seat.seatId; // 좌석 ID 표시
-
-        // 좌석 클릭 시 선택 상태 변경
-        seatElement.addEventListener("click", function() {
-            // 이미 선택된 좌석인 경우
-            if (this.classList.contains("selected")) {
-                this.classList.remove("selected");
-                selectedSeats = selectedSeats.filter(seat => seat !== this.getAttribute("data-seat-id"));
-            }
-            // 선택된 좌석이 2개 미만일 때만 선택
-            else if (selectedSeats.length < 2) {
-                this.classList.add("selected");
-                selectedSeats.push(this.getAttribute("data-seat-id"));
-            } else {
-                alert("선택 가능한 좌석 수를 초과했습니다.");
-            }
-
-            if (selectedSeats.length > 0) {
-                // 좌석 선택이 완료되면 배송 여부와 결제 UI 보이기
-                document.querySelector(".dlvSelBox").classList.remove("d-none");
-                document.querySelector(".booking-footer").classList.remove("d-none");
-            } else {
-                // 좌석이 선택되지 않으면 배송 여부와 결제 UI 숨기기
-                document.querySelector(".dlvSelBox").classList.add("d-none");
-                document.querySelector(".booking-footer").classList.add("d-none");
-            }
-
-            console.log(selectedSeats);
         });
-
-        // 좌석 구역별 색상 구분
-        switch (seat.grade) {
-            case 'VIP':
-                seatElement.classList.add("vip-seat");
-                break;
-            case 'R':
-                seatElement.classList.add("r-seat");
-                break;
-            case 'S':
-                seatElement.classList.add("s-seat");
-                break;
-        }
-
-        seatContainer.appendChild(seatElement);
-    });
+        return res.data;
+    }
 
     // 배송 받기 mode 변경
     document.querySelector("input[name='isDelivery']").addEventListener("change", function(e) {
