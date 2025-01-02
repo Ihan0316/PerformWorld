@@ -47,25 +47,25 @@ public class EventServiceImpl implements EventService{
     private final SystemCodeRepository systemCodeRepository;
     private final ImageRepository imageRepository;
 
-//    @Override
-//    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size) {
-//        log.info("API 호출을 시작합니다...");
-//
-//        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shprfnm=%s",
-//                apiUrl, apiKey, stdate, eddate, Page, Size, signgucode, shprfnm);
-//
-//        log.info("API 호출 URL: {}", url);
-//
-//        try {
-//            String xmlResponse = restTemplate.getForObject(url, String.class);
-//
-//            XmlMapper xmlMapper = new XmlMapper();
-//            return xmlMapper.readValue(xmlResponse, EventSearchListDTO.class);
-//        } catch (Exception e) {
-//            log.error("API 호출 또는 데이터 파싱 중 오류 발생: {}", e.getMessage(), e);
-//            throw new RuntimeException("공공데이터 API 호출 실패", e);
-//        }
-//    }
+    @Override
+    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, String genre, int Page, int Size) {
+        log.info("API 호출을 시작합니다...");
+
+        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shcate=%s&shprfnm=%s",
+                apiUrl, apiKey, stdate, eddate, Page, Size, signgucode,genre, shprfnm);
+
+        log.info("API 호출 URL: {}", url);
+
+        try {
+            String xmlResponse = restTemplate.getForObject(url, String.class);
+
+            XmlMapper xmlMapper = new XmlMapper();
+            return xmlMapper.readValue(xmlResponse, EventSearchListDTO.class);
+        } catch (Exception e) {
+            log.error("API 호출 또는 데이터 파싱 중 오류 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("공공데이터 API 호출 실패", e);
+        }
+    }
 
     @Override
     public String getEventDetails(String eventID) {

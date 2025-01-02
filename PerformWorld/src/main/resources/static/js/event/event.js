@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const startDate = document.querySelector("input[name='start-date']").value;
         const endDate = document.querySelector("input[name='end-date']").value;
         const locationCode = document.querySelector("select[name='location-code']").value;
+        const genre = document.querySelector("select[name='genre-select']").value;
 
         // 공연 시작일과 종료일을 입력하지 않으면 경고 메시지 표시
         if (!startDate || !endDate) {
@@ -35,14 +36,14 @@ document.addEventListener("DOMContentLoaded", function () {
             return;  // 함수 종료하여 API 호출을 막음
         }
         // API 호출
-        fetchPerformances(performName, startDate, endDate, locationCode, currentPage);
+        fetchPerformances(performName, startDate, endDate, locationCode, genre, currentPage);
 
         modal.show();  // 모달 띄우기
     });
 
-    function fetchPerformances(performName, startDate, endDate, locationCode, page) {
+    function fetchPerformances(performName, startDate, endDate, locationCode, genre, page) {
         // API URL 설정
-        const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&page=${page}&size=${pageSize}`;
+        const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&genre=${genre}&page=${page}&size=${pageSize}`;
         fetch(apiUrl)
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
@@ -140,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("input[name='start-date']").value,
             document.querySelector("input[name='end-date']").value,
             document.querySelector("select[name='location-code']").value,
+            document.querySelector("select[name='genre-select']").value,
             currentPage
         );
 
