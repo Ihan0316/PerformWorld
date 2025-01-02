@@ -31,6 +31,9 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "seat_id", referencedColumnName = "seat_id")
     private Seat seat;  // Seats 테이블과의 관계
 
+    @Column(name = "is_delivery", nullable = false)
+    private boolean isDelivery;  // 배송 여부
+
     @Column(name = "total_price", nullable = false)
     private Long totalPrice;  // 총 예매 금액
 
