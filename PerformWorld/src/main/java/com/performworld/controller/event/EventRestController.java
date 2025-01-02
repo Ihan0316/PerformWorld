@@ -4,10 +4,12 @@ import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSavedListDTO;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
+import com.performworld.service.eventSchedule.EventScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.List;
 public class EventRestController {
 
     private final EventService eventService;
+    private final EventScheduleService eventScheduleService;
 
     @GetMapping("/searchList2")
     public EventSearchListDTO getPerformances(
@@ -56,6 +59,7 @@ public class EventRestController {
     @PostMapping("/save")
     public ResponseEntity<String> saveEvent(@RequestBody String eventXml) {
         eventService.saveEvent(eventXml);
+        eventScheduleService.saveSchedulesFromXml(eventXml);
         return ResponseEntity.ok("이벤트가 성공적으로 저장되었습니다.");
     }
 
@@ -79,14 +83,21 @@ public class EventRestController {
         return ResponseEntity.ok("Event deleted successfully");
     }
 
-    @PostMapping ("/details")
-    public EventDTO getOneEvents(@RequestBody EventDTO eventDTO) {
+    @PostMapping ("/details/{eventId}")
+    public EventDTO getOneEvents(@PathVariable Long eventId) {
         // 상세 조회 API 호출 및 XML 반환
-        return eventService.getOneEvents(eventDTO.getEventId());
+        return eventService.getOneEvents(eventId);
 
     }
 
+    // DB에 저장된 event 목록 가져오기
+    @GetMapping( "/getEventList")
+    public List<EventDTO> getAllEvent() {
 
+       return eventService.getAllEvents();// 서비스에서 eventId로 이벤트 가져오기
+
+
+    }
 
 
 

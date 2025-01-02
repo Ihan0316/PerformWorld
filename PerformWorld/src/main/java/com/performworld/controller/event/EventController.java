@@ -4,14 +4,12 @@ package com.performworld.controller.event;
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 
 @Controller
 @RequestMapping("/event")
@@ -37,8 +35,9 @@ public class EventController {
     }
 
     // 예매하기
-    @GetMapping("/book")
-    public String book() {
+    @GetMapping("{eventId}/book")
+    public String booking(@PathVariable Long eventId, Model model) {
+        model.addAttribute("eventId", eventId);
         return "/event/booking";
     }
 
@@ -61,8 +60,6 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
 
 }
 

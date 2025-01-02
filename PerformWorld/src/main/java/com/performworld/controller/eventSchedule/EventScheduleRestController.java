@@ -1,6 +1,6 @@
 package com.performworld.controller.eventSchedule;
 
-import com.performworld.domain.EventSchedule;
+import com.performworld.dto.event.EventScheduleDTO;
 import com.performworld.service.eventSchedule.EventScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,17 +14,23 @@ import java.util.List;
 @RequestMapping("/eventSchedule")
 @RequiredArgsConstructor
 public class EventScheduleRestController {
+
     private final EventScheduleService eventScheduleService;
 
-//    @PostMapping("/saveEventSchedule")
-//    public String createSchedules(@RequestBody String xmlData) {
-//        try {
-//            List<EventSchedule> schedules = ScheduleUtils.parseAndCreateSchedules(xmlData);
-//            eventScheduleService.saveSchedules(schedules);
-//            return "Schedules created successfully!";
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "Error creating schedules: " + e.getMessage();
-//        }
-//    }
+    // 공연 날짜별 회차 목록 조회
+    @PostMapping("/getScheduleList")
+    public List<EventScheduleDTO> getScheduleList(@RequestBody EventScheduleDTO scheduleDTO) {
+        return eventScheduleService.getScheduleList(scheduleDTO);
+    }
+
+    @PostMapping("/saveEventSchedule")
+    public String createSchedules(@RequestBody String xmlData) {
+        try {
+            eventScheduleService.saveSchedulesFromXml(xmlData);
+            return "Schedules created successfully!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error creating schedules: " + e.getMessage();
+        }
+    }
 }
