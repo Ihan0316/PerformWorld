@@ -1,18 +1,18 @@
 package com.performworld.service.user;
 
-import com.performworld.dto.user.UserDto;
+import com.performworld.dto.user.UserDTO;
 import com.performworld.domain.User;
 
 public interface UserService {
 
-    User signUp(UserDto userDto);  // 회원가입
-    User login(String email, String password);  // 로그인
+    User signUp(UserDTO userDTO);  // 회원가입
+    User login(String userId, String password);  // 로그인
 
-    UserDto getUserInfo(UserDto userDto);  // 회원정보 조회
+    UserDTO getUserInfo(UserDTO userDTO);  // 회원정보 조회
 
-    void changePw(UserDto userDto);
+    void changePw(UserDTO userDTO);
 
-    void updateUser(UserDto userDto);  // 회원정보 수정
+    void updateUser(UserDTO userDTO);  // 회원정보 수정
 
     void deleteUser(String userId);  // 회원탈퇴
 }
