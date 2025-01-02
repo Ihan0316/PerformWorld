@@ -1,7 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("addTierModal");
     const form = document.getElementById("addTierForm");
-    const addTierButton = document.querySelector(".addTierBtn");  // 클래스 이름을 사용하여 선택
+    const addTierButton = document.querySelector(".addTierBtn");
+
+    // 숫자 입력에 대한 소숫점 방지 및 0 이상으로 제한
+    document.querySelectorAll("#maxSpent, #minSpent, #discountRate").forEach(input => {
+        input.addEventListener("input", function (e) {
+            let value = e.target.value;
+
+            // 소숫점 입력 방지
+            value = value.replace(/\./g, '');
+
+            // 값이 0보다 작은 경우 0으로 설정
+            if (parseInt(value) < 0) {
+                value = '0';  // 'value.replace = '0';' 오류를 수정
+            }
+
+            // 수정된 값을 다시 입력 필드에 설정
+            e.target.value = value;
+        });
+    });
 
     function toggleModal(show) {
         modal.style.display = show ? "block" : "none";
@@ -22,7 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const maxSpent = parseFloat(document.getElementById("maxSpent").value.trim());
         const discountRate = parseFloat(document.getElementById("discountRate").value.trim());
 
-        if (!tierName || isNaN(minSpent) || isNaN(maxSpent) || isNaN(discountRate) || minSpent >= maxSpent || discountRate < 0 || discountRate > 100) {
+        // 유효성 검사
+        if (!tierName ||
+            isNaN(minSpent) || isNaN(maxSpent) || isNaN(discountRate) ||
+            minSpent < 0 || maxSpent < 0 || discountRate < 0 ||
+            minSpent >= maxSpent || discountRate > 100) {
             alert("유효한 값을 입력하세요.");
             return;
         }

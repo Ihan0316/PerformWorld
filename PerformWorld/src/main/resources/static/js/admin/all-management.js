@@ -1,6 +1,9 @@
 // 비동기 함수로 전체 데이터를 한 번에 조회
 async function getAllData() {
     try {
+        // 로딩 상태 표시
+        document.getElementById('loadingSpinner').style.display = 'block';
+
         // 전체 데이터를 한번에 받아오는 요청
         const response = await axios.post('/admin/getAllData', {
             // 요청 데이터 (예: 필터링을 위한 파라미터)
@@ -21,6 +24,9 @@ async function getAllData() {
         updateTableData(userList, tierList, seatList);
     } catch (error) {
         console.error('데이터 조회 오류:', error);
+    } finally {
+        // 로딩 상태 숨기기
+        document.getElementById('loadingSpinner').style.display = 'none';
     }
 }
 
@@ -54,8 +60,8 @@ function updateTableData(users, tiers, seats) {
         row.innerHTML = `
             <td>${tier.tierId}</td>
             <td>${tier.tierName}</td>
-            <td>${tier.minSpent} 원</td>
-            <td>${tier.maxSpent} 원</td>
+            <td>${tier.minSpent.toLocaleString()} 원</td>
+            <td>${tier.maxSpent.toLocaleString()} 원</td>
             <td>${tier.discountRate} %</td>
         `;
         tierTableBody.appendChild(row);
@@ -69,7 +75,7 @@ function updateTableData(users, tiers, seats) {
         row.innerHTML = `
             <td>${seat.seatId}</td>
             <td>${seat.section}</td>
-            <td>${seat.price} 원</td>
+            <td style="text-align: right;">${seat.price.toLocaleString()} 원</td>
         `;
         seatTableBody.appendChild(row);
     });

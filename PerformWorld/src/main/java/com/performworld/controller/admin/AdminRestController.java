@@ -3,7 +3,6 @@ package com.performworld.controller.admin;
 import com.performworld.dto.admin.SeatDTO;
 import com.performworld.dto.admin.TierDTO;
 import com.performworld.dto.user.UserDTO;
-import com.performworld.repository.admin.TierRepository;
 import com.performworld.service.admin.SeatService;
 import com.performworld.service.admin.TierService;
 import com.performworld.service.admin.UserListService;
@@ -28,7 +27,6 @@ public class AdminRestController {
     private final TierService tierService;
     private final UserListService userListService;
     private final SeatService seatService;
-    private final TierRepository tierRepository;
 
     // 모든 데이터 불러오기
     @PostMapping("/getAllData")
