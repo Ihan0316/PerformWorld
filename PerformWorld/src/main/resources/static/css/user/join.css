@@ -45,7 +45,7 @@ input[readonly] {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #228896;
     color: white;
     border: none;
     border-radius: 4px;
@@ -53,9 +53,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #45a049;
-}
 
 button[type="button"] {
     width: auto;

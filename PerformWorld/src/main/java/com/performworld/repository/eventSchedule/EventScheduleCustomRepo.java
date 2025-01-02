@@ -1,12 +1,10 @@
-package com.performworld.service.eventSchedule;
+package com.performworld.repository.eventSchedule;
 
 import com.performworld.dto.event.EventScheduleDTO;
 
 import java.util.List;
 
-public interface EventScheduleService {
+public interface EventScheduleCustomRepo {
 
     List<EventScheduleDTO> getScheduleList(EventScheduleDTO scheduleDTO);
-
-    void saveSchedulesFromXml(String xmlData);
 }

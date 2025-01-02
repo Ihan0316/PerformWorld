@@ -3,6 +3,7 @@ package com.performworld.service.eventSchedule;
 import com.performworld.domain.Event;
 import com.performworld.domain.EventSchedule;
 import com.performworld.repository.event.EventRepository;
+import com.performworld.dto.event.EventScheduleDTO;
 import com.performworld.repository.eventSchedule.EventScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,8 +28,15 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EventScheduleServiceImpl implements EventScheduleService {
+
     private final EventScheduleRepository eventScheduleRepository;
     private final EventRepository eventRepository;
+
+    // 공연 날짜별 회차 목록 조회
+    @Override
+    public List<EventScheduleDTO> getScheduleList(EventScheduleDTO scheduleDTO) {
+        return eventScheduleRepository.getScheduleList(scheduleDTO);
+    }
 
     @Override
     public void saveSchedulesFromXml(String xmlData) {

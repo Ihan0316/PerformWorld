@@ -1,6 +1,6 @@
 package com.performworld.domain;
 
-import com.performworld.dto.user.UserDto;
+import com.performworld.dto.user.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,12 +59,12 @@ public class User extends BaseEntity {
     }
 
     // 정보 수정
-    public void chnUserInfo(UserDto userDto) {
-        this.name = userDto.getName();
-        this.email = userDto.getEmail();
-        this.phoneNumber = userDto.getPhoneNumber();
-        this.address1 = userDto.getAddress1();
-        this.address2 = userDto.getAddress2();
-        this.postcode = userDto.getPostcode();
+    public void chnUserInfo(UserDTO userDTO) {
+        this.name = userDTO.getName();
+        this.email = userDTO.getEmail();
+        this.phoneNumber = userDTO.getPhoneNumber();
+        this.address1 = userDTO.getAddress1();
+        this.address2 = userDTO.getAddress2();
+        this.postcode = userDTO.getPostcode();
     }
 }
