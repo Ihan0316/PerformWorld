@@ -2,7 +2,7 @@ package com.performworld.controller.admin;
 
 import com.performworld.dto.admin.SeatDTO;
 import com.performworld.dto.admin.TierDTO;
-import com.performworld.dto.user.UserDto;
+import com.performworld.dto.user.UserDTO;
 import com.performworld.service.admin.SeatService;
 import com.performworld.service.admin.TierService;
 import com.performworld.service.admin.UserListService;
@@ -29,12 +29,12 @@ public class AdminController {
     public String getTierAndUserList(Model model) {
         // Tier 목록과 사용자 목록을 각각 가져옵니다.
         List<TierDTO> tierDTOs = tierService.getAllTiers();
-        List<UserDto> userDtos = userListService.getAllUsers();  // UserDto 객체를 사용
+        List<UserDTO> userDTOs = userListService.getAllUsers();  // UserDto 객체를 사용
         List<SeatDTO> seats = seatService.getAllSeats(); // 좌석 목록 추가
 
         // Model에 Tier, User, Seat 데이터를 추가합니다.
         model.addAttribute("tiers", tierDTOs);
-        model.addAttribute("users", userDtos);  // UserDto 객체 목록을 모델에 추가
+        model.addAttribute("users", userDTOs);  // UserDto 객체 목록을 모델에 추가
         model.addAttribute("seats", seats);    // 좌석 목록 추가
 
         return "admin/AdminUserList";

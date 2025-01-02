@@ -1,7 +1,7 @@
 package com.performworld.service.admin;
 
 import com.performworld.domain.User;
-import com.performworld.dto.user.UserDto;
+import com.performworld.dto.user.UserDTO;
 import com.performworld.repository.admin.UserListRepository;
 import com.performworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +20,11 @@ public class UserListServiceImpl implements UserListService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         List<User> users = userListRepository.findAll();  // User 객체 가져오기
 
         return users.stream()
-                .map(user -> new UserDto(
+                .map(user -> new UserDTO(
                         user.getUserId(),
                         user.getName(),
                         user.getEmail(),
