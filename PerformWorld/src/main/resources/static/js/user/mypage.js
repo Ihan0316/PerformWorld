@@ -1,7 +1,203 @@
-const init = () => {
-//        const loginInfo = sessionStorage.getItem("user");  // 로그인 유저 정보
+// grid 초기화
+const initBkGrid = () => {
+    const BookGrid = tui.Grid;
 
+    // 테마
+    BookGrid.applyTheme('default',  {
+        cell: {
+            normal: {
+                border: 'gray'
+            },
+            header: {
+                background: 'gray',
+                text: 'white',
+                border: 'gray'
+            },
+            rowHeaders: {
+                header: {
+                    background: 'gray',
+                    text: 'white'
+                }
+            }
+        }
+    });
+
+    // 세팅
+    return new BookGrid({
+        el: document.getElementById('bookingGrid'),
+        scrollX: false,
+        scrollY: false,
+        minBodyHeight: 150,
+        rowHeaders: ['rowNum'],
+        pageOptions: {
+            useClient: true,  // 프론트에서 페이징
+            perPage: 5
+        },
+        columns: [
+            {
+                header: '번호',
+                name: 'bookingId',
+                hidden: true
+            },
+            {
+                header: '공연명',
+                name: 'title',
+                align: 'center'
+            },
+            {
+                header: '공연장',
+                name: 'location',
+                align: 'center'
+            },
+            {
+                header: '예매상태',
+                name: 'bookingStatus',
+                align: 'center'
+            },
+            {
+                header: '관람일',
+                name: 'eventDate',
+                formatter: (value) => {
+                    if (value) {
+                        const data = value.value;
+                        return `${data[0]}-${data[1]}-${data[2]} ${data[3]}:${data[4]}`;
+                    }
+                    return "";
+                }
+            },
+            {
+                header: '캐스팅',
+                name: 'eventCast',
+                align: 'center',
+                // formatter: (value) => {
+                //     if (value) {
+                //         const data = value.value;
+                //         return `${data ? '완료' : '취소'}`;
+                //     }
+                //     return "";
+                // }
+            },
+            {
+                header: '좌석정보',
+                name: 'seat',
+                // formatter: (value) => {
+                //     if (value) {
+                //         const data = value.value;
+                //         return `${data[0]}-${data[1]}-${data[2]}`;
+                //     }
+                //     return "";
+                // }
+            },
+            {
+                header: '금액',
+                name: 'totalPrice',
+                align: 'center'
+            },
+            {
+                header: '예매일',
+                name: 'regDate',
+                formatter: (value) => {
+                    if (value) {
+                        const data = value.value;
+                        return `${data[0]}-${data[1]}-${data[2]}`;
+                    }
+                    return "";
+                }
+            }
+        ]
+    });
+}
+const initRvGrid = () => {
+    const ReviewGrid = tui.Grid;
+
+    // 테마
+    ReviewGrid.applyTheme('default',  {
+        cell: {
+            normal: {
+                border: 'gray'
+            },
+            header: {
+                background: 'gray',
+                text: 'white',
+                border: 'gray'
+            },
+            rowHeaders: {
+                header: {
+                    background: 'gray',
+                    text: 'white'
+                }
+            }
+        }
+    });
+
+    // 세팅
+    return new ReviewGrid({
+        el: document.getElementById('reviewGrid'),
+        scrollX: false,
+        scrollY: false,
+        minBodyHeight: 150,
+        rowHeaders: ['rowNum'],
+        pageOptions: {
+            useClient: true,  // 프론트에서 페이징
+            perPage: 4
+        },
+        columns: [
+            {
+                header: '번호',
+                name: 'reviewId',
+                hidden: true
+            },
+            {
+                header: '공연명',
+                name: 'title',
+                align: 'center'
+            },
+            {
+                header: '관람일',
+                name: 'eventDate',
+                formatter: (value) => {
+                    if (value) {
+                        const data = value.value;
+                        return `${data[0]}-${data[1]}-${data[2]} ${data[3]}:${data[4]}`;
+                    }
+                    return "";
+                }
+            },
+            {
+                header: '내용',
+                name: 'content'
+            },
+            {
+                header: '작성일',
+                name: 'regDate',
+                formatter: (value) => {
+                    if (value) {
+                        const data = value.value;
+                        return `${data[0]}-${data[1]}-${data[2]}`;
+                    }
+                    return "";
+                }
+            }
+        ]
+    });
+}
+
+const init = () => {
      getUserInfo();
+
+    // grid 초기 세팅
+    const bookingGrid = initBkGrid();
+    // getBkList().then(res => {
+    //     bookingGrid.resetData(res.data);  // grid에 세팅
+    // }).catch(e => {
+    //     alert("예매내역을 불러오는데 실패했습니다.");
+    // })
+    const reviewGrid = initRvGrid();
+    // getRvList().then(res => {
+    //     reviewGrid.resetData(res.data);  // grid에 세팅
+    // }).catch(e => {
+    //     alert("후기목록을 불러오는데 실패했습니다.");
+    // })
 
     // 비밀번호 변경
     document.querySelector(".chnPwBtn").addEventListener("click", function (e) {
@@ -164,7 +360,33 @@ const init = () => {
         const res = await axios({
             method : 'delete',
             url : '/user',
-            data : { userId: 'user123' },  // loginInfo.userId
+            data : { userId: 'user123' },  // loginInfo
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    // 예매내역 조회
+    async function getBkList() {
+        const res = await axios({
+            method : 'post',
+            url : '/book/getBknList',
+            data : { userId: 'user123' },  // loginInfo
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    // 후기목록 조회
+    async function getRvList() {
+        const res = await axios({
+            method : 'post',
+            url : '/review/getRvList',
+            data : { userId: 'user123' },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
