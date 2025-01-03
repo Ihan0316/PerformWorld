@@ -75,13 +75,21 @@ public class UserRestController {
             User user = userService.login(userId, password);
             UserDTO userDTO = modelMapper.map(user, UserDTO.class);
             userDTO.setPassword(null);
-            return ResponseEntity.ok(userDTO); // 로그인 성공 시 UserDTO 반환
+            return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             log.error("로그인 실패: {}", e.getMessage());
             return ResponseEntity.ok("로그인 실패: " + e.getMessage());
         }
     }
-
-
+    //비밀번호 찾기
+    @PostMapping("/findPw")
+    public String findPw(@RequestParam String email) {
+        try {
+            userService.findPw(email);
+            return "임시 비밀번호가 이메일로 전송되었습니다.";
+        } catch (Exception e) {
+            return "오류가 발생했습니다: " + e.getMessage();
+        }
+    }
 
 }
