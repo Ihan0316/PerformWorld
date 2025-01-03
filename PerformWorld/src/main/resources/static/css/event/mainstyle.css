@@ -141,3 +141,6 @@ div.header_naviWrapper__6fe56 {
         }
     }
 
+.js .animate-box {
+    opacity: 1 !important; /* opacity: 1로 설정하고 !important로 우선 적용 */
+}

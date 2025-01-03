@@ -1,4 +1,4 @@
-package com.performworld.dto.ticket;
+package com.performworld.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,17 +10,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class TicketingDTO {
+public class EventScheduleDTO {
+
+    private Long scheduleId;
     private Long eventId;
-    private String eventName;
-    private Long ticketingId;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate eventPeriodStart;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate eventPeriodEnd;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime openDatetime;
+    private LocalDateTime eventDate;
+    private String eventCast;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate searchDate;  // 날짜별 회차 조회용
 }

@@ -1,79 +1,65 @@
 <!DOCTYPE html>
 <html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Login Page" />
-  <meta name="keywords" content="login, sign in, HTML5" />
-  <meta name="author" content="FreeHTML5.co" />
-
-  <!-- Stylesheets -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Modernizr JS -->
-  <script src="js/modernizr-2.6.2.min.js"></script>
-
-  <!-- For IE9 below -->
-  <!--[if lt IE 9]>
-  <script src="js/respond.min.js"></script>
-  <![endif]-->
-
-</head>
-
 <body>
-<div id="fh5co-page" layout:fragment="content">
-  <div id="fh5co-main">
-    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Login</h2>
-        </div>
-      </div>
-      <form id="loginForm" action="/user/login" method="POST">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="ID를 입력하세요" name="userId" required>
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control" placeholder="Password" name="password" required>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <input type="submit" id="loginButton" class="btn btn-primary btn-md" value="Login">
-          <span id="loadingSpinner" class="spinner-border text-primary" style="display: none;"></span> <!-- 로딩 스피너 -->
-        </div>
-
-        <div class="form-group">
-          <a href="/user/join" class="btn btn-secondary btn-md">회원가입</a>
-        </div>
-
-        <!-- 비밀번호 찾기 링크 -->
-        <div class="form-group">
-          <a href="/user/forgot-password" class="btn btn-link">비밀번호 찾기</a>
-        </div>
-      </form>
+<div id="fh5co-main" layout:fragment="content">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Login</h2>
     </div>
   </div>
+  <form id="loginForm" action="/user/login" method="POST">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="ID를 입력하세요" name="userId" required>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="Password" name="password" required>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <input type="submit" id="loginButton" class="btn btn-primary btn-md" value="Login">
+      <span id="loadingSpinner" class="spinner-border text-primary" style="display: none;"></span>
+    </div>
+    <div class="form-group">
+      <a href="/user/join" class="btn btn-secondary btn-md">회원가입</a>
+    </div>
+    <div class="form-group">
+      <a href="#findPwModal" class="btn btn-link btn-md" data-toggle="modal">비밀번호 찾기</a>
+    </div>
+  </form>
+  <div class="modal fade" id="findPwModal" tabindex="-1" role="dialog" aria-labelledby="findPwModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="findPwModalLabel">비밀번호 찾기</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="findPwForm" action="/user/findPw" method="POST">
+            <div class="form-group">
+              <label for="email">이메일을 입력하세요</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="이메일" required>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">임시 비밀번호 전송</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/js/user/login.js}"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </div>
-
-<!-- Scripts -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script>
-<script src="js/login.js"></script> <!-- 외부 JS 파일 포함 -->
-
 </body>
+
 </html>
