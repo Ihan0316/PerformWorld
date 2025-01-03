@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>Tier,User,Seat 조회</title>
+</head>
+<body>
+<div id="fh5co-main" layout:fragment="content">
+  <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+    <div class="row">
+
+      <!-- User 조회 섹션 (상단) -->
+      <h2>User 조회</h2>
+      <div class="col-md-12">
+        <table id="userTable" class="table table-striped" style="text-align: right;">
+          <thead>
+          <tr>
+            <th>User ID</th>
+            <th>이름</th>
+            <th>Email</th>
+            <th>전화번호</th>
+            <th>주소</th>
+            <th>우편번호</th>
+            <th>Tier</th>
+            <th>삭제</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.phoneNumber}"></td>
+            <td th:text="${user.address1} + ' ' + ${user.address2}"></td>
+            <td th:text="${user.postcode}"></td>
+            <td th:text="${user.tierName}"></td>
+            <td>
+              <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- User 조회 섹션 end -->
+
+    <hr> <!-- 구분선 추가 -->
+
+    <!-- Tier 및 Seat 조회 섹션 (옆에 배치) -->
+    <div class="row">
+      <div class="col-md-8">
+        <!-- Tier 조회 섹션 -->
+        <h2>Tier 조회</h2>
+        <div class="row">
+          <div class="col-md-12 text-end">
+            <button class="btn btn-primary add-tier-btn">Add Tier</button>
+          </div>
+        </div>
+        <!-- Tier 조회 테이블 -->
+        <div class="row">
+          <div class="col-md-12">
+            <table id="tierTable" class="table table-striped" style="text-align: right;">
+              <thead>
+              <tr>
+                <th>Tier ID</th>
+                <th>Tier 이름</th>
+                <th>최소 소비 금액</th>
+                <th>최대 소비 금액</th>
+                <th>할인율 (%)</th>
+                <th>수정</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="tier : ${tiers}">
+                <td th:text="${tier.tierId}"></td>
+                <td th:text="${tier.tierName}"></td>
+                <td th:text="${tier.minSpent} + ' 원'"></td>
+                <td th:text="${tier.maxSpent} + ' 원'"></td>
+                <td th:text="${tier.discountRate} + '%'"></td>
+                <td>
+                  <button class="btn btn-primary update-tier-btn" th:data-tier-id="${tier.tierId}" onclick="updateTier(this)">수정</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div> <!-- Tier 조회 섹션 end -->
+
+      <div class="col-md-3">
+        <!-- Seat 조회 섹션 -->
+        <h2>Seat 조회</h2>
+        <!-- Seat 조회 테이블 -->
+        <div class="row">
+          <div class="col-md-12">
+            <table id="seatTable" class="table table-striped" style="text-align: right;">
+              <thead>
+              <tr>
+                <th>Seat ID</th>
+                <th>섹션</th>
+                <th>가격</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="seat : ${seats}">
+                <td th:text="${seat.seatId}"></td>
+                <td th:text="${seat.section}"></td>
+                <td th:text="${seat.price} + ' 원'"></td> <!-- 가격 표시 -->
+              </tr>
+              </tbody>
+            </table>
+            <!-- Seat 테이블 하단에 페이지네이션 버튼 -->
+            <div id="seatPagination" style="text-align: center;">
+              <button id="prevPage" class="btn btn-secondary">이전</button>
+              <span id="pageNumbers"></span> <!-- 동적으로 페이지 번호 표시 -->
+              <button id="nextPage" class="btn btn-secondary">다음</button>
+            </div>
+          </div>
+        </div>
+      </div> <!-- Seat 조회 섹션 end -->
+    </div> <!-- Tier 및 Seat 조회 섹션 end -->
+
+    <!-- Tier 추가 모달 -->
+    <div id="addTierModal" class="modal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tier 추가</h4>
+            <button type="button" class="close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="addTierForm">
+              <div class="form-group">
+                <label for="tierName">Tier 이름</label>
+                <input type="text" class="form-control" id="tierName" required>
+              </div>
+              <div class="form-group">
+                <label for="minSpent">최소 소비 금액</label>
+                <input type="number" class="form-control" id="minSpent" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="maxSpent">최대 소비 금액</label>
+                <input type="number" class="form-control" id="maxSpent" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="discountRate">할인율 (%)</label>
+                <input type="number" class="form-control" id="discountRate" min="0" max="100" required>
+              </div>
+              <button type="submit" class="btn btn-primary addTierBtn">Tier 추가</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수정 모달 -->
+    <div id="editTierModal" class="modal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tier 수정</h4>
+            <button type="button" class="close" onclick="closeEditModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="editTierForm">
+              <div class="form-group">
+                <label for="editTierName">Tier 이름</label>
+                <input type="text" class="form-control" id="editTierName" name="tierName" required>
+              </div>
+              <div class="form-group">
+                <label for="editMinSpent">최소 소비 금액</label>
+                <input type="number" class="form-control" id="editMinSpent" name="minSpent" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="editMaxSpent">최대 소비 금액</label>
+                <input type="number" class="form-control" id="editMaxSpent" name="maxSpent" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="editDiscountRate">할인율 (%)</label>
+                <input type="number" class="form-control" id="editDiscountRate" name="discountRate" min="0" max="100" required>
+              </div>
+              <button type="submit" class="btn btn-primary">수정</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </div> <!-- fh5co-main end -->
+
+  <th:block layout:fragment="javascript">
+    <script th:src="@{/js/admin/tier-management.js}"></script>
+    <script th:src="@{/js/admin/user-management.js}"></script>
+    <script th:src="@{/js/admin/data.js}"></script>
+  </th:block>
+</body>
+</html>

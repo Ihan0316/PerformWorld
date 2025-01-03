@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+    <!-- libraries -->
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <!-- css import -->
+    <link rel="stylesheet" th:href="@{/css/board/notice.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <h4>공지사항 검색</h4>
+    <form>
+        Text: <input type="text" name="srhTitle"><br/>
+        Date: <input type="date" name="srhStartDate">
+        &nbsp;~&nbsp;
+        <input type="date" name="srhEndDate"><br/>
+        <button type="button" class="searchBtn">검색</button>
+    </form>
+
+    <h1>공지사항 목록</h1>
+    <!-- list grid -->
+    <div id="grid"></div>
+
+    <h4>공지사항 등록</h4>
+    <form id="noticeForm" method="POST" action="/notice/regist" enctype="multipart/form-data">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title"><br/>
+
+        <label for="content">내용:</label>
+        <textarea id="content" name="content"></textarea><br/>
+
+        <label>파일 업로드:</label>
+        <div id="fileInputs">
+            <input type="file" name="files" />
+        </div>
+        <button type="button" class="addFileBtn">파일 추가</button>
+
+        <button type="button" class="registBtn">등록하기</button>
+    </form>
+
+    <h4>공지사항 목록</h4>
+  <!--  공지사항 테이블-->
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>공지 제목</th>
+        <th>공지 내용</th>
+        <th>등록일</th>
+        <th>수정일</th>
+        <th>수정</th>
+        <th>삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- 동적으로 공지사항 목록이 추가됩니다 -->
+      </tbody>
+    </table>
+    <div>
+        <button type="button" class="registerBtn">등록</button>
+        <button type="button" class="updateBtn">수정</button>
+        <button type="button" class="deleteBtn">삭제</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</div>
+
+<th:block layout:fragment="javascript">
+  <!-- js import -->
+  <script th:src="@{/js/board/notice.js}"></script>
+</th:block>
+</body>
+</html>
