@@ -88,9 +88,11 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
     public List<BookingDTO> getBookedList(Long scheduleId) {
         QBooking booking = QBooking.booking;
         QEventSchedule schedule = QEventSchedule.eventSchedule;
+        QSeat seat = QSeat.seat;
 
         List<Tuple> result = from(booking)
                 .leftJoin(booking.eventSchedule, schedule)
+                .leftJoin(booking.seats, seat)
                 .where(booking.eventSchedule.scheduleId.eq(scheduleId))
                 .where(booking.status.code.in("Y", "P"))
 
@@ -98,7 +100,7 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                         booking.bookingId
                         , booking.user.userId
                         , schedule.scheduleId
-                        , booking.seat.seatId
+                        , seat.seatId
                         , booking.status.code
                 ).fetch();
 
@@ -106,7 +108,7 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                         .bookingId(tuple.get(booking.bookingId))
                         .userId(tuple.get(booking.user.userId))
                         .scheduleId(tuple.get(schedule.scheduleId))
-                        .seatId(tuple.get(booking.seat.seatId))
+                        .seatId(tuple.get(seat.seatId))
                         .status(tuple.get(booking.status.code))
                         .build())
                 .collect(Collectors.toList());
