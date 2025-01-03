@@ -70,6 +70,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.7.0'
 
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml' // XML 파싱용
+
+    implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 전송 라이브러리
+
 }
 
 tasks.named('test') {
