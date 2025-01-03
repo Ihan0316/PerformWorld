@@ -48,11 +48,11 @@ public class EventServiceImpl implements EventService{
     private final ImageRepository imageRepository;
 
     @Override
-    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, int Page, int Size) {
+    public EventSearchListDTO getPerformances(String stdate, String eddate, String shprfnm, String signgucode, String genre, int Page, int Size) {
         log.info("API 호출을 시작합니다...");
 
-        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shprfnm=%s",
-                apiUrl, apiKey, stdate, eddate, Page, Size, signgucode, shprfnm);
+        String url = String.format("%s?service=%s&stdate=%s&eddate=%s&cpage=%d&rows=%d&signgucode=%s&shcate=%s&shprfnm=%s",
+                apiUrl, apiKey, stdate, eddate, Page, Size, signgucode,genre, shprfnm);
 
         log.info("API 호출 URL: {}", url);
 
@@ -81,7 +81,7 @@ public class EventServiceImpl implements EventService{
 
         Optional<Event> existingEvent = eventRepository.findByTitle(event.getTitle());
         if (existingEvent.isPresent()) {
-            throw new DuplicateEventException("이미 존재하는 공연 제목입니다: " + event.getTitle());
+            throw new DuplicateEventException("이미 존재하는 공연 제목입니다");
         }
 
         log.info("saveEvent Service단" + event);
@@ -184,6 +184,7 @@ public class EventServiceImpl implements EventService{
                 .fcltynm(event.getLocation())
                 .runtime(String.valueOf(event.getLuntime()));
 
+
         Optional<SystemCode> systemCode = systemCodeRepository.findByCode(event.getCategory().getCode());
         systemCode.ifPresent(code -> eventDTOBuilder.genreName(code.getCodeName()));
 
@@ -216,11 +217,11 @@ public class EventServiceImpl implements EventService{
 
         // title과 genre 조건에 따라 쿼리 실행
         if (title != null && !title.isEmpty() && genre != null && !genre.isEmpty()) {
-            eventPage = eventRepository.findByTitleContainingAndCategory_CodeName(title, genre, pageable);
+            eventPage = eventRepository.findByTitleContainingAndCategory_Code(title, genre, pageable);
         } else if (title != null && !title.isEmpty()) {
             eventPage = eventRepository.findByTitleContaining(title, pageable);
         } else if (genre != null && !genre.isEmpty()) {
-            eventPage = eventRepository.findByCategory_CodeName(genre, pageable);
+            eventPage = eventRepository.findByCategory_Code(genre, pageable);
         } else {
             eventPage = eventRepository.findAll(pageable); // 조건 없이 모든 이벤트 반환
         }
@@ -241,14 +242,34 @@ public class EventServiceImpl implements EventService{
         return eventSavedListDTOPage;
     }
 
-
+    // 목록에 포스트 이미지 조회
     @Override
     public EventDTO getOneEvents(Long eventId) {
         Event events = eventRepository.findById(eventId).orElseThrow();
         return convertToDTO(events);
     }
 
+//    @Override
+//    public EventDTO getOneImages(Long imageUrls) {
+//        Event events = eventRepository.findById(imageUrls).orElseThrow();
+//        return convertToDTO(events);
+//    }
 
+    // 상세 페이지에 상세이미지 조회
+    @Override
+    public EventDTO getOneImages(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event 데이터를 불러올수 없습니다: " + eventId));
+
+        List<String> imageUrls = imageRepository.findByEventEventId(eventId).stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+
+        return EventDTO.builder()
+                .eventId(event.getEventId())
+                .imageUrls(imageUrls)
+                .build();
+    }
 
 
 }
