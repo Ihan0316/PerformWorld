@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Seat extends BaseEntity{
 
+
     @Id
     @Column(name = "seat_id", length = 10)
     private String seatId;  // 좌석 ID (예: A11, C20)
