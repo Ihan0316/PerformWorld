@@ -3,64 +3,102 @@ package com.performworld.service.board;
 import com.performworld.domain.Notice;
 import com.performworld.dto.board.NoticeDTO;
 import com.performworld.dto.board.NoticeRequestDTO;
+import com.performworld.dto.board.NoticeResponseDTO;
 import com.performworld.repository.board.NoticeRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Log4j2
-@RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
 
-    private final NoticeRepository noticeRepository;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private NoticeRepository noticeRepository;
+    private ModelMapper modelMapper;
 
-    //목록 조회(페이징 처리)
     @Override
-    public List<NoticeDTO> getList(NoticeDTO noticeDTO) {
-        Pageable pageable =Pageable.unpaged();
-        Page<Notice> noticePage = noticeRepository.findAll(pageable);
-        return noticePage.stream()
-                .map(entity -> modelMapper.map(entity, NoticeDTO.class))
+    public List<NoticeDTO> getAllNotices(NoticeDTO noticeDTO) {
+        // 전체 공지사항 조회
+        return noticeRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // 등록
-    @Override
-    public Long insert(NoticeRequestDTO noticeRequestDTO) {
-        Notice notice = modelMapper.map(noticeRequestDTO, Notice.class);
-        return noticeRepository.save(notice).getNoticeId();
-    }
-
-    // 수정
-    @Override
-    public Long update(NoticeRequestDTO noticeRequestDTO) {
-        // 먼저 기존 데이터를 조회한 후 수정
-        Notice existingNotice = noticeRepository.findById(noticeRequestDTO.getNoticeId())
-                .orElseThrow(() -> new RuntimeException("Notice not found with ID: " + noticeRequestDTO.getNoticeId()));
-
-        modelMapper.map(noticeRequestDTO, existingNotice);  // DTO를 기존 객체에 맵핑
-        return noticeRepository.save(existingNotice).getNoticeId();
-    }
-
-    // 삭제
-    @Override
-    public void delete(Long id) {
-        noticeRepository.deleteById(id);
-    }
-
-    // 단일 공지사항 조회
     @Override
     public NoticeDTO getNoticeById(Long id) {
+        // 특정 ID로 공지사항 조회
         Notice notice = noticeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notice not found with ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Notice not found with id: " + id)); // 예외 처리
+        return convertToDTO(notice);
+    }
+
+    @Override
+    public NoticeDTO updateNotice(Long id, NoticeRequestDTO noticeDTO) {
+        // 기존 공지사항 수정
+        Notice existingNotice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notice not found with id: " + id)); // 예외 처리
+
+        existingNotice.updateNotice(noticeDTO.getTitle(), noticeDTO.getContent());
+
+        Notice updatedNotice = noticeRepository.save(existingNotice);
+        return convertToDTO(updatedNotice);
+    }
+
+    @Override
+    public void deleteNotice(Long id) {
+        // 공지사항 삭제 (예외를 통해 처리)
+        if (!isAdmin()) {
+            throw new RuntimeException("Only administrators can delete notices.");
+        }
+
+        // 공지사항이 존재하는지 확인 후 삭제
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notice not found with id: " + id)); // 예외 처리
+        noticeRepository.delete(notice);
+    }
+
+
+    @Override
+    public NoticeResponseDTO registerNotice(NoticeRequestDTO noticeRequestDTO) {
+        // DTO에서 Entity로 변환 후 저장
+        Notice notice = Notice.builder()
+                .title(noticeRequestDTO.getTitle())
+                .content(noticeRequestDTO.getContent())
+                .build();
+
+        Notice savedNotice = noticeRepository.save(notice);
+
+        // 저장된 Notice를 ResponseDTO로 변환하여 반환
+        return convertToResponseDTO(savedNotice);
+    }
+
+    private NoticeResponseDTO convertToResponseDTO(Notice notice) {
+        return NoticeResponseDTO.builder()
+                .noticeId(notice.getNoticeId())
+                .title(notice.getTitle())
+                .content(notice.getContent())
+                .build();
+    }
+
+    // DTO -> Entity 변환
+    private NoticeDTO convertToDTO(Notice notice) {
         return modelMapper.map(notice, NoticeDTO.class);
     }
+
+    // Entity -> DTO 변환
+    private Notice convertToEntity(NoticeDTO noticeDTO) {
+        return modelMapper.map(noticeDTO, Notice.class);
+    }
+
+    // 관리자 확인 로직 (Spring Security 사용 권장)
+    private boolean isAdmin() {
+        // 관리자 확인 로직 (예: Spring Security 활용)
+        return true; // 임시 true
+    }
 }
+
+

@@ -5,8 +5,6 @@ import com.performworld.dto.board.QnARequestDTO;
 import com.performworld.service.board.QnAService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,47 +17,34 @@ public class QnARestController {
 
     private final QnAService qnaService;
 
-    // QnA 목록 조회
-    @PostMapping("/getQnAList")
-    public ResponseEntity<List<QnADTO>> getList(@RequestBody QnARequestDTO qnaRequestDTO) {
-        log.info(qnaRequestDTO);
-        List<QnADTO> qnaList = qnaService.getList(qnaRequestDTO);
-        return ResponseEntity.ok(qnaList);
+    // QnA 목록 조회 (페이지 처리)
+    @GetMapping("/list")
+    public List<QnADTO> getQnAList(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int size) {
+        log.info("Fetching QnA list for API");
+        QnARequestDTO requestDTO = new QnARequestDTO();
+        requestDTO.setPage(page);
+        requestDTO.setSize(size);
+        return qnaService.getList(requestDTO);
     }
 
     // QnA 등록
     @PostMapping("/register")
-    public ResponseEntity<Long> register(@RequestBody QnARequestDTO qnaRequestDTO) {
-        log.info(qnaRequestDTO);
-
-        Long qnaId = qnaService.createQnA(qnaRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnaId);
+    public Long registerQnA(@RequestBody QnARequestDTO qnaRequestDTO) {
+        return qnaService.registerQnA(qnaRequestDTO);
     }
 
     // QnA 수정
-    @PutMapping("/update")
-    public ResponseEntity<Long> update(@RequestBody QnARequestDTO qnaRequestDTO) {
-        log.info(qnaRequestDTO);
-        Long qnaId = qnaService.updateQnA(qnaRequestDTO.getQnaId(), qnaRequestDTO);
-        return ResponseEntity.ok(qnaId);
+    @PutMapping("/update/{id}")
+    public Long updateQnA(@PathVariable Long id, @RequestBody QnARequestDTO qnaRequestDTO) {
+        return qnaService.updateQnA(id, qnaRequestDTO);
     }
 
     // QnA 삭제
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.info(id);
+    public void deleteQnA(@PathVariable Long id) {
         qnaService.deleteQnA(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    // QnA 답변 등록
-    @PostMapping("/respond")
-    public ResponseEntity<Void> respond(@RequestParam Long qnaId, @RequestParam String response) {
-        qnaService.respondToQnA(qnaId, response);
-        return ResponseEntity.ok().build();
     }
 }
-
-
 
 

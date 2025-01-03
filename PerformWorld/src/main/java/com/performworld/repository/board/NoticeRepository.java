@@ -23,7 +23,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     @Query("select n from Notice n where n.noticeId = :noticeId")
     Optional<Notice> findByNoticeId(@Param("noticeId") Long noticeId);
 
-    //최신 공지사항을 페이징 처리하여 조회
+    //최신 공지사항을 페이징 처리한 후 조회
     @Query("select n from Notice n order by n.createdAt desc ")
     Page<Notice> findLatestNotices(Pageable pageable);
 

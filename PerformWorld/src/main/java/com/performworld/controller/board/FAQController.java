@@ -57,7 +57,7 @@ public class FAQController {
     @PostMapping("/search")
     public String searchFAQ(@RequestParam("keyword") String keyword) {
         List<FAQ> faqList = faqService.searchFAQsByKeyWord(keyword);
-        //검색된 FAQ 목록을 모델에 담아서 view 전달
+        //검색 FAQ 목록을 모델에 담아서 view 전달
         return "faq/searchResult";
     }
 }

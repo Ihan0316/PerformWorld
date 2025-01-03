@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NoticeDTO {
 
-    private Long noticeId;            // 공지사항 고유 ID
-    private String title;             // 공지 제목
-    private String content;           // 공지 내용
+    private Long noticeId;// 공지사항 고유ID
+    private String title;// 공지 제목
+    private String content;// 공지 내용
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;  // 등록일

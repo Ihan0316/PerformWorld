@@ -17,8 +17,8 @@ public class NoticeResponseDTO {
 
     private String content; // 공지사항 내용
 
-    private LocalDateTime createdAt; // 생성 시간
+    private LocalDateTime createdAt; // 생성시간
 
-    private LocalDateTime updatedAt; // 수정 시간
+    private LocalDateTime updatedAt; // 수정시간
 }
 

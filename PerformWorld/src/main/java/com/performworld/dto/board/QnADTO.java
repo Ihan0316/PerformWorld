@@ -23,7 +23,7 @@ public class QnADTO {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime responseDate;  // 답변일
 
-    private String response;  // 답변 내용
+    private String response;  // 답변내용
 }
 
 

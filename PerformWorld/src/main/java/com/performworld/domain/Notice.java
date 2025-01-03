@@ -22,4 +22,9 @@ public class Notice extends BaseEntity{
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;  // 공지 내용
+
+    public void updateNotice(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

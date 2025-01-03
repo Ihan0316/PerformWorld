@@ -16,6 +16,6 @@ public class QnAResponseDTO {
     private String response; // 관리자 답변 (nullable)
     private LocalDateTime createdAt; // 등록일
     private LocalDateTime updatedAt; // 수정일
-    private LocalDateTime responseDatetime; // 답변 날짜 (nullable)
+    private LocalDateTime responseDatetime; // 답변날짜 (nullable)
 }
 

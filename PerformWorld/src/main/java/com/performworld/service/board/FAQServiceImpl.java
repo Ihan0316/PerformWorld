@@ -34,17 +34,14 @@ public class FAQServiceImpl implements FAQService {
 
     @Override
     public void updateFAQ(FAQDTO faqDTO) {
-        FAQ faq = faqRepository.findById(faqDTO.getFaqId())
-                .orElseThrow(() -> new RuntimeException("FAQ not found with ID: " + faqDTO.getFaqId()));
-        faq.setQuestion(faqDTO.getQuestion());
-        faq.setAnswer(faqDTO.getAnswer());
+        FAQ faq = modelMapper.map(faqDTO, FAQ.class);
         faqRepository.save(faq);
     }
 
     @Override
     public FAQDTO getFAQById(Long faqId) {
         FAQ faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new RuntimeException("FAQ not found with ID: " + faqId));
+                .orElseThrow(() -> new IllegalArgumentException("FAQ not found for id: " + faqId));
         return modelMapper.map(faq, FAQDTO.class);
     }
 

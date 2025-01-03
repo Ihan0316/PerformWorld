@@ -35,4 +35,9 @@ public class QnA extends BaseEntity {
 
     @Column(name = "response_datetime")
     private LocalDateTime responseDatetime; // 답변 날짜 및 시간
+
+    public void updateQnA(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

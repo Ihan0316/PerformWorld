@@ -2,24 +2,25 @@ package com.performworld.service.board;
 
 import com.performworld.dto.board.NoticeDTO;
 import com.performworld.dto.board.NoticeRequestDTO;
+import com.performworld.dto.board.NoticeResponseDTO;
 
 import java.util.List;
 
 public interface NoticeService {
-    // 목록 조회
-    List<NoticeDTO> getList(NoticeDTO noticeDTO);
+    // 전체 공지사항 조회
+    List<NoticeDTO> getAllNotices(NoticeDTO noticeDTO);
 
-    // 등록
-    Long insert(NoticeRequestDTO noticeDTO);
+    // 공지사항 단건 조회
+    NoticeDTO getNoticeById(Long id);
 
-    // 수정
-    Long update(NoticeRequestDTO noticeDTO);
+    // 공지사항 등록
+    NoticeResponseDTO registerNotice(NoticeRequestDTO noticeRequestDTO);
 
-    // 삭제
-    void delete(Long id);
+    // 공지사항 수정
+    NoticeDTO updateNotice(Long id, NoticeRequestDTO noticeDTO);
 
-    // 공지사항 ID로 조회
-    NoticeDTO getNoticeById(Long id); // 반환 타입을 Object에서 NoticeDTO로 변경
+    // 공지사항 삭제
+    void deleteNotice(Long id);
 }
 
 

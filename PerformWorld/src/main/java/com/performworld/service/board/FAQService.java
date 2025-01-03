@@ -16,7 +16,7 @@ public interface FAQService {
     // FAQ 수정
     void updateFAQ(FAQDTO faqDTO);
 
-    // FAQ 상세 조회
+    // FAQ 상세조회
     FAQDTO getFAQById(Long faqId);
 
     // FAQ 삭제

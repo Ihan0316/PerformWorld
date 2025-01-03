@@ -26,7 +26,7 @@ public class FAQRestController {
     @GetMapping("/{faqId}")
     public ResponseEntity<FAQDTO> getFAQById(@PathVariable Long faqId) {
         FAQDTO faq = faqService.getFAQById(faqId);
-        return ResponseEntity.ok(faq); //FAQ 데이터 변환
+        return ResponseEntity.ok(faq); //FAQ 데이터변환
     }
 
     //FAQ 등록

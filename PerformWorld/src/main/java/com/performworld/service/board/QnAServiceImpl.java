@@ -1,20 +1,22 @@
 package com.performworld.service.board;
 
+
 import com.performworld.domain.QnA;
 import com.performworld.dto.board.QnADTO;
 import com.performworld.dto.board.QnARequestDTO;
+
 import com.performworld.repository.board.QnARepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Log4j2
 @Service
@@ -24,61 +26,56 @@ public class QnAServiceImpl implements QnAService {
     private final QnARepository qnaRepository;
     private final ModelMapper modelMapper;
 
-    // 목록 조회
     @Override
+    @Transactional(readOnly = true)
     public List<QnADTO> getList(QnARequestDTO qnaRequestDTO) {
-        Pageable pageable = PageRequest.of(qnaRequestDTO.getPage(), qnaRequestDTO.getSize()); // Pageable 설정
-        Page<QnA> qnaPage = qnaRepository.findAll(pageable); // 페이징된 QnA 목록 조회
-
-        // DTO로 변환하여 반환
-        return qnaPage.stream()
+        log.info("Fetching QnA list with filter: {}", qnaRequestDTO);
+        return qnaRepository.findAll().stream()
                 .map(entity -> modelMapper.map(entity, QnADTO.class))
                 .collect(Collectors.toList());
     }
 
-    // 등록
+    //등록
     @Override
-    public Long createQnA(QnARequestDTO qnaRequestDTO) {
-        QnA qna = modelMapper.map(qnaRequestDTO, QnA.class); // DTO -> Entity 변환
-        return qnaRepository.save(qna).getQnaId(); // 저장 후 ID 반환
+    @Transactional
+    public Long registerQnA(QnARequestDTO qnaRequestDTO) {
+        log.info("Registering new QnA : {}", qnaRequestDTO);
+        QnA qna = modelMapper.map(qnaRequestDTO, QnA.class);
+        QnA savedQnA = qnaRepository.save(qna);
+        return savedQnA.getQnaId();
     }
 
-    // 수정
+    //수정
     @Override
+    @Transactional
     public Long updateQnA(Long qnaId, QnARequestDTO qnaRequestDTO) {
-        QnA qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new RuntimeException("QnA not found with ID: " + qnaId));
-        modelMapper.map(qnaRequestDTO, qna); // 기존 데이터를 DTO로 업데이트
-        return qnaRepository.save(qna).getQnaId(); // 업데이트 후 ID 반환
-    }
+        log.info("Updating QnA with ID : {}", qnaId);
 
-    // 삭제
-    @Override
-    public void deleteQnA(Long id) {
-        qnaRepository.deleteById(id); // QnA 삭제
-    }
+        // findById와 orElseThrow를 분리하여 가독성 향상
+        QnA existingQnA = qnaRepository.findById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("QnA with ID " + qnaId + " not found"));
 
-    @Override
-    public void updateResponse(Long qnaId, String response) {
-        QnA qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new RuntimeException("QnA not found with ID: " + qnaId));
+        // updateQnA 메서드를 호출하여 제목과 내용을 업데이트
+        existingQnA.updateQnA(qnaRequestDTO.getTitle(), qnaRequestDTO.getContent());
 
-        qna.setResponse(response); // 답변 내용 및 날짜 설정
-        qnaRepository.save(qna); // 저장
+        // 업데이트된 엔티티 저장
+        QnA updatedQnA = qnaRepository.save(existingQnA);
+
+        return updatedQnA.getQnaId();
     }
 
     @Override
-    public void respondToQnA(Long qnaId, String response) {
-        QnA qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new RuntimeException("QnA not found with ID: " + qnaId));
-        qna.setResponse(response);
-        qna.setResponseDate(LocalDateTime.now());
-        qnaRepository.save(qna);
+    @Transactional
+    public void deleteQnA(Long qnaId) {
+        log.info("Deleting QnA with ID : {}", qnaId);
+        if (!qnaRepository.existsById(qnaId)) {
+            throw new IllegalArgumentException("QnA with ID " + qnaId + " not found");
+        }
+        qnaRepository.deleteById(qnaId);
     }
 
+    @Override
+    public QnADTO getQnAById(Long id) {
+        return null;
+    }
 }
-
-
-
-
-

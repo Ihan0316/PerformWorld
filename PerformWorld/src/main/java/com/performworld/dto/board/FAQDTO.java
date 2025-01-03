@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FAQDTO {
 
-    private Long fagId; //faq 고유 ID
+    private Long fagId; //faq 고유ID
     private String question; //질문
     private String answer; //답변
 

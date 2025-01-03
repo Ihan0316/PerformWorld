@@ -16,10 +16,14 @@ public class QnARequestDTO {
 
     // 페이지 번호 반환
     @Getter
+    @Builder.Default
     private int page = 0;  // 페이지 번호 (기본값 0)
     // 페이지 크기 반환
     @Getter
+    @Builder.Default
     private int size = 10; // 페이지 크기 (기본값 10)
+    @Setter
+    private String keyword;
 
 }
 

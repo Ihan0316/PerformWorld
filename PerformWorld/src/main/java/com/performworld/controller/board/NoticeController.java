@@ -22,18 +22,18 @@ public class NoticeController {
     @GetMapping("/list")
     public String getListPage() {
         // 공지사항 목록 조회
-        List<NoticeDTO> noticeList = noticeService.getList(new NoticeDTO());
+        List<NoticeDTO> noticeList = noticeService.getAllNotices(new NoticeDTO());
         // view 이름을 "notice/list"로 반환하여 thymeleaf 템플릿을 렌더링하도록 설정
         return "notice/list";
     }
 
-    // 공지사항 등록 페이지 (등록 폼)
+    // 공지사항 등록 페이지(등록 폼)
     @GetMapping("/register")
     public String getRegisterPage() {
         return "notice/register"; // 등록 페이지로 이동
     }
 
-    // 공지사항 수정 페이지 (수정 폼)
+    // 공지사항 수정 페이지(수정 폼)
     @GetMapping("/update")
     public String getUpdatePage() {
         return "notice/update"; // 수정 페이지로 이동
