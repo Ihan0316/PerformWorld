@@ -11,10 +11,11 @@
 <div id="fh5co-main" layout:fragment="content">
   <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
     <div class="row">
+
       <!-- User 조회 섹션 (상단) -->
       <h2>User 조회</h2>
       <div class="col-md-12">
-        <table class="table table-striped">
+        <table id="userTable" class="table table-striped" style="text-align: right;">
           <thead>
           <tr>
             <th>User ID</th>
@@ -54,13 +55,13 @@
         <h2>Tier 조회</h2>
         <div class="row">
           <div class="col-md-12 text-end">
-            <button class="btn btn-primary add-tier-btn" onclick="openAddTierModal()">Add Tier</button>
+            <button class="btn btn-primary add-tier-btn">Add Tier</button>
           </div>
         </div>
         <!-- Tier 조회 테이블 -->
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-striped">
+            <table id="tierTable" class="table table-striped" style="text-align: right;">
               <thead>
               <tr>
                 <th>Tier ID</th>
@@ -84,13 +85,13 @@
         </div>
       </div> <!-- Tier 조회 섹션 end -->
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <!-- Seat 조회 섹션 -->
         <h2>Seat 조회</h2>
         <!-- Seat 조회 테이블 -->
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-striped">
+            <table id="seatTable" class="table table-striped" style="text-align: right;">
               <thead>
               <tr>
                 <th>Seat ID</th>
@@ -106,18 +107,23 @@
               </tr>
               </tbody>
             </table>
+            <!-- Seat 테이블 하단에 페이지네이션 버튼 -->
+            <div id="seatPagination" style="text-align: center;">
+              <button id="prevPage" class="btn btn-secondary">이전</button>
+              <span id="pageNumbers"></span> <!-- 동적으로 페이지 번호 표시 -->
+              <button id="nextPage" class="btn btn-secondary">다음</button>
+            </div>
           </div>
         </div>
       </div> <!-- Seat 조회 섹션 end -->
     </div> <!-- Tier 및 Seat 조회 섹션 end -->
 
-    <!-- Tier 추가 모달 -->
     <div id="addTierModal" class="modal" style="display: none;">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Tier 추가</h4>
-            <button type="button" class="close" onclick="closeAddTierModal()">&times;</button>
+            <button type="button" class="close">&times;</button>
           </div>
           <div class="modal-body">
             <form id="addTierForm">
@@ -127,28 +133,31 @@
               </div>
               <div class="form-group">
                 <label for="minSpent">최소 소비 금액</label>
-                <input type="number" class="form-control" id="minSpent" required>
+                <input type="number" class="form-control" id="minSpent" min="0" required>
               </div>
               <div class="form-group">
                 <label for="maxSpent">최대 소비 금액</label>
-                <input type="number" class="form-control" id="maxSpent" required>
+                <input type="number" class="form-control" id="maxSpent" min="0" required>
               </div>
               <div class="form-group">
                 <label for="discountRate">할인율 (%)</label>
-                <input type="number" class="form-control" id="discountRate" required>
+                <input type="number" class="form-control" id="discountRate" min="0" max="100" required>
               </div>
-              <button type="submit" class="btn btn-primary">Tier 추가</button>
+              <button type="submit" class="btn btn-primary addTierBtn">Tier 추가</button>
             </form>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </div> <!-- fh5co-main end -->
 
   <th:block layout:fragment="javascript">
     <script th:src="@{/js/admin/tier-management.js}"></script>
     <script th:src="@{/js/admin/user-management.js}"></script>
+    <script th:src="@{/js/admin/data.js}"></script>
   </th:block>
 </body>
 </html>
