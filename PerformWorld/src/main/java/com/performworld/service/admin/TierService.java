@@ -11,4 +11,5 @@ public interface TierService {
 
     TierDTO addTier(TierDTO tierDTO); // 티어 등록
 
+    TierDTO getUserTier(String userId);
 }

@@ -1,11 +1,31 @@
 const init = () => {
 
-    // 좌석 선택 개수
-    let selectedSeats = [];
+    let selectedSeats = [];  // 좌석 선택 개수
+    let sections = [];  // 좌석 등급 정보
+    let userInfo = {};
+    let eventName = "";  // 공연명
+    let discountPercent = 0;  // 등급 할인율
+    const totalPay = document.querySelector(".totalAmount");
+
+    getUserInfo().then(res => {
+        userInfo = res.data;
+    }).catch(e => {
+        alert("회원 정보를 가져오는데 실패했습니다.");
+    });
+
+    getUserTier().then(res => {
+        console.log(res)
+        discountPercent = (100-res.discountRate)/100;
+        document.querySelector(".discountAmount").textContent = res.discountRate;
+    }).catch(e => {
+        alert("등급 정보를 가져오는데 실패했습니다.");
+    });
 
     // 좌석선택
     getSeatList().then(res => {
         console.log(res)
+
+        let seatPrice = 0;
 
         res.forEach(seat => {
             const seatElement = document.createElement("div");
@@ -17,17 +37,34 @@ const init = () => {
 
             // 좌석 클릭 시 선택 상태 변경
             seatElement.addEventListener("click", function() {
+
                 // 이미 선택된 좌석인 경우
                 if (this.classList.contains("selected")) {
                     this.classList.remove("selected");
                     selectedSeats = selectedSeats.filter(seat => seat !== this.getAttribute("data-seat-id"));
+                    // 결제금액 세팅
+                    seatPrice -= seat.price;
+                    if(document.querySelector("input[name='isDelivery']").checked) {
+                        totalPay.textContent = (seatPrice * discountPercent + 3000).toLocaleString();
+                    } else {
+                        totalPay.textContent = (seatPrice * discountPercent).toLocaleString();
+                    }
                 }
+
                 // 선택된 좌석이 2개 미만일 때만 선택
                 else if (selectedSeats.length < 2) {
                     this.classList.add("selected");
                     selectedSeats.push(this.getAttribute("data-seat-id"));
+                    // 결제금액 세팅
+                    seatPrice += seat.price;
+                    if(document.querySelector("input[name='isDelivery']").checked) {
+                        totalPay.textContent = (seatPrice * discountPercent + 3000).toLocaleString();
+                    } else {
+                        totalPay.textContent = (seatPrice * discountPercent).toLocaleString();
+                    }
                 } else {
                     alert("선택 가능한 좌석 수를 초과했습니다.");
+                    return;
                 }
 
                 if (selectedSeats.length > 0) {
@@ -39,24 +76,37 @@ const init = () => {
                     document.querySelector(".dlvSelBox").classList.add("d-none");
                     document.querySelector(".booking-footer").classList.add("d-none");
                 }
-
-                console.log(selectedSeats);
             });
 
-            // 좌석 구역별 색상 구분
-            switch (seat.section) {
-                case 'VIP':
-                    seatElement.classList.add("vip-seat");
-                    break;
-                case 'R':
-                    seatElement.classList.add("r-seat");
-                    break;
-                case 'S':
-                    seatElement.classList.add("s-seat");
-                    break;
+            // sections 세팅
+            const sectionExists = sections.some(item => item.section === seat.section);
+            if (!sectionExists) {
+                sections.push({
+                    section: seat.section,
+                    price: seat.price,
+                    color: seat.section === 'VIP' ? 'mediumorchid' : seat.section === 'R' ? 'mediumseagreen' : 'skyblue'
+                });
             }
 
+            // 좌석 구역별 색상 구분
+            seatElement.classList.add(`${seat.section}-seat`);
+
             document.getElementById("seat-container").appendChild(seatElement);
+        });
+        sections.sort((a, b) => b.price - a.price);
+
+        // 좌석 정보 추가
+        const sectionInfoContainer = document.querySelector(".section-info");
+        sections.forEach(section => {
+            const sectionElement = document.createElement("div");
+            sectionElement.classList.add("section-info-item");
+
+            sectionElement.innerHTML = `
+                <div class="section-name" style="color: ${section.color}">${section.section}</div>
+                <div class="section-price">${section.price.toLocaleString()}원</div>
+            `;
+
+            sectionInfoContainer.appendChild(sectionElement);
         });
 
     }).catch(e => {
@@ -67,8 +117,8 @@ const init = () => {
         console.log(res);
         const datePeriod = getMixMaxDate(res);
 
-        // 공연명 세팅
-        document.querySelector(".eventName").innerHTML = `&lt;&nbsp;${res[0].eventName}&nbsp;&gt;`;
+        eventName = res[0].eventName;
+        document.querySelector(".eventName").textContent = eventName;
 
         // 날짜선택 (flatpickr)
         const fp = flatpickr("#datepicker", {
@@ -78,6 +128,7 @@ const init = () => {
             maxDate: datePeriod.end,    // 티켓팅 종료일
             disableMobile: true,        // 모바일에서의 UI 변경 방지
             onReady: function(selectedDates, dateStr, instance) {
+                // 초기 세팅
                 const year = instance.currentYear;
                 const month = instance.currentMonth;
                 instance.calendarContainer.querySelector('.flatpickr-monthDropdown-month').textContent = `${year}년 ${month + 1}월`;
@@ -104,13 +155,13 @@ const init = () => {
                 }
             },
             onMonthChange: function(selectedDates, dateStr, instance) {
+                // 월 변경 event
                 const year = instance.currentYear;
                 const month = instance.currentMonth;
                 instance.calendarContainer.querySelector(`.flatpickr-monthDropdown-months option[value="${month}"]`).textContent = `${year}년 ${month + 1}월`;
             },
             onChange: function(selectedDates, dateStr, instance) {
-                // 선택된 날짜의 회차 정보 가져오기
-                const selectedDate = new Date(selectedDates[0]).toLocaleDateString();
+                // 날짜 선택 event
                 getScheduleList(new Date(selectedDates[0]).toLocaleDateString('sv-SE', {timeZone: 'Asia/Seoul'})).then(res => {
                     console.log(res);
 
@@ -123,31 +174,48 @@ const init = () => {
                             const scheduleElement = document.createElement("div");
                             scheduleElement.classList.add("schedule-item");
                             scheduleElement.innerHTML = `
-                            <div><strong>${schedule.eventDate.split('T')[1].substring(0, 5)}</strong></div>
-                            <div><span>${schedule.eventCast}</span></div>
-                        `;
+                                <div><strong>${schedule.eventDate.split('T')[1].substring(0, 5)}</strong></div>
+                                <div><span>${schedule.eventCast}</span></div>
+                            `;
 
-                            // 클릭 가능한 이벤트 핸들러 추가
+                            // 클릭 이벤트 핸들러
                             scheduleElement.addEventListener("click", function() {
-                                // 이전에 클릭한 항목이 있다면 active 클래스를 제거
+                                // 이전에 클릭한 항목 active 클래스 제거
                                 const activeItem = document.querySelector(".schedule-item.active");
                                 if (activeItem) {
                                     activeItem.classList.remove("active");
                                 }
 
-                                // 클릭된 항목에 active 클래스 추가
+                                // 클릭된 항목 active 클래스 추가
                                 scheduleElement.classList.add("active");
 
-                                // 회차 선택이 완료되면 좌석 선택 UI 보이기
-                                document.querySelector(".seatSelBox").classList.remove("d-none");
+                                // 해당 회차 예매정보 조회
+                                getBookedList(schedule.scheduleId).then(res => {
+                                    console.log(res)
+                                    // 좌석 초기화
+                                    selectedSeats = [];
+                                    const selectedSeatElements = document.querySelectorAll(".seat.selected");
+                                    selectedSeatElements.forEach(seat => {
+                                        seat.classList.remove("selected");
+                                    });
+                                    const bookedSeatElements = document.querySelectorAll(".seat.unavailable");
+                                    bookedSeatElements.forEach(seat => {
+                                        seat.classList.remove("unavailable");
+                                    });
+                                    // 예매된 좌석 선택불가 설정
+                                    res.forEach(booked => {
+                                        const bookedSeat = document.querySelector(`.seat[data-seat-id='${booked.seatId}']`);
+                                        if (bookedSeat) {
+                                            bookedSeat.classList.add("unavailable");
+                                        }
+                                    });
 
-                                // 좌석 초기화
-                                selectedSeats = [];
-                                // 선택된 좌석 UI 초기화
-                                const selectedSeatElements = document.querySelectorAll(".seat.selected");
-                                selectedSeatElements.forEach(seat => {
-                                    seat.classList.remove("selected");
+                                }).catch(e => {
+                                   alert("예매 정보를 가져오는데 실패했습니다.");
                                 });
+
+                                // 좌석 선택 UI 보이기
+                                document.querySelector(".seatSelBox").classList.remove("d-none");
                                 // 배송 여부와 결제하기 UI 숨기기
                                 document.querySelector(".dlvSelBox").classList.add("d-none");
                                 document.querySelector(".booking-footer").classList.add("d-none");
@@ -171,7 +239,9 @@ const init = () => {
             }
         });
     }).catch(e => {
+        // 티켓팅 가능 회차 없으면 공연 상세페이지로
         alert("티켓팅 정보를 불러오는데 실패했습니다.");
+        window.location.href = `/event/details/${eventId}`;
     });
 
     // 모든 티켓팅의 오픈 회차(날짜) 범위 합치기
@@ -197,63 +267,35 @@ const init = () => {
         return { start: minDate, end: maxDate };
     }
 
-    // 티켓팅 목록 가져오기
-    async function getTicketingInfo() {
-        const res = await axios({
-            method : 'post',
-            url : '/book/getEventTicketing',
-            data : { eventId: eventId },
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        });
-        return res.data;
-    }
-
-    // 회차 목록 가져오기
-    async function getScheduleList(searchDate) {
-        console.log(searchDate)
-        const res = await axios({
-            method : 'post',
-            url : '/eventSchedule/getScheduleList',
-            data : {
-                eventId: eventId,
-                searchDate: searchDate
-            },
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        });
-        return res.data;
-    }
-
-    // 좌석 정보 가져오기
-    async function getSeatList() {
-        const res = await axios({
-            method : 'post',
-            url : '/seat/getSeatList',
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        });
-        return res.data;
-    }
-
     // 배송 받기 mode 변경
     document.querySelector("input[name='isDelivery']").addEventListener("change", function(e) {
         if (this.checked) {
+            document.querySelector(".shippingAmount").textContent = '3,000';
+            totalPay.textContent = (Number(totalPay.textContent.replace(/,/g, '')) + 3000).toLocaleString();
             document.querySelector("input[name='address2']").disabled = false;
+            document.querySelector("input[name='loadAddress']").disabled = false;
             document.querySelector("input[name='openPostBtn']").disabled = false;
         } else {
+            document.querySelector(".shippingAmount").textContent = '0';
+            totalPay.textContent = (Number(totalPay.textContent.replace(/,/g, '')) - 3000).toLocaleString();
             document.querySelector("input[name='postcode']").value = '';
             document.querySelector("input[name='address1']").value = '';
             document.querySelector("input[name='address2']").value = '';
             document.querySelector("input[name='address2']").disabled = true;
+            document.querySelector("input[name='loadAddress']").disabled = true;
+            document.querySelector("input[name='loadAddress']").checked = false;
             document.querySelector("input[name='openPostBtn']").disabled = true;
         }
     });
 
-    // 배송지 선택
+    // 배송지 불러오기
+    document.querySelector("input[name='loadAddress']").addEventListener("click", function(e) {
+        document.querySelector("input[name='postcode']").value = userInfo.postcode;
+        document.querySelector("input[name='address1']").value = userInfo.address1;
+        document.querySelector("input[name='address2']").value = userInfo.address2;
+    });
+
+    // 배송지 입력
     document.querySelector("input[name='openPostBtn']").addEventListener("click", function(e) {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -302,14 +344,147 @@ const init = () => {
         }).open();
     });
 
+
+
+    // 회원 정보 가져오기
+    async function getUserInfo() {
+        const res = await axios({
+            method: 'post',
+            url: '/user/getInfo',
+            data: { userId: 'user123' }, // loginInfo
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res;
+    }
+
+    // 등급 정보 가져오기
+    async function getUserTier() {
+        const res = await axios({
+            method : 'post',
+            url : '/book/getUserTier',
+            data : { userId: 'user123' },  // loginInfo
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    // 티켓팅 목록 가져오기
+    async function getTicketingInfo() {
+        const res = await axios({
+            method : 'post',
+            url : '/book/getEventTicketing',
+            data : { eventId: eventId },
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    // 회차 목록 가져오기
+    async function getScheduleList(searchDate) {
+        console.log(searchDate)
+        const res = await axios({
+            method : 'post',
+            url : '/eventSchedule/getScheduleList',
+            data : {
+                eventId: eventId,
+                searchDate: searchDate
+            },
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    // 좌석 정보 가져오기
+    async function getSeatList() {
+        const res = await axios({
+            method : 'post',
+            url : '/book/getSeatList',
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    // 예매 정보 가져오기
+    async function getBookedList(scheduleId) {
+        const res = await axios({
+            method : 'post',
+            url : '/book/getBookedList',
+            data : {
+                scheduleId: scheduleId
+            },
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        });
+        return res.data;
+    }
+
     // 결제하기
-    document.querySelector(".payBtn").addEventListener("click", function(e) {
+    document.querySelector(".payBtn").addEventListener("click", async function(e) {
         const postcode = document.querySelector("input[name='postcode']").value;
         if(document.querySelector("input[name='isDelivery']").checked &&
             (postcode == null || postcode === '')) {
             alert("배송지를 선택해주세요.");
             return;
         }
+
+        // 결제 api
+        const res = await PortOne.requestPayment({
+            storeId: "",
+            channelKey: "",
+            paymentId: `pay${crypto.randomUUID()}`,
+            orderName: eventName,
+            totalAmount: 1000,//totalPay.textContent.replace(/,/g, ''),
+            currency: "CURRENCY_KRW",
+            payMethod: "CARD",
+            customer: {
+              fullName: userInfo.name,
+              phoneNumber: userInfo.phoneNumber,
+              email: userInfo.email,
+            },
+//            virtualAccount: {
+//                bank: `SHINHAN`,
+//                accountExpiry: {
+//                    dueDate: `2025-01-12T23:59:59+09:00`,  //입금기한
+//                },
+//                cashReceipt: {
+//                    type: `PERSONAL`,
+//                    customerIdentityNumber: `010-1234-0000`,
+//                },
+//                remitteeName: `테스트`,
+//            },
+        });
+        if (res.code !== undefined) {
+            return alert(res.message);
+        }
+
+        // 결제내역 단건 조회 api
+        const PORTONE_API_SECRET = "";
+        const paymentResponse = await fetch(
+            `https://api.portone.io/payments/${res.paymentId}`,
+            {
+                headers: {
+                    Authorization: `PortOne ${PORTONE_API_SECRET}`
+                }
+            },
+        );
+        if (!paymentResponse.ok) {
+            throw new Error(`paymentResponse: ${await paymentResponse.json()}`);
+        }
+        const payment = await paymentResponse.json();
+        console.log(payment)
+
+        // 결제정보 DB 저장
     });
 }
 

@@ -17,7 +17,7 @@
 				<div class="performance-title">
 					<h2 class="eventName"></h2>
 				</div>
-				<div class="row">
+				<div class="row" style="border-top: 1px solid #ccc">
 					<div class="col-lg-3 col-sm-12">
 						<div class="fh5co-feature fh5co-feature-sm animate-box" data-animate-effect="fadeInLeft">
 							<div class="fh5co-text p-0">
@@ -32,6 +32,7 @@
 							<div class="fh5co-text p-0">
 								<label class="fs-2">좌석 선택</label>
 								<div class="seat-selection">
+									<div class="section-info"></div>
 									<div class="seat-stage">STAGE</div>
 									<div id="seat-container"></div>
 									<div class="seat-info">
@@ -45,9 +46,15 @@
 						<div class="fh5co-feature fh5co-feature-sm animate-box dlvSelBox d-none" data-animate-effect="fadeInLeft">
 							<div class="fh5co-text p-0">
 								<label class="fs-2">티켓 배송 여부</label>
-								<div class="mt-3">
-									<label class="fs-4 fw-bold">배송(3000원)&nbsp;</label>
-									<input type="checkbox" name="isDelivery" class="form-check-input fs-4" style="transform: scale(1.5)">
+								<div class="mt-3 d-flex justify-content-between">
+									<div>
+										<label class="fs-4 fw-bold">배송(3000원)&nbsp;</label>
+										<input type="checkbox" name="isDelivery" class="form-check-input fs-4" style="transform: scale(1.5)">
+									</div>
+									<div>
+										<label class="fs-4 fw-bold">배송지 불러오기&nbsp;</label>
+										<input type="checkbox" name="loadAddress" class="form-check-input fs-4" style="transform: scale(1.5)" disabled>
+									</div>
 								</div>
 								<form class="addressForm">
 									<div class="row">
@@ -60,11 +67,16 @@
 												<div class="col-lg-4 p-0">
 													<input type="text" name="postcode" class="form-control" required disabled>
 												</div>
-												<input type="button" name="openPostBtn" value="배송지 선택" class="btn btn-primary btn-md mt-3" disabled>
+												<input type="button" name="openPostBtn" value="배송지 입력" class="btn btn-primary btn-md mt-3" disabled>
 											</div>
 										</div>
 									</div>
 								</form>
+							</div>
+							<div class="text-end mt-5 payInfo">
+								<p>등급 할인: <span class="d-inline-block w-25 discountAmount">0</span>%</p>
+								<p>배송비: <span class="d-inline-block w-25 shippingAmount">0</span>원</p>
+								<p>결제 금액: <span class="d-inline-block w-25 totalAmount">0</span>원</p>
 							</div>
 						</div>
 					</div>
@@ -78,6 +90,7 @@
 
 	<!-- js import -->
 	<th:block layout:fragment="javascript">
+		<script th:src="@{https://cdn.portone.io/v2/browser-sdk.js}"></script>
 		<script th:inline="javascript">
 			const loginUser = [[${session.user}]];
 			console.log(loginUser);
