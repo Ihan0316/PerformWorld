@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<body>
+<!--	content layout start  -->
+<div id="fh5co-main" layout:fragment="content">
+    <!-- Modal -->
+    <div class="modal eventRegisterModal" tabindex="-1">
+        <div class="modal-dialog" style="width: 80%; max-width: 1000px; ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>공연/전시 추가</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <!-- 테이블 추가 -->
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th style="width: 15%;">썸네일</th>
+                                <th style="width: 10%;">Event ID</th>
+                                <th style="width: 15%;">제목</th>
+                                <th style="width: 13%;">공연 시작일</th>
+                                <th style="width: 13%;">공연 종료일</th>
+                                <th style="width: 15%;">지역</th>
+                                <th style="width: 14%;">장르</th>
+                                <th style="width: 5%;">추가</th>
+                            </tr>
+                            </thead>
+                            <tbody id="eventList">
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 페이지 네비게이션 버튼 -->
+                    <div id="paginationContainer" class="d-flex justify-content-between mt-3">
+                        <!-- 이전 페이지 버튼 -->
+                        <button id="prevPageBtn" class="btn btn-outline-secondary" disabled>이전</button>
+                        <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                            <span id="pageButtons" class="mx-3 text-center">Page 1</span>
+                            <input type="text" id="pageInput" class="page-input form-control mx-2" min="1" placeholder="Page 검색" style="width: 125px;">
+                        </div>
+                        <!-- 다음 페이지 버튼 -->
+                        <button id="nextPageBtn" class="btn btn-outline-secondary">다음</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>티켓팅 일정 등록</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group d-flex">
+                    <input type="text" id="titleSearch" class="form-control mb-3 mr-2" placeholder="제목을 입력하여 검색" style="width: 250px;">
+                    <select id= "genre-code" class="form-control mb-3 mr-2" style="width: 200px;" name="genre-code">
+                    </select>
+                    <button class="btn btn-primary mb-3" id="searchButton">검색</button>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 10%;">Event ID</th>
+                        <th style="width: 35%;">제목</th>
+                        <th style="width: 10%;">공연 시작일</th>
+                        <th style="width: 10%;">공연 종료일</th>
+                        <th style="width: 15%;">지역</th>
+                        <th style="width: 15%;">장르</th>
+                        <th style="width: 10%;">등록</th>
+                    </tr>
+                    </thead>
+                    <tbody id="savedEventList">
+
+                    </tbody>
+                </table>
+                <ul id="pagination" class="pagination">
+                    <!-- 페이징 버튼들이 여기에 동적으로 추가됩니다 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+<!--    <div id="map"></div>-->
+</div>
+<!--	content layout end  -->
+
+<!-- JavaScript -->
+
+<th:block layout:fragment="javascript">
+    <script th:src="@{/js/ticket/ticket.js}"></script>
+    <script th:inline="javascript"></script>
+</th:block>
+</body>
+</html>
