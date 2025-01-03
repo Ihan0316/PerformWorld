@@ -9,6 +9,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString
 public class TierDTO {
@@ -27,6 +28,8 @@ public class TierDTO {
     @DecimalMin(value = "0", message = "할인율은 0 이상이어야 합니다.")
     @DecimalMax(value = "100", message = "할인율은 100 이하이어야 합니다.")
     private Long discountRate;
+
+    private String userId;
 
     // 생성자에서 유효성 검사 추가
     public TierDTO(Long tierId, String tierName, Long minSpent, Long maxSpent, Long discountRate) {

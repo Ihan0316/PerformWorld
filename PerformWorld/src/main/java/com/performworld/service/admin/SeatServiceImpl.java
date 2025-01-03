@@ -27,8 +27,6 @@ public class SeatServiceImpl implements SeatService {
     // 모든 좌석 조회
     @Override
     public List<SeatDTO> getAllSeats() {
-        List<Seat> seats = seatRepository.findAll();
-        // Retrieve all seats and map to SeatDTO
         List<Seat> seats = seatRepository.findAll(Sort.by(Sort.Order.asc("seatId")));
         return seats.stream()
                 .map(this::convertToDTO)  // DTO 변환을 위한 메서드 호출
