@@ -85,4 +85,22 @@ public class AdminRestController {
         return ResponseEntity.ok(response);
     }
 
+    // tier 수정
+    @PutMapping("/tier/{tierId}")
+    @ResponseBody
+    public ResponseEntity<?> updateTier(
+            @PathVariable Long tierId,
+            @Valid @RequestBody TierDTO tierDTO) {
+        try {
+            TierDTO updatedTier = tierService.updateTier(tierId, tierDTO);
+            return ResponseEntity.ok(updatedTier);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error updating tier: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Tier 수정에 실패했습니다.");
+        }
+    }
+
 }

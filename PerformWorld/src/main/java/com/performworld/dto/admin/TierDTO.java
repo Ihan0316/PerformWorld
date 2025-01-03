@@ -40,6 +40,14 @@ public class TierDTO {
         this.discountRate = discountRate;
     }
 
+    // Tier 엔티티에서 정보를 받아오는 생성자
+    public TierDTO(Tier updatedTier) {
+        this.tierName = updatedTier.getTierName();
+        this.minSpent = updatedTier.getMinSpent();
+        this.maxSpent = updatedTier.getMaxSpent();
+        this.discountRate = updatedTier.getDiscountRate();
+    }
+
     // 엔티티를 DTO로 변환하는 메소드
     public static TierDTO fromEntity(Tier tier) {
         return new TierDTO(
