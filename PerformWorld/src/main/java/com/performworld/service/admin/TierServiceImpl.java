@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,16 +22,14 @@ public class TierServiceImpl implements TierService {
     @Override
     public List<TierDTO> getAllTiers() {
         List<Tier> tiers = tierRepository.findAll();
-        List<TierDTO> tierDTOs = tiers.stream()
+        return tiers.stream()
                 .map(TierDTO::fromEntity)
                 .collect(Collectors.toList());
-        return tierDTOs;
     }
 
     // 티어 등록
     @Override
     public TierDTO addTier(TierDTO tierDTO) {
-        // 유효성 검사는 컨트롤러에서 처리
         Tier tier = tierDTO.toEntity();
         return TierDTO.fromEntity(tierRepository.save(tier));
     }
@@ -39,5 +38,34 @@ public class TierServiceImpl implements TierService {
     @Override
     public TierDTO getUserTier(String userId) {
         return tierRepository.getUserTier(userId);
+    }
+
+    // 티어 수정
+    @Override
+    public TierDTO updateTier(Long tierId, TierDTO tierDTO) {
+        return tierRepository.findById(tierId)
+                .map(tier -> {
+                    Tier updatedTier = new Tier(
+                            tierId,
+                            tierDTO.getTierName(),
+                            tierDTO.getMinSpent(),
+                            tierDTO.getMaxSpent(),
+                            tierDTO.getDiscountRate()
+                    );
+                    tierRepository.save(updatedTier);
+                    return new TierDTO(updatedTier);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Tier입니다."));
+    }
+
+    // 특정 tierId에 해당하는 Tier 조회
+    @Override
+    public TierDTO getTierById(Long tierId) {
+        Optional<Tier> tierOptional = tierRepository.findById(tierId);
+        if (tierOptional.isPresent()) {
+            return TierDTO.fromEntity(tierOptional.get());
+        } else {
+            throw new IllegalArgumentException("존재하지 않는 Tier입니다.");
+        }
     }
 }
