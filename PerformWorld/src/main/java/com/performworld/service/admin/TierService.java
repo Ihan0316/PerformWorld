@@ -11,5 +11,5 @@ public interface TierService {
 
     TierDTO addTier(TierDTO tierDTO); // 티어 등록
 
-    Tier getTierById(Long tierId); // tierId로 Tier 조회 (추가된 메서드)
+    TierDTO getUserTier(String userId);
 }

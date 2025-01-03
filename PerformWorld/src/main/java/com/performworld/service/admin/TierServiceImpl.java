@@ -30,22 +30,14 @@ public class TierServiceImpl implements TierService {
     // 티어 등록
     @Override
     public TierDTO addTier(TierDTO tierDTO) {
-        // 유효성 검사 (minSpent가 maxSpent보다 큰지 체크)
-        if (tierDTO.getMinSpent() >= tierDTO.getMaxSpent()) {
-            throw new IllegalArgumentException("Min Spent should be less than Max Spent");
-        }
-
-        // DTO를 엔티티로 변환하여 DB에 저장
+        // 유효성 검사는 컨트롤러에서 처리
         Tier tier = tierDTO.toEntity();
-        Tier savedTier = tierRepository.save(tier);
-
-        // 저장된 엔티티를 DTO로 다시 변환하여 반환
-        return TierDTO.fromEntity(savedTier);
+        return TierDTO.fromEntity(tierRepository.save(tier));
     }
 
+    // 회원 등급 조회
     @Override
-    public Tier getTierById(Long tierId) {
-        return tierRepository.findById(tierId)
-                .orElseThrow(() -> new IllegalArgumentException("Tier not found with id: " + tierId));
+    public TierDTO getUserTier(String userId) {
+        return tierRepository.getUserTier(userId);
     }
 }

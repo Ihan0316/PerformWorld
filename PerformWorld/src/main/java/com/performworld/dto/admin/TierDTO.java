@@ -1,19 +1,35 @@
 package com.performworld.dto.admin;
 
 import com.performworld.domain.Tier;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString
 public class TierDTO {
 
     private Long tierId;
+
+    @NotNull(message = "Tier 이름은 필수입니다.")
     private String tierName;
+
+    @Min(value = 0, message = "최소 금액은 0 이상이어야 합니다.")
     private Long minSpent;
+
+    @Min(value = 0, message = "최대 금액은 0 이상이어야 합니다.")
     private Long maxSpent;
+
+    @DecimalMin(value = "0", message = "할인율은 0 이상이어야 합니다.")
+    @DecimalMax(value = "100", message = "할인율은 100 이하이어야 합니다.")
     private Long discountRate;
+
+    private String userId;
 
     // 생성자에서 유효성 검사 추가
     public TierDTO(Long tierId, String tierName, Long minSpent, Long maxSpent, Long discountRate) {

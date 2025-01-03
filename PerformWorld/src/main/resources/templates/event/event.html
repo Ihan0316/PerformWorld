@@ -63,34 +63,23 @@
         </div>
         <form action="#" method="get" th:action="@{/event/search}" th:object="${eventSearchDTO}">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label for="perform-name">공연 이름</label>
                         <input type="text" class="form-control" name="perform-name" id="perform-name" placeholder="공연 이름">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label for="location-code">지역 코드</label>
-                        <select id="location-code" class="form-control" name="location-code">
-                            <option value="">지역 선택</option>
-                            <option value="11">서울</option>
-                            <option value="26">부산</option>
-                            <option value="27">대구</option>
-                            <option value="28">인천</option>
-                            <option value="29">광주</option>
-                            <option value="30">대전</option>
-                            <option value="31">울산</option>
-                            <option value="36">세종</option>
-                            <option value="41">경기</option>
-                            <option value="51">강원</option>
-                            <option value="43">충북</option>
-                            <option value="44">충남</option>
-                            <option value="45">전북</option>
-                            <option value="46">전남</option>
-                            <option value="47">경북</option>
-                            <option value="48">경남</option>
-                            <option value="50">제주</option>
+                        <label>지역 코드</label>
+                        <select class="form-control" name="location-code">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>장르 코드</label>
+                        <select class="form-control" name="genre-select">
                         </select>
                     </div>
                 </div>
@@ -125,17 +114,7 @@
             <div class="col-md-12">
                 <div class="form-group d-flex">
                     <input type="text" id="titleSearch" class="form-control mb-3 mr-2" placeholder="제목을 입력하여 검색" style="width: 250px;">
-                    <select id="genreFilter" class="form-control mb-3 mr-2" style="width: 200px;">
-                        <option value="">전체 장르</option>
-                        <option value="연극">연극</option>
-                        <option value="무용">무용</option>
-                        <option value="대중무용">대중무용</option>
-                        <option value="서양음악(클래식)">서양음악(클래식)</option>
-                        <option value="한국음악(국악)">한국음악(국악)</option>
-                        <option value="대중음악">대중음악</option>
-                        <option value="복합">복합</option>
-                        <option value="서커스/마술">서커스/마술</option>
-                        <option value="뮤지컬">뮤지컬</option>
+                    <select id= "genre-code" class="form-control mb-3 mr-2" style="width: 200px;" name="genre-code">
                     </select>
                     <button class="btn btn-primary mb-3" id="searchButton">검색</button>
                 </div>
@@ -188,7 +167,7 @@
             // 페이지 목록을 로드하는 함수
             function loadEvents(page) {
                 const titleSearch = document.getElementById('titleSearch').value.toLowerCase(); // 제목 검색
-                const genreFilter = document.getElementById('genreFilter').value; // 장르 선택
+                const genreFilter = document.getElementById('genre-code').value; // 장르 선택
                 let url = `/event/savedEventList?page=${page}&size=${eventsPerPage}`;
 
                 // 제목이 입력되었으면 title 파라미터 추가
@@ -356,11 +335,6 @@
                 loadEvents(currentPage);  // 검색 조건으로 이벤트 목록을 다시 로드
             });
         });
-
-
-
-
-
     </script>
 </th:block>
 </body>
