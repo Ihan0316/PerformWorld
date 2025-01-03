@@ -99,6 +99,13 @@ function updateTableData(users, tiers) {
             <td>${tier.minSpent.toLocaleString()} 원</td>
             <td>${tier.maxSpent.toLocaleString()} 원</td>
             <td>${tier.discountRate} %</td>
+            <td>
+            <button 
+                class="btn btn-primary update-tier-btn" 
+                data-tier-id="${tier.tierId}" onclick="updateTier(this)">
+                수정
+            </button>
+            </td>
         `;
         tierTableBody.appendChild(row);
     });
