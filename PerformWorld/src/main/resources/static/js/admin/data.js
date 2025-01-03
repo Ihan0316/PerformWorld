@@ -66,12 +66,16 @@ function updateSeatData(seats) {
     });
 }
 
-// User와 Tier 데이터를 테이블에 추가하는 함수
+/// User와 Tier 데이터를 테이블에 추가하는 함수
 function updateTableData(users, tiers) {
     // User 테이블 갱신
     const userTableBody = document.querySelector('#userTable tbody');
     userTableBody.innerHTML = '';  // 기존 테이블 내용 삭제
-    users.forEach(user => {
+
+    // 'admin'이 아닌 사용자만 표시
+    const filteredUsers = users.filter(user => user.userId !== 'admin');
+
+    filteredUsers.forEach(user => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${user.userId}</td>
