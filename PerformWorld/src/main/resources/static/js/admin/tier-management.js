@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await axios.put(`/admin/tier/${selectedTierId}`, { tierName, minSpent, maxSpent, discountRate });
+            await axios.put(`/admin/tier/${selectedTierId}`, { tierName, minSpent, maxSpent, discountRate });
             alert("Tier가 성공적으로 수정되었습니다!");
             console.log("selectedTierId (after update):", selectedTierId);
 

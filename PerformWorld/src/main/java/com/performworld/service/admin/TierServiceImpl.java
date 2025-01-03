@@ -52,15 +52,6 @@ public class TierServiceImpl implements TierService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Tier입니다."));
     }
 
-    // 티어 삭제
-    @Override
-    public void deleteTierById(Long tierId) {
-        if (!tierRepository.existsById(tierId)) {
-            throw new IllegalArgumentException("존재하지 않는 Tier입니다.");
-        }
-        tierRepository.deleteById(tierId);
-    }
-
     // 특정 tierId에 해당하는 Tier 조회
     @Override
     public TierDTO getTierById(Long tierId) {
