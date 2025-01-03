@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function fetchPerformances(performName, startDate, endDate, locationCode, page) {
         // API URL 설정
         const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&page=${page}&size=${pageSize}`;
-        console.log("현재페이지 : " + page)
         fetch(apiUrl)
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
@@ -51,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-                console.log(xmlDoc)
                 // 공연 데이터 처리 (db 태그를 사용)
                 const performances = xmlDoc.getElementsByTagName("db");
                 // 기존 테이블 내용 삭제
@@ -136,7 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // API 호출 트리거 함수
     function triggerFetch() {
         fetchPerformances(
             document.querySelector("input[name='perform-name']").value,
@@ -153,10 +150,11 @@ document.addEventListener("DOMContentLoaded", function () {
     eventListContainer.addEventListener("click", function (e) {
         if (e.target.classList.contains("add-btn")) {
             const eventID = e.target.getAttribute("data-id");
-            console.log("eventID:" + eventID)
             if (eventID) {
                 fetchEventDetails(eventID)
-                    .then((eventData) => saveEvent(eventData))
+                    .then((eventData) => {
+                        saveEvent(eventData)
+                    })
                     .catch((error) => {
                         console.error("상세 조회 또는 저장 실패:", error);
                         alert(error);
@@ -179,9 +177,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-        console.log("상세 조회 결과:", xmlDoc);
-
         // 필요한 데이터 추출
+        const mt20id = xmlDoc.getElementsByTagName("mt20id")[0]?.textContent || '';
         const genrenm = xmlDoc.getElementsByTagName("genrenm")[0]?.textContent || '';
         const prfnm = xmlDoc.getElementsByTagName("prfnm")[0]?.textContent || '';
         const prfpdfrom = xmlDoc.getElementsByTagName("prfpdfrom")[0]?.textContent || '';
@@ -189,13 +186,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const prfcast = xmlDoc.getElementsByTagName("prfcast")[0]?.textContent || '';
         const fcltynm = xmlDoc.getElementsByTagName("fcltynm")[0]?.textContent || '';
         const prfruntime = xmlDoc.getElementsByTagName("prfruntime")[0]?.textContent || '';
+        const dtguidance = xmlDoc.getElementsByTagName("dtguidance")[0]?.textContent || '';
         const poster = xmlDoc.getElementsByTagName("poster")[0]?.textContent || '';
-
         // styurls는 여러 개일 수 있으므로 배열로 처리
         const styurls = Array.from(xmlDoc.getElementsByTagName("styurl")).map(url => url.textContent);
 
         // 필요한 데이터를 객체로 반환
         return {
+            mt20id,
             genrenm,
             prfnm,
             prfpdfrom,
@@ -203,6 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
             prfcast,
             fcltynm,
             prfruntime,
+            dtguidance,
             poster,
             styurls
         };
@@ -214,6 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // XML 데이터 생성
         const xmlString = `
     <event>
+        <mt20id>${eventData.mt20id || ''}</mt20id>
         <genrenm>${eventData.genrenm || ''}</genrenm>
         <prfnm>${eventData.prfnm || ''}</prfnm>
         <prfpdfrom>${eventData.prfpdfrom || ''}</prfpdfrom>
@@ -221,6 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <prfcast>${eventData.prfcast || ''}</prfcast>
         <fcltynm>${eventData.fcltynm || ''}</fcltynm>
         <prfruntime>${eventData.prfruntime || ''}</prfruntime>
+        <dtguidance>${eventData.dtguidance || ''}</dtguidance>
         <poster>${eventData.poster || ''}</poster>
         <styurls>
             ${eventData.styurls && eventData.styurls.length > 0
@@ -229,8 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </styurls>
     </event>
 `;
-
-        console.log("결과"+xmlString);
+        console.log("필요한 데이터3:"+xmlString)
         // XML 형식으로 서버에 전송
         const response = await fetch(saveApiUrl, {
             method: "POST",
