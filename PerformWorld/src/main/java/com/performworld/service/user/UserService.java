@@ -18,5 +18,6 @@ public interface UserService {
     void updateUser(UserDTO userDTO);  // 회원정보 수정
 
     void deleteUser(String userId);  // 회원탈퇴
+
 }
 

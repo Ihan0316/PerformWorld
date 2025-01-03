@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private final ModelMapper modelMapper;
-
+    // 회원가입
     @Override
     public User signUp(UserDTO userDTO) {
         Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    // 로그인 로직
+    // 로그인
     @Override
     public User login(String userId, String password) {
         Optional<User> user = userRepository.findByUserId(userId);

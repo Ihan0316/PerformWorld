@@ -74,8 +74,6 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 전송 라이브러리
 
-
-
 }
 
 tasks.named('test') {
