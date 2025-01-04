@@ -21,7 +21,10 @@ public class PayRestController {
     @PostMapping("/regist")
     public BookingDTO registPayment(@RequestBody BookingDTO bookingDTO) {
         log.info(bookingDTO);
-        payService.registPayment(bookingDTO);
-        return bookingDTO;
+        return payService.registPayment(bookingDTO);
     }
+
+    // 예매 내역 조회
+
+    // 예매 취소 (결제 취소)
 }

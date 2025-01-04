@@ -1,7 +1,6 @@
 package com.performworld.repository.event;
 
 import com.performworld.domain.*;
-import com.performworld.dto.ticket.BookingDTO;
 import com.performworld.dto.ticket.TicketingDTO;
 import com.querydsl.core.Tuple;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -83,34 +82,4 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                 .collect(Collectors.toList());
     }
 
-    // 특정 회차의 예매정보 조회
-    @Override
-    public List<BookingDTO> getBookedList(Long scheduleId) {
-        QBooking booking = QBooking.booking;
-        QEventSchedule schedule = QEventSchedule.eventSchedule;
-        QSeat seat = QSeat.seat;
-
-        List<Tuple> result = from(booking)
-                .leftJoin(booking.eventSchedule, schedule)
-                .leftJoin(booking.seats, seat)
-                .where(booking.eventSchedule.scheduleId.eq(scheduleId))
-                .where(booking.status.code.in("Y", "P"))
-
-                .select(
-                        booking.bookingId
-                        , booking.user.userId
-                        , schedule.scheduleId
-                        , seat.seatId
-                        , booking.status.code
-                ).fetch();
-
-        return result.stream().map(tuple -> BookingDTO.builder()
-                        .bookingId(tuple.get(booking.bookingId))
-                        .userId(tuple.get(booking.user.userId))
-                        .scheduleId(tuple.get(schedule.scheduleId))
-                        .seatId(tuple.get(seat.seatId))
-                        .status(tuple.get(booking.status.code))
-                        .build())
-                .collect(Collectors.toList());
-    }
 }

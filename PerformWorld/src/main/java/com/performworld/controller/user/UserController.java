@@ -31,4 +31,9 @@ public class UserController {
     public String mypage() {
         return "user/mypage";
     }
+    // 예매 상세내역
+    @GetMapping("/book/{bookingId}")
+    public String bookingInfo(@PathVariable Long bookingId) {
+        return "user/bookInfo";
+    }
 }

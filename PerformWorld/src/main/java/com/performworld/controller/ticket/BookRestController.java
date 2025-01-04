@@ -2,7 +2,6 @@ package com.performworld.controller.ticket;
 
 import com.performworld.dto.admin.SeatDTO;
 import com.performworld.dto.admin.TierDTO;
-import com.performworld.dto.ticket.BookingDTO;
 import com.performworld.dto.ticket.TicketingDTO;
 import com.performworld.service.admin.SeatService;
 import com.performworld.service.admin.TierService;
@@ -44,13 +43,6 @@ public class BookRestController {
     @PostMapping("/getSeatList")
     public List<SeatDTO> getSeatList() {
         return seatService.getAllSeats();
-    }
-
-    // 특정 회차의 예매정보 조회
-    @PostMapping("/getBookedList")
-    public List<BookingDTO> getBookedList(@RequestBody BookingDTO bookingDTO) {
-        log.info(bookingDTO);
-        return bookService.getBookedList(bookingDTO.getScheduleId());
     }
 
     // 등급 정보 조회

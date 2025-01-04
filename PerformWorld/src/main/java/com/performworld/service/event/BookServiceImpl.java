@@ -1,6 +1,5 @@
 package com.performworld.service.event;
 
-import com.performworld.dto.ticket.BookingDTO;
 import com.performworld.dto.ticket.TicketingDTO;
 import com.performworld.repository.event.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,4 @@ public class BookServiceImpl implements BookService {
         return bookRepository.getEventTicketing(eventId);
     }
 
-    // 회차별 예매 목록 조회 (예매 페이지용)
-    @Override
-    public List<BookingDTO> getBookedList(Long scheduleId) {
-        return bookRepository.getBookedList(scheduleId);
-    }
 }

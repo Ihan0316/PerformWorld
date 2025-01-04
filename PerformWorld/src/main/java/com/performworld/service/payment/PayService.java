@@ -4,5 +4,5 @@ import com.performworld.dto.ticket.BookingDTO;
 
 public interface PayService {
 
-    void registPayment(BookingDTO bookingDTO);
+    BookingDTO registPayment(BookingDTO bookingDTO);
 }
