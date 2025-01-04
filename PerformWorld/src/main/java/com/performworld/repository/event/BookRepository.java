@@ -1,8 +1,8 @@
 package com.performworld.repository.event;
 
-import com.performworld.domain.Ticketing;
+import com.performworld.domain.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BookRepository extends JpaRepository<Ticketing, Long>, BookCustomRepo {
+public interface BookRepository extends JpaRepository<Booking, Long>, BookCustomRepo {
 
 }

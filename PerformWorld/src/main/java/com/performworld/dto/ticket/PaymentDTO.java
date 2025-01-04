@@ -13,10 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 public class PaymentDTO {
 
-    private Long paymentId;
+    private String paymentId;
     private Long bookingId;
-    private String payMethod;
-    private Long payAmount;
+    private String paymentMethod;
+    private Integer paymentAmount;
     private LocalDateTime paymentDate;
+    private String email;
     private String status;
 }
