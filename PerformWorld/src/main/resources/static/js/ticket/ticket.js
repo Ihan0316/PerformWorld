@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPageGroup = 1; // 현재 페이지 그룹 (1부터 시작)
     let totalPages = 0; // 전체 페이지 수
     let allEvents = []; // 모든 이벤트 목록
-
+    const modal = new bootstrap.Modal(document.querySelector(".eventRegisterModal"));
     // 페이지 목록을 로드하는 함수
     loadEvents(currentPage); // 페이지가 로드될 때 첫 번째 페이지의 이벤트 목록을 로드
 
@@ -58,19 +58,39 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${event.prfpdto}</td>
             <td>${event.location}</td>
             <td>${event.genre}</td>
-            <td><button class="btn btn-primary btn-sm" data-event-id="${event.eventId}">등록</button></td>
+            <td><button class="btn btn-primary btn-sm register-btn" >등록</button></td>
         `;
+            const regBtn = row.querySelector('button');
+            regBtn.addEventListener('click',function (e){
+                e.stopPropagation()
+                e.preventDefault()
+                // 한 줄 요약 설정
+                const summary = `${event.title} | ${event.prfpdfrom} ~ ${event.prfpdto} | ${event.location}`;
+                document.getElementById('modal-summary').textContent = summary;
 
-            // 삭제 버튼에 클릭 이벤트 추가
-            const deleteButton = row.querySelector('button');
-            deleteButton.addEventListener('click', function () {
-                const eventId = deleteButton.getAttribute('data-event-id');
-                deleteEvent(eventId);
-            });
+                // 상세 데이터 설정
+                document.getElementById('modal-eventId').textContent = event.eventId;
+                document.getElementById('modal-title').textContent = event.title;
+                document.getElementById('modal-prfpdfrom').textContent = event.prfpdfrom;
+                document.getElementById('modal-prfpdto').textContent = event.prfpdto;
+                document.getElementById('modal-location').textContent = event.location;
+                document.getElementById('modal-genre').textContent = event.genre;
+
+                const inputs = document.querySelectorAll('.dynamic-row input');
+                inputs.forEach(input => input.value = '');
+
+                // 추가적으로 텍스트나 숫자 필드도 초기화
+                const ticketingCounts = document.querySelectorAll('.dynamic-row .ticketing-count');
+                ticketingCounts.forEach(count => count.textContent = '');
+
+                modal.show()
+            })
 
             tbody.appendChild(row);  // 테이블에 행 추가
         });
     }
+
+
 
     const pagination = document.querySelector('.pagination');
 
@@ -150,30 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
         loadEvents(currentPage);
     }
 
-    // 삭제 버튼 클릭 시 실행되는 함수
-    function deleteEvent(eventId) {
-        const isConfirmed = window.confirm("정말 이 이벤트를 삭제하시겠습니까?");
-        if (isConfirmed) {
-            fetch(`/event/deleteEvent/${eventId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('이벤트가 삭제되었습니다.');
-                        loadEvents(currentPage);  // 삭제 후 현재 페이지의 이벤트 목록 다시 로드
-                    } else {
-                        alert('이벤트 삭제에 실패했습니다.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('이벤트 삭제 중 오류가 발생했습니다.');
-                });
-        }
-    }
 
     // 검색 버튼 클릭 시 실행되는 함수
     document.getElementById('searchButton').addEventListener('click', function() {
@@ -182,31 +178,152 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-    async function getCategoryList2() {
-        const res = await axios({
-            method: 'post',
-            url: '/sys/getList',
-            data: { mainCode: 'CTG' },  // 장르 카테고리
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        return res.data;
-    }
-    getCategoryList2().then(data => {
-        console.log(data);
-        const selectElement = document.querySelector("select[name='genre-code']");
-        const optionElement = document.createElement("option");
-        optionElement.value = ""
-        optionElement.textContent = "장르 선택";  //
-        selectElement.appendChild(optionElement);
-        for(const category of data) {
-            const optionElement = document.createElement("option");
-            optionElement.value = category.code;  // 코드
-            optionElement.textContent = category.codeName;  // 이름
-
-            selectElement.appendChild(optionElement);
+async function getCategoryList() {
+    const res = await axios({
+        method: 'post',
+        url: '/sys/getList',
+        data: { mainCode: 'CTG' },  // 장르 카테고리
+        headers: {
+            'Content-Type': 'application/json'
         }
-    }).catch(e => {
-        console.error(e);
+    });
+    return res.data;
+}
+getCategoryList().then(data => {
+    console.log(data);
+    const selectElement = document.querySelector("select[name='genre-code']");
+    const optionElement = document.createElement("option");
+    optionElement.value = ""
+    optionElement.textContent = "장르 선택";  //
+    selectElement.appendChild(optionElement);
+    for(const category of data) {
+        const optionElement = document.createElement("option");
+        optionElement.value = category.code;  // 코드
+        optionElement.textContent = category.codeName;  // 이름
+
+        selectElement.appendChild(optionElement);
+    }
+}).catch(e => {
+    console.error(e);
 });
+
+let phaseCount = 0; // 차수 관리
+
+// 추가 버튼 클릭 이벤트
+document.getElementById('addRowButton').addEventListener('click', function () {
+    phaseCount++;
+
+    const container = document.getElementById('dynamicRowsContainer');
+
+    // 동적 입력 필드 생성
+    const row = document.createElement('div');
+    row.classList.add('dynamic-row');
+    row.setAttribute('data-phase', phaseCount); // 차수 식별을 위한 속성 추가
+
+    row.innerHTML = `
+        <div class="cell ticketing-count">${phaseCount}</div>
+        <input type="date" name="ticketing-start" class="cell" required />
+        <input type="date" name="ticketing-end" class="cell" required />
+        <input type="datetime-local" name="open-datetime" class="cell" required />
+    `;
+
+    container.appendChild(row); // 컨테이너에 행 추가
+});
+
+// 제거 버튼 클릭 이벤트
+document.getElementById('removeRowButton').addEventListener('click', function () {
+    const container = document.getElementById('dynamicRowsContainer');
+    if(phaseCount==0){
+        return
+    }
+    // 마지막 입력 필드 삭제
+    if (container.lastElementChild) {
+        container.removeChild(container.lastElementChild);
+        phaseCount--; // 차수 감소
+    }
+});
+
+document.getElementById('saveTicketingButton').addEventListener('click', function () {
+    const rows = document.querySelectorAll('.dynamic-row');
+    const ticketingData = [];
+    let previousEndDate = null; // 이전 티켓팅 종료일
+    let isValid = true; // 유효성 검사 플래그
+    const eventId = document.getElementById('modal-eventId').textContent; // 모달에서 이벤트 ID 가져오기
+    const eventStart = document.getElementById('modal-prfpdfrom').textContent;
+    const eventEnd = document.getElementById('modal-prfpdto').textContent;
+    const rowsToProcess = Array.from(rows).slice(1);
+    function getDateOnly(dateString) {
+        const date = new Date(dateString);
+        date.setHours(0, 0, 0, 0);  // 시간 부분을 00:00:00으로 설정
+        return date;
+    }
+
+    rowsToProcess.forEach(row => {
+
+        // 각 행에 대해 데이터 추출
+        const ticketingCount = row.querySelector('.ticketing-count') ? parseInt(row.querySelector('.ticketing-count').textContent, 10) : 0;  // 숫자로 변환
+        const eventPeriodStart = row.querySelector("input[name='ticketing-start']") ? row.querySelector("input[name='ticketing-start']").value : '';
+        const eventPeriodEnd = row.querySelector("input[name='ticketing-end']") ? row.querySelector("input[name='ticketing-end']").value : '';
+        const openDatetime = row.querySelector("input[name='open-datetime']") ? row.querySelector("input[name='open-datetime']").value : '';
+
+
+        // 유효성 검사 1: 티켓팅 차수 기간이 작품 전체 기간을 벗어나지 않도록
+        if (getDateOnly(eventPeriodStart) < getDateOnly(eventStart) || getDateOnly(eventPeriodEnd) > getDateOnly(eventEnd)) {
+            alert('티켓팅 차수의 기간이 작품의 전체 기간을 벗어날 수 없습니다.');
+            isValid = false;
+        }
+
+// 유효성 검사 2: 티켓팅 종료일이 다음 티켓팅 시작일보다 뒤에 있어야 함 (동일 날짜는 허용하지 않음)
+        if (previousEndDate && getDateOnly(eventPeriodStart) <= getDateOnly(previousEndDate)) {
+            alert('이전 티켓팅의 종료일이 다음 티켓팅의 시작일보다 뒤에 있을 수 없습니다. 종료일과 시작일이 동일한 것도 허용되지 않습니다.');
+            isValid = false;
+        }
+
+// 유효성 검사 3: 티켓팅 오픈일이 시작일 이전이어야 함
+        if (getDateOnly(openDatetime) > getDateOnly(eventPeriodStart)) {
+            alert('티켓팅 오픈일은 티켓팅 시작일 이전이어야 합니다.');
+            isValid = false;
+        }
+
+
+        // 유효성 검사 통과 시 ticketingData에 추가
+        if (isValid) {
+            const ticketData = {
+                eventId: eventId,
+                ticketingCount: ticketingCount,
+                eventPeriodStart: eventPeriodStart,
+                eventPeriodEnd: eventPeriodEnd,
+                openDatetime: openDatetime
+            };
+
+            ticketingData.push(ticketData);
+            previousEndDate = eventPeriodEnd;
+        }
+    });
+
+    console.log(ticketingData); // 데이터 확인
+    if (isValid && ticketingData.length > 0) {
+        console.log('서버로 전송되는 데이터:', ticketingData); // 데이터 확인
+
+        fetch(`/ticketing/save`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ticketingData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('티켓팅 정보가 저장되었습니다.');
+                console.log('티켓팅 데이터 저장 성공:', data);
+            })
+            .catch(error => {
+                alert('티켓팅 저장에 실패했습니다.');
+                console.error('티켓팅 저장 실패:', error);
+            });
+    } else {
+        alert('모든 필드를 올바르게 입력해주세요.');
+    }
+});
+
+

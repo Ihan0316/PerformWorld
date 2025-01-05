@@ -55,4 +55,8 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<EventSchedule> eventSchedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Ticketing> ticketings = new ArrayList<>();
 }
