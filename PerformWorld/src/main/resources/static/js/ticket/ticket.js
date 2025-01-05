@@ -252,6 +252,7 @@ document.getElementById('saveTicketingButton').addEventListener('click', functio
     const eventStart = document.getElementById('modal-prfpdfrom').textContent;
     const eventEnd = document.getElementById('modal-prfpdto').textContent;
     const rowsToProcess = Array.from(rows).slice(1);
+
     function getDateOnly(dateString) {
         const date = new Date(dateString);
         date.setHours(0, 0, 0, 0);  // 시간 부분을 00:00:00으로 설정
