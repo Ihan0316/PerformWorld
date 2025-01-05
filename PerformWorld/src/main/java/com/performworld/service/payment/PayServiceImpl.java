@@ -2,9 +2,11 @@ package com.performworld.service.payment;
 
 import com.performworld.domain.*;
 import com.performworld.dto.ticket.BookingDTO;
+import com.performworld.repository.admin.TierRepository;
 import com.performworld.repository.event.BookRepository;
 import com.performworld.repository.payment.PayRepository;
 import com.performworld.repository.systemcode.SystemCodeRepository;
+import com.performworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,8 @@ public class PayServiceImpl implements PayService {
     private final BookRepository bookRepository;
     private final PayRepository payRepository;
     private final SystemCodeRepository systemCodeRepository;
+    private final UserRepository userRepository;
+    private final TierRepository tierRepository;
     private final RestTemplate restTemplate;
 
     // 예매 결제 등록
@@ -50,7 +54,7 @@ public class PayServiceImpl implements PayService {
         }
 
         if ("PAID".equals(result.get("status"))) {
-            // 저장
+            // 결제 정보 정상 조회 시 저장
             SystemCode statusCode = systemCodeRepository.findByCode("Y").orElseThrow();
             List<Seat> seats = bookingDTO.getSeatIds().stream().map(id -> Seat.builder()
                             .seatId(id)
@@ -75,6 +79,14 @@ public class PayServiceImpl implements PayService {
                     .status(statusCode)
                     .build();
             payRepository.save(payment);
+
+            // 회원 소비금액 및 등급 업데이트
+            User user = userRepository.findByUserId(bookingDTO.getUserId()).orElseThrow();
+            user.chnTotalSpent(
+                    user.getTotalSpent() + payment.getPaymentAmount()
+                    , tierRepository.findAll()
+            );
+            userRepository.save(user);
 
             return BookingDTO.builder().bookingId(insertedBooking.getBookingId()).resultCode(200).build();
         }
