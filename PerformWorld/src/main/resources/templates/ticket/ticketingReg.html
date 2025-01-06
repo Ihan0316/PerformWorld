@@ -42,14 +42,16 @@
                         <button type="button" class="btn btn-primary" id="addRowButton">추가</button>
                         <button type="button" class="btn btn-danger" id="removeRowButton">제거</button>
                     </div>
-                    <!-- 동적 입력 필드 영역 -->
-                    <div class="dynamic-rows mt-3" id="dynamicRowsContainer">
-                        <!-- 추가된 입력 필드가 여기에 생성됨 -->
-                        <div class="dynamic-row">
+                    <div>
+                        <div class="dynamic-head">
                             <div class="cell">차수</div>
                             <div class="cell">티켓팅 시작 날짜</div>
                             <div class="cell">티켓팅 종료 날짜</div>
                             <div class="cell">티켓팅 오픈 날짜</div>
+                        </div>
+                    </div>
+                    <div class="dynamic-rows mt-3" id="dynamicRowsContainer">
+                        <div class="dynamic-row">
                         </div>
                     </div>
                 </div>
@@ -70,8 +72,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group d-flex">
-                    <input type="text" id="titleSearch" class="form-control mb-3 mr-2" placeholder="제목을 입력하여 검색" style="width: 250px;">
-                    <select id= "genre-code" class="form-control mb-3 mr-2" style="width: 200px;" name="genre-code">
+                    <input type="text" id="titleSearch" class="form-control mb-3 mr-2" placeholder="제목을 입력하여 검색"
+                           style="width: 250px;">
+                    <select id="genre-code" class="form-control mb-3 mr-2" style="width: 200px;" name="genre-code">
                     </select>
                     <button class="btn btn-primary mb-3" id="searchButton">검색</button>
                 </div>
@@ -97,7 +100,7 @@
             </div>
         </div>
     </div>
-<!--    <div id="map"></div>-->
+    <!--    <div id="map"></div>-->
 </div>
 <!--	content layout end  -->
 

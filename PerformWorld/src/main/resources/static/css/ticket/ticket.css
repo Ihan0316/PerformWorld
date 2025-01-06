@@ -28,6 +28,12 @@
     margin-bottom: 10px;
 }
 
+.dynamic-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 .dynamic-row .cell {
     flex: 1;
     padding: 0 5px;
