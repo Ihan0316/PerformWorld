@@ -2,6 +2,7 @@ package com.performworld.controller.ticket;
 
 import com.performworld.domain.Ticketing;
 import com.performworld.dto.ticket.TicketingDTO;
+import com.performworld.dto.ticket.TicketingInfoDTO;
 import com.performworld.dto.ticket.TicketingSaveDTO;
 import com.performworld.service.ticket.TicketService;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,11 @@ public class TicketRestController {
         log.info("이벤트id:"+eventId);
         ticketService.deleteTicketingData(eventId);
         return ResponseEntity.ok("{ \"status\": \"success\" }");
+    }
+
+    // 모든 티켓 데이터를 가져오는 API 엔드포인트
+    @GetMapping("/ticketingInfo")
+    public List<TicketingInfoDTO> getAllTickets() {
+        return ticketService.findAllList(); // 서비스 레이어에서 티켓 리스트 반환
     }
 }

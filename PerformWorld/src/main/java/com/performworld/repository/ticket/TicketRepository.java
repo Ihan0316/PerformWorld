@@ -12,9 +12,10 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticketing,Long> {
     List<Ticketing> findTicketingByEvent_EventId(Long eventId);
 
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Ticketing t WHERE t.event.eventId = :eventId")
     void deleteTicketingByEvent_EventId(@Param("eventId") Long eventId);
+
+
 }
