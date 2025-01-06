@@ -14,14 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TicketingDTO {
-    private Long eventId;
-    private String eventName;
+public class TicketingSaveDTO {
     private Long ticketingId;
+    private Long eventId;  // Event 객체를 포함
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime openDatetime;  // 티켓팅 오픈 일시
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate eventPeriodStart;
+    private LocalDate eventPeriodStart;  // 오픈 공연 회차 시작일
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate eventPeriodEnd;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime openDatetime;
+    private LocalDate eventPeriodEnd;  // 오픈 공연 회차 종료일
 }
