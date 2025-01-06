@@ -4,6 +4,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ticket</title>
     <link rel="stylesheet" href="/css/board/boardstyle.css">
 </head>
 
@@ -14,52 +17,38 @@
             <div class="col-md-3 col-sm-10 col-padding">
                 <h1 class="header_link__5ddf2" data-animate-effect="fadeInLeft">FAQ</h1>
             </div>
+
+            <!-- 검색목록 -->
+            <menu class="Ticket_GNB_PC header_wrapMenu__02b29">
+                <ul class="header_genreMenu__34716">
+                    <li><a class="header_link__5ddf2" href="">ID</a></li>
+                    <li><a class="header_link__5ddf2" href="">질문</a></li>
+                    <li><a class="header_link__5ddf2" href="">답변</a></li>
+                    <li><a class="header_link__5ddf2" href="">등록일</a></li>
+                    <li><a class="header_link__5ddf2" href="">수정일</a></li>
+
+                </ul>
+                <div class="header_menuDivider__01d75"></div>
+                <ul class="header_categoryMenu__4fbf3">
+                    <li><a class="header_link__5ddf2" href="">공연상태</a></li>
+                    <li><a class="header_link__5ddf2" href="">지역</a></li>
+                </ul>
+                <div class="header_searchWrapper">
+                    <input type="text" class="header_searchInput" placeholder="검색어를 입력하세요..." onkeypress="handleSearch(event)">
+                </div>
+            </menu>
         </div>
 
-        <!-- 자주 묻는 질문 테이블-->
+        <!-- 공연 목록이 동적으로 삽입될 부분 -->
         <div class="fh5co-narrow-content">
-            <h2 class="section-title">자주 묻는 질문 등록</h2>
-
-            <!-- 관리자만 보여지는 등록 폼-->
-            <div class="faq-regist-form" style="display: none;" id="faq-regist-form">
-                <h3>FAQ 등록</h3>
-                <form id="faq-form">
-                    <label for="question">질문</label>
-                    <input type="text" id="question" name="question" placeholder="질문을 입력하세요" required>
-
-                    <label for="answer">답변</label>
-                    <textarea id="answer" name="answer" placeholder="답변을 입력하세요" required></textarea>
-
-                    <button type="button" class="registBtn">등록</button>
-                </form>
+            <div class="row row-bottom-padded-md" id="project-list">
+                <!-- 프로젝트 목록이 여기서 동적으로 생성됩니다 -->
             </div>
-
-            <table class="faq-table">
-                <thead>
-                    <tr>
-                        <th>FAQ_ID</th>
-                        <th>질문</th>
-                        <th>답변</th>
-                        <th>등록일</th>
-                        <th>수정일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="faq : ${faqs}">
-                        <td th:text="${faq.faq_id}" id="faqId_${faq.faq_id}"></td>
-                        <td th:text="${faq.question}" id="question_${faq.faq_id}"></td>
-                        <td th:text="${faq.answer}" id="answer_${faq.faq_id}"></td>
-                        <td th:text="${#dates.format(faq.created_at, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${#dates.format(faq.updated_at, 'yyyy-MM-dd')}"></td>
-                        <!-- 수정, 삭제 버튼-->
-                        <td>
-                            <button type="button" class="updateBtn" th:data-id="${faq.faq_id}">수정</button>
-                            <button type="button" class="deleteBtn" th:data-id="${faq.faq_id}">삭제</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
+
+
+
+
     </div>
 </div>
 

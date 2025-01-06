@@ -4,7 +4,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 <head>
-    <link rel="stylesheet" href="/css/event/mainstyle.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ticket</title>
+    <link rel="stylesheet" href="/css/board/boardstyle.css">
 </head>
 
 <body>
@@ -12,17 +15,22 @@
     <div id="fh5co-main">
         <div id="menu">
             <div class="col-md-3 col-sm-10 col-padding">
-                <h1 class="header_link__5ddf2" data-animate-effect="fadeInLeft">공지사항</h1>
+                <h1 class="header_link__5ddf2" data-animate-effect="fadeInLeft">Notice</h1>
             </div>
 
-            <!-- 검색목록 및 메뉴 -->
+            <!-- 검색목록 -->
             <menu class="Ticket_GNB_PC header_wrapMenu__02b29">
                 <ul class="header_genreMenu__34716">
-                    <li><a class="header_link__5ddf2" href="">공지사항</a></li>
+                    <li><a class="header_link__5ddf2" href="">ID</a></li>
+                    <li><a class="header_link__5ddf2" href="">공지 제목</a></li>
+                    <li><a class="header_link__5ddf2" href="">공지 내용</a></li>
+                    <li><a class="header_link__5ddf2" href="">등록일</a></li>
+                    <li><a class="header_link__5ddf2" href="">수정일</a></li>
                 </ul>
                 <div class="header_menuDivider__01d75"></div>
                 <ul class="header_categoryMenu__4fbf3">
-                    <li><a class="header_link__5ddf2" href="">전체</a></li>
+                    <li><a class="header_link__5ddf2" href="">공연상태</a></li>
+                    <li><a class="header_link__5ddf2" href="">지역</a></li>
                 </ul>
                 <div class="header_searchWrapper">
                     <input type="text" class="header_searchInput" placeholder="검색어를 입력하세요..." onkeypress="handleSearch(event)">
@@ -30,47 +38,16 @@
             </menu>
         </div>
 
-        <!-- 공지사항 목록 -->
+        <!-- 공연 목록이 동적으로 삽입될 부분 -->
         <div class="fh5co-narrow-content">
-            <h2 class="section-title">공지사항 목록</h2>
-            <table class="notice-table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>제목</th>
-                    <th>내용</th>
-                    <th>등록일</th>
-                    <th>수정일</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- 공지사항 데이터 동적 렌더링 -->
-                <tr th:each="notice : ${notices}">
-                    <td th:text="${notice.notice_id}"></td>
-                    <td th:text="${notice.title}"></td>
-                    <td th:text="${notice.content}"></td>
-                    <td th:text="${#dates.format(notice.created_at, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#dates.format(notice.updated_at, 'yyyy-MM-dd')}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="row row-bottom-padded-md" id="project-list">
+                <!-- 프로젝트 목록이 여기서 동적으로 생성됩니다 -->
+            </div>
         </div>
 
-        <!-- 관리자 공지사항 등록 폼 -->
-        <div class="fh5co-narrow-content" th:if="${isAdmin}">
-            <h2>공지사항 등록</h2>
-            <form id="noticeForm" th:action="@{/notice/register}" method="post">
-                <div class="form-group">
-                    <label for="noticeTitle">제목</label>
-                    <input type="text" id="noticeTitle" name="title" placeholder="공지 제목 입력" required>
-                </div>
-                <div class="form-group">
-                    <label for="noticeContent">내용</label>
-                    <textarea id="noticeContent" name="content" placeholder="공지 내용 입력" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">등록</button>
-            </form>
-        </div>
+
+
+
     </div>
 </div>
 

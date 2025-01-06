@@ -4,6 +4,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ticket</title>
     <link rel="stylesheet" href="/css/board/boardstyle.css">
 </head>
 
@@ -14,64 +17,42 @@
             <div class="col-md-3 col-sm-10 col-padding">
                 <h1 class="header_link__5ddf2" data-animate-effect="fadeInLeft">QnA</h1>
             </div>
+
+            <!-- 검색목록 -->
+            <menu class="Ticket_GNB_PC header_wrapMenu__02b29">
+                <ul class="header_genreMenu__34716">
+                    <li><a class="header_link__5ddf2" href="">ID</a></li>
+                    <li><a class="header_link__5ddf2" href="">User ID</a></li>
+                    <li><a class="header_link__5ddf2" href="">문의 제목</a></li>
+                    <li><a class="header_link__5ddf2" href="">답변 내용</a></li>
+                    <li><a class="header_link__5ddf2" href="">답변 날짜</a></li>
+                    <li><a class="header_link__5ddf2" href="">등록일</a></li>
+                    <li><a class="header_link__5ddf2" href="">수정일</a></li>
+
+                </ul>
+                <div class="header_menuDivider__01d75"></div>
+                <ul class="header_categoryMenu__4fbf3">
+                    <li><a class="header_link__5ddf2" href="">공연상태</a></li>
+                    <li><a class="header_link__5ddf2" href="">지역</a></li>
+                </ul>
+                <div class="header_searchWrapper">
+                    <input type="text" class="header_searchInput" placeholder="검색어를 입력하세요..." onkeypress="handleSearch(event)">
+                </div>
+            </menu>
         </div>
 
-        <!-- 문의사항 테이블-->
+        <!-- 공연 목록이 동적으로 삽입될 부분 -->
         <div class="fh5co-narrow-content">
-            <h2 class="section-title">문의사항 목록</h2>
-            <table class="qna-table">
-                <thead>
-                    <tr>
-                        <th>QnA_ID</th>
-                        <th>User_ID</th>
-                        <th>문의 제목</th>
-                        <th>문의 내용</th>
-                        <th>답변 내용</th>
-                        <th>답변 날짜</th>
-                        <th>등록일</th>
-                        <th>수정일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="qna: ${qnas}">
-                        <td th:text="${qna.qna_id}"></td>
-                        <td th:text="${qna.user_id}"></td>
-                        <td th:text="${qna.title}"></td>
-                        <td th:text="${qna.content}"></td>
-                        <td th:text="${qna.response !=null ? qna.response:'답변 대기 중'}"></td>
-                        <td th:text="${qna.response_datetime != null ? #dates.formant(qna.response.datetime, 'yyyy-MM-dd') : '-'}"></td>
-                        <td th:text="${#dates.format(qna.created_at, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${#dates.format(qna.updated_at, 'yyyy-MM-dd')}"></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row row-bottom-padded-md" id="project-list">
+                <!-- 프로젝트 목록이 여기서 동적으로 생성됩니다 -->
+            </div>
         </div>
 
-        <!-- 회원용 등록 폼-->
-        <div class="qna-form">
-            <h3>문의 등록</h3>
-            <input type="text" id="qnaTitle" placeholder="문의 제목 입력">
-            <textarea id="qnaContent" placeholder="문의 내용 입력"></textarea>
-            <button class="registQnaBtn">등록</button>
-        </div>
 
-        <!-- 관리자용 수정 폼-->
-        <div class="qna-response-form" th:if="${isAdmin}">
-            <h3>문의 답변 수정</h3>
-            <input type="text" id="responseQnaId" placeholder="QnA ID 입력">
-            <textarea id="qnaResponse" placeholder="수정 내용 입력"></textarea>
-            <button class="responseQnaBtn">수정</button>
-        </div>
 
-        <!-- 관리자용 삭제 폼-->
-        <div class="qna-delete-form" th:if="${isAdmin}">
-            <h3>문의 삭제</h3>
-            <input type="text" id="deleteQnaId" placeholder="QnA ID 입력">
-            <button class="deleteQnaBtn">삭제</button>
-        </div>
+
     </div>
 </div>
-
 
 <!-- JavaScript 파일 연결 -->
 <th:block layout:fragment="javascript">
@@ -79,4 +60,5 @@
 </th:block>
 </body>
 </html>
+
 
