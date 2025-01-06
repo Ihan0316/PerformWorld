@@ -18,7 +18,7 @@ public class QnARestController {
     private final QnAService qnaService;
 
     // QnA 목록 조회 (페이지 처리)
-    @GetMapping("/list")
+    @PostMapping("/list")
     public List<QnADTO> getQnAList(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size) {
         log.info("Fetching QnA list for API");

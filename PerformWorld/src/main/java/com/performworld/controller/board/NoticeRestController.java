@@ -22,7 +22,7 @@ public class NoticeRestController {
     private final NoticeService noticeService;
 
     // 공지사항 목록 조회(페이징 처리)
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<NoticeDTO>> getList(Pageable pageable) {
         log.info("Fetching list of notices with pagination: {}", pageable);
         List<NoticeDTO> noticeList = noticeService.getAllNotices(null); // Pageable 처리 필요 시 인터페이스 수정
@@ -56,7 +56,7 @@ public class NoticeRestController {
     }
 
     // 공지사항 상세 조회
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<NoticeDTO> getNoticeById(@PathVariable Long id) {
         log.info("Fetching notice details for ID: {}", id);
         NoticeDTO noticeDTO = noticeService.getNoticeById(id);
