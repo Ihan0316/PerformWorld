@@ -16,14 +16,14 @@ public class FAQRestController {
     private final FAQService faqService;
 
     //FAQ 목록 조회
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<FAQDTO>> getFAQList() {
         List<FAQDTO> faqList = faqService.getAllFAQs();
         return ResponseEntity.ok(faqList); //FAQ 목록을 JSON 형식으로 변환
     }
 
     //FAQ 상세 조회
-    @GetMapping("/{faqId}")
+    @PostMapping("/{faqId}")
     public ResponseEntity<FAQDTO> getFAQById(@PathVariable Long faqId) {
         FAQDTO faq = faqService.getFAQById(faqId);
         return ResponseEntity.ok(faq); //FAQ 데이터변환

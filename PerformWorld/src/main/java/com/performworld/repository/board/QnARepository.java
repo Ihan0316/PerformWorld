@@ -10,10 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface QnARepository extends JpaRepository<QnA, Long> {
 
-    // QnA 목록을 페이지 처리하여 반환(DTO 변환 필요)
-    @Query("SELECT new com.performworld.dto.board.QnADTO(q) from QnA q")
-    Page<QnA> findAll(Pageable pageable);
-
     // QnA 업데이트(필요한 데이터만 업데이트)
     @Modifying
     @Query("UPDATE QnA q SET q.title = :#{#qnaRequestDTO.title}, " +
