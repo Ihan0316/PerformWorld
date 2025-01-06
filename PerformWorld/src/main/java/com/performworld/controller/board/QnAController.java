@@ -55,27 +55,6 @@ public class QnAController {
         model.addAttribute("qna", qnaDTO);
         return "qna/delete";
     }
-
-    // QnA 등록 처리
-    @PostMapping("/register")
-    public String registerQnA(QnARequestDTO qnaRequestDTO) {
-        qnaService.registerQnA(qnaRequestDTO);
-        return "redirect:/qna/list";  // 등록 후 목록 페이지로 리다이렉트
-    }
-
-    // QnA 수정 처리
-    @PostMapping("/update/{id}")
-    public String updateQnA(@PathVariable Long id, QnARequestDTO qnaRequestDTO) {
-        qnaService.updateQnA(id, qnaRequestDTO);
-        return "redirect:/qna/list"; // 수정 후 목록 페이지로 리다이렉트
-    }
-
-    // QnA 삭제 처리
-    @PostMapping("/delete/{id}")
-    public String deleteQnA(@PathVariable Long id) {
-        qnaService.deleteQnA(id);
-        return "redirect:/qna/list";  // 삭제 후 목록 페이지로 리다이렉트
-    }
 }
 
 
