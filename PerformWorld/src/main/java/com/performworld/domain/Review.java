@@ -2,7 +2,6 @@ package com.performworld.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reviews")
@@ -28,4 +27,8 @@ public class Review extends BaseEntity{
 
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;  // 후기 내용
+
+    public void chnContent(String content) {
+        this.content = content;
+    }
 }

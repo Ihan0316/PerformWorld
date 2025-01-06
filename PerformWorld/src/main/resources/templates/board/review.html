@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<body>
+<div id="fh5co-main" layout:fragment="content">
+    <!-- 후기 등록 모달 -->
+    <div class="modal regRvModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">후기 등록</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <div class="input-group">관람 공연</div>
+                        <select class="form-control" name="seenEvent"></select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group">내용</div>
+                        <textarea class="form-control" rows="20" name="content" style="resize: none"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary registBtn">등록하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 후기 상세 모달 -->
+    <div class="modal rvDtlModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">후기 상세</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="reviewId">
+                    <div class="input-group mb-3">
+                        <div class="input-group">관람 공연</div>
+                        <select class="form-control" name="booking" disabled></select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group">내용</div>
+                        <textarea class="form-control" rows="20" name="rvContent" style="resize: none" disabled></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary updRvBtn" value="수정하기">
+                    <input type="button" class="btn btn-primary delRvBtn" value="삭제하기">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>후기 목록</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group d-flex">
+                    <input type="text" class="form-control m-3" name="srhEvent" placeholder="공연명을 입력하여 검색">
+                    <input type="text" class="form-control m-3" name="srhUserId" placeholder="작성자를 입력하여 검색">
+                    <button class="btn btn-primary m-3" name="searchButton">검색</button>
+                </div>
+            </div>
+            <!-- 후기 목록 -->
+            <div id="rvListGrid"></div>
+            <div class="form-group">
+                <input type="button" class="btn btn-primary btn-md registReview" value="후기 등록">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<th:block layout:fragment="javascript">
+    <script th:inline="javascript">
+        const loginUser = [[${session.user}]];
+        console.log(loginUser);
+        const regRvModal = new bootstrap.Modal(document.querySelector('.regRvModal'));
+        const rvDtlModal = new bootstrap.Modal(document.querySelector('.rvDtlModal'));
+    </script>
+    <script th:src="@{/js/board/review.js}"></script>
+</th:block>
+</body>
+</html>
