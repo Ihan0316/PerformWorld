@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "ticketing")
+@Table(name = "ticketings")
 @Getter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,7 +19,7 @@ public class Ticketing extends BaseEntity{
     @Column(name = "ticketing_id")
     private Long ticketingId;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     private Event event;  // Events 테이블과의 관계
 

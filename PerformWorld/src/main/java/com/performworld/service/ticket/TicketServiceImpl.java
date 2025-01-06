@@ -22,15 +22,15 @@ public class TicketServiceImpl implements TicketService{
     private final EventRepository eventRepository;
 
     @Override
-    public List<TicketingDTO> findByEventID(Long eventId) {
-        return ticketRepository.findByEvent_EventId(eventId)
+    public List<TicketingSaveDTO> findTicketingByEventId(Long eventId) {
+        return ticketRepository.findTicketingByEvent_EventId(eventId)
                 .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    private TicketingDTO convertToDto(Ticketing ticketing) {
-        return TicketingDTO.builder()
+    private TicketingSaveDTO convertToDto(Ticketing ticketing) {
+        return TicketingSaveDTO.builder()
                 .eventId(ticketing.getEvent().getEventId())
                 .openDatetime(ticketing.getOpenDatetime())
                 .eventPeriodStart(ticketing.getEventPeriodStart())
@@ -55,5 +55,10 @@ public class TicketServiceImpl implements TicketService{
             // Ticketing 엔티티 저장
             ticketRepository.save(ticketing);
         }
+    }
+
+    @Override
+    public void deleteTicketingData(Long eventId) {
+        ticketRepository.deleteTicketingByEvent_EventId(eventId);
     }
 }
