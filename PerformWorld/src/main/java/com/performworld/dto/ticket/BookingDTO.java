@@ -22,4 +22,5 @@ public class BookingDTO {
     private String status;
     private PaymentDTO payment;  // 예매 결제 정보
     private Integer resultCode;  // 예매하기 결과 리턴용
+    private String eventInfo;  // 후기 작성 시 공연정보 출력용
 }

@@ -38,7 +38,7 @@ const initGrid = () => {
                 header: '장르',
                 name: 'genre',
                 align: 'center',
-                width: 30,
+                width: 100,
                 sortable: true,
                 sortingType: 'desc'
             },
