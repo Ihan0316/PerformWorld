@@ -9,11 +9,12 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter
-@ToString
+@ToString(exclude = {"password"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User extends BaseEntity {
+
     @Id
     @Column(name = "user_id", length = 20)
     private String userId;

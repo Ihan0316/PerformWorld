@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+    <!-- libraries -->
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <!-- css import -->
+    <link rel="stylesheet" th:href="@{/css/board/qna.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <h4>문의사항 검색</h4>
+    <form>
+        제목: <input type="text" name="srhTitle"><br/>
+        등록일: <input type="date" name="srhStartDate">
+        &nbsp;~&nbsp;
+        <input type="date" name="srhEndDate"><br/>
+        <button type="button" class="searchBtn">검색</button>
+    </form>
+
+    <h1>문의사항 목록</h1>
+    <!-- List Grid for QnAs -->
+    <div id="grid"></div>
+
+    <h4>문의사항 등록</h4>
+    <form id="qnaForm" method="POST" action="/qna/registQnA">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title"><br/>
+
+        <label for="content">내용:</label>
+        <textarea id="content" name="content"></textarea><br/>
+
+        <button type="button" class="registBtn">등록하기</button>
+    </form>
+
+    <h4>문의사항 답변</h4>
+    <form id="responseForm" method="POST" action="/qna/respondQnA">
+        <label for="response">답변:</label>
+        <textarea id="response" name="response"></textarea><br/>
+
+        <label for="responseDatetime">답변일:</label>
+        <input type="datetime-local" id="responseDatetime" name="responseDatetime"><br/>
+
+        <input type="hidden" id="responseQnAId" name="qnaId"><!-- 숨겨진 필드로 문의사항 ID 전송 -->
+        <button type="button" class="responseBtn">답변하기</button>
+    </form>
+
+    <h4>문의사항 삭제</h4>
+    <form id="deleteForm" method="post" action="qna/delete">
+        <p>정말로 선택한 문의사항을 삭제하시겠습니까?</p>
+        <input type="hidden" id="deleteQnAId" name="qnaId">
+        <button type="button" class="deleteBtn">삭제</button>
+        <button type="button" onclick="window.location.href='/qna/list'">취소</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</div>
+
+<th:block layout:fragment="javascript">
+  <!-- js import -->
+  <script th:src="@{/js/board/qna.js}"></script>
+</th:block>
+</body>
+</html>
