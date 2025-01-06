@@ -14,4 +14,7 @@ public class TicketController {
     public String register() {
         return "ticket/ticketingReg";
     }
+
+    @GetMapping("/info")
+    public String ticketInfo() {return "ticket/ticketingInfo";}
 }

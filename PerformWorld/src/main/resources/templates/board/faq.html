@@ -1,51 +1,70 @@
 <!DOCTYPE html>
-<html lang="ko"
+<html class="no-js" lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 <head>
-    <!-- libraries -->
-    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-    <!-- css import -->
-    <link rel="stylesheet" th:href="@{/css/board/faq.css}">
+    <link rel="stylesheet" href="/css/board/boardstyle.css">
 </head>
+
 <body>
-<div layout:fragment="content">
-    <h4>FAQ 목록</h4>
-    <!-- FAQ 테이블 -->
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>질문</th>
-            <th>답변</th>
-            <th>등록일</th>
-            <th>수정일</th>
-            <th>수정</th>
-            <th>삭제</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- 동적으로 FAQ 목록이 추가됩니다 -->
-        </tbody>
-    </table>
+<div id="fh5co-page" layout:fragment="content">
+    <div id="fh5co-main">
+        <div id="menu">
+            <div class="col-md-3 col-sm-10 col-padding">
+                <h1 class="header_link__5ddf2" data-animate-effect="fadeInLeft">FAQ</h1>
+            </div>
+        </div>
 
-    <h4>FAQ 등록</h4>
-    <form id="faqForm" method="POST" action="/faq/register">
-        <label for="question">질문:</label>
-        <input type="text" id="question" name="question" required><br/>
+        <!-- 자주 묻는 질문 테이블-->
+        <div class="fh5co-narrow-content">
+            <h2 class="section-title">자주 묻는 질문 등록</h2>
 
-        <label for="answer">답변:</label>
-        <textarea id="answer" name="answer" required></textarea><br/>
+            <!-- 관리자만 보여지는 등록 폼-->
+            <div class="faq-regist-form" style="display: none;" id="faq-regist-form">
+                <h3>FAQ 등록</h3>
+                <form id="faq-form">
+                    <label for="question">질문</label>
+                    <input type="text" id="question" name="question" placeholder="질문을 입력하세요" required>
 
-        <button type="button" class="registerBtn">등록하기</button>
-    </form>
+                    <label for="answer">답변</label>
+                    <textarea id="answer" name="answer" placeholder="답변을 입력하세요" required></textarea>
+
+                    <button type="button" class="registBtn">등록</button>
+                </form>
+            </div>
+
+            <table class="faq-table">
+                <thead>
+                    <tr>
+                        <th>FAQ_ID</th>
+                        <th>질문</th>
+                        <th>답변</th>
+                        <th>등록일</th>
+                        <th>수정일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="faq : ${faqs}">
+                        <td th:text="${faq.faq_id}" id="faqId_${faq.faq_id}"></td>
+                        <td th:text="${faq.question}" id="question_${faq.faq_id}"></td>
+                        <td th:text="${faq.answer}" id="answer_${faq.faq_id}"></td>
+                        <td th:text="${#dates.format(faq.created_at, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${#dates.format(faq.updated_at, 'yyyy-MM-dd')}"></td>
+                        <!-- 수정, 삭제 버튼-->
+                        <td>
+                            <button type="button" class="updateBtn" th:data-id="${faq.faq_id}">수정</button>
+                            <button type="button" class="deleteBtn" th:data-id="${faq.faq_id}">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- JavaScript 파일 연결 -->
 <th:block layout:fragment="javascript">
-    <!-- js import -->
     <script th:src="@{/js/board/faq.js}"></script>
 </th:block>
 </body>
