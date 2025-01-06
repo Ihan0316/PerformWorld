@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,8 +16,10 @@ public class BookingDTO {
     private Long bookingId;
     private String userId;
     private Long scheduleId;
-    private String seatId;
+    private List<String> seatIds;
     private boolean isDelivery;
     private Long totalPrice;
     private String status;
+    private PaymentDTO payment;  // 예매 결제 정보
+    private Integer resultCode;  // 예매하기 결과 리턴용
 }

@@ -1,10 +1,11 @@
 const init = () => {
 
-    let selectedSeats = [];  // 좌석 선택 개수
-    let sections = [];  // 좌석 등급 정보
-    let userInfo = {};
+    let userInfo = {};  // 회원 정보
     let eventName = "";  // 공연명
+    let sections = [];  // 좌석 등급 정보
     let discountPercent = 0;  // 등급 할인율
+    let selectedSeats = [];  // 좌석 선택 개수
+    let selectedSchedule = null;  // 선택된 회차 id
     const totalPay = document.querySelector(".totalAmount");
 
     getUserInfo().then(res => {
@@ -14,7 +15,6 @@ const init = () => {
     });
 
     getUserTier().then(res => {
-        console.log(res)
         discountPercent = (100-res.discountRate)/100;
         document.querySelector(".discountAmount").textContent = res.discountRate;
     }).catch(e => {
@@ -23,8 +23,6 @@ const init = () => {
 
     // 좌석선택
     getSeatList().then(res => {
-        console.log(res)
-
         let seatPrice = 0;
 
         res.forEach(seat => {
@@ -174,44 +172,41 @@ const init = () => {
                             const scheduleElement = document.createElement("div");
                             scheduleElement.classList.add("schedule-item");
                             scheduleElement.innerHTML = `
-                                <div><strong>${schedule.eventDate.split('T')[1].substring(0, 5)}</strong></div>
+                                <div class="d-flex justify-content-between">
+                                    <strong>${schedule.eventDate.split('T')[1].substring(0, 5)}</strong>
+                                    <span>${schedule.seats.length}/50</span>
+                                </div>
                                 <div><span>${schedule.eventCast}</span></div>
                             `;
 
                             // 클릭 이벤트 핸들러
                             scheduleElement.addEventListener("click", function() {
+                                selectedSchedule = schedule.scheduleId;
+
                                 // 이전에 클릭한 항목 active 클래스 제거
                                 const activeItem = document.querySelector(".schedule-item.active");
                                 if (activeItem) {
                                     activeItem.classList.remove("active");
                                 }
-
                                 // 클릭된 항목 active 클래스 추가
                                 scheduleElement.classList.add("active");
 
-                                // 해당 회차 예매정보 조회
-                                getBookedList(schedule.scheduleId).then(res => {
-                                    console.log(res)
-                                    // 좌석 초기화
-                                    selectedSeats = [];
-                                    const selectedSeatElements = document.querySelectorAll(".seat.selected");
-                                    selectedSeatElements.forEach(seat => {
-                                        seat.classList.remove("selected");
-                                    });
-                                    const bookedSeatElements = document.querySelectorAll(".seat.unavailable");
-                                    bookedSeatElements.forEach(seat => {
-                                        seat.classList.remove("unavailable");
-                                    });
-                                    // 예매된 좌석 선택불가 설정
-                                    res.forEach(booked => {
-                                        const bookedSeat = document.querySelector(`.seat[data-seat-id='${booked.seatId}']`);
-                                        if (bookedSeat) {
-                                            bookedSeat.classList.add("unavailable");
-                                        }
-                                    });
-
-                                }).catch(e => {
-                                   alert("예매 정보를 가져오는데 실패했습니다.");
+                                // 좌석 초기화
+                                selectedSeats = [];
+                                const selectedSeatElements = document.querySelectorAll(".seat.selected");
+                                selectedSeatElements.forEach(seat => {
+                                    seat.classList.remove("selected");
+                                });
+                                const bookedSeatElements = document.querySelectorAll(".seat.unavailable");
+                                bookedSeatElements.forEach(seat => {
+                                    seat.classList.remove("unavailable");
+                                });
+                                // 예매된 좌석 선택불가 설정
+                                schedule.seats.forEach(seat => {
+                                    const bookedSeat = document.querySelector(`.seat[data-seat-id='${seat}']`);
+                                    if (bookedSeat) {
+                                        bookedSeat.classList.add("unavailable");
+                                    }
                                 });
 
                                 // 좌석 선택 UI 보이기
@@ -387,7 +382,6 @@ const init = () => {
 
     // 회차 목록 가져오기
     async function getScheduleList(searchDate) {
-        console.log(searchDate)
         const res = await axios({
             method : 'post',
             url : '/eventSchedule/getScheduleList',
@@ -414,21 +408,6 @@ const init = () => {
         return res.data;
     }
 
-    // 예매 정보 가져오기
-    async function getBookedList(scheduleId) {
-        const res = await axios({
-            method : 'post',
-            url : '/book/getBookedList',
-            data : {
-                scheduleId: scheduleId
-            },
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        });
-        return res.data;
-    }
-
     // 결제하기
     document.querySelector(".payBtn").addEventListener("click", async function(e) {
         const postcode = document.querySelector("input[name='postcode']").value;
@@ -439,12 +418,12 @@ const init = () => {
         }
 
         // 결제 api
-        const res = await PortOne.requestPayment({
-            storeId: "",
-            channelKey: "",
+        const result = await PortOne.requestPayment({
+            storeId: "store-e12bb050-7a06-49db-a3d6-22120ea4d145",
+            channelKey: "channel-key-2cd8fabb-10e2-4788-bd23-93fe53a7cba2",
             paymentId: `pay${crypto.randomUUID()}`,
             orderName: eventName,
-            totalAmount: 1000,//totalPay.textContent.replace(/,/g, ''),
+            totalAmount: totalPay.textContent.replace(/,/g, ''),
             currency: "CURRENCY_KRW",
             payMethod: "CARD",
             customer: {
@@ -452,39 +431,45 @@ const init = () => {
               phoneNumber: userInfo.phoneNumber,
               email: userInfo.email,
             },
-//            virtualAccount: {
-//                bank: `SHINHAN`,
-//                accountExpiry: {
-//                    dueDate: `2025-01-12T23:59:59+09:00`,  //입금기한
-//                },
-//                cashReceipt: {
-//                    type: `PERSONAL`,
-//                    customerIdentityNumber: `010-1234-0000`,
-//                },
-//                remitteeName: `테스트`,
-//            },
         });
-        if (res.code !== undefined) {
-            return alert(res.message);
+        if (result.code !== undefined) {
+            return alert(result.message);
         }
-
-        // 결제내역 단건 조회 api
-        const PORTONE_API_SECRET = "";
-        const paymentResponse = await fetch(
-            `https://api.portone.io/payments/${res.paymentId}`,
-            {
-                headers: {
-                    Authorization: `PortOne ${PORTONE_API_SECRET}`
-                }
-            },
-        );
-        if (!paymentResponse.ok) {
-            throw new Error(`paymentResponse: ${await paymentResponse.json()}`);
-        }
-        const payment = await paymentResponse.json();
-        console.log(payment)
 
         // 결제정보 DB 저장
+        await axios({
+            method : 'post',
+            url : '/pay/regist',
+            data : {
+                userId: 'user123',  // loginInfo
+                scheduleId: selectedSchedule,
+                seatIds: selectedSeats,
+                isDelivery: document.querySelector("input[name='isDelivery']").checked,
+                totalPrice: totalPay.textContent.replace(/,/g, ''),
+                payment: { paymentId: result.paymentId }
+            },
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then(res => {
+            let msg = "";
+            switch (res.data.resultCode) {
+                case 200 :
+                    alert("예매가 완료되었습니다.");
+                    window.location.href = `/user/book/${res.data.bookindId}`;
+                    break;
+                case 900 :
+                    alert("이미 결제된 좌석입니다.");
+                    break;
+                case 800 :
+                    alert("결제 정보 조회에 실패했습니다.");
+                    break;
+                default : alert("결제에 실패했습니다.");
+            }
+
+        }).catch(e => {
+            alert("결제에 실패했습니다.");
+        });
     });
 }
 

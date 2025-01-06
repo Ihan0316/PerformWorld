@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/ticket/ticket.css}">
+</head>
+<body>
+<!--	content layout start  -->
+<div id="fh5co-main" layout:fragment="content">
+    <!-- Modal -->
+    <div class="modal eventRegisterModal" tabindex="-1">
+        <div class="modal-dialog" style="width: 80%; max-width: 1200px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-summary"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 제목과 데이터를 한 줄로 배치 -->
+                    <div class="modal-row header-row">
+                        <div class="cell">이벤트 ID</div>
+                        <div class="cell">제목</div>
+                        <div class="cell">공연 시작일</div>
+                        <div class="cell">공연 종료일</div>
+                        <div class="cell">지역</div>
+                        <div class="cell">장르</div>
+                    </div>
+                    <!-- 데이터 -->
+                    <div class="modal-row data-row">
+                        <div class="cell" id="modal-eventId"></div>
+                        <div class="cell" id="modal-title"></div>
+                        <div class="cell" id="modal-prfpdfrom"></div>
+                        <div class="cell" id="modal-prfpdto"></div>
+                        <div class="cell" id="modal-location"></div>
+                        <div class="cell" id="modal-genre"></div>
+                    </div>
+                    <!-- 추가/제거 버튼 -->
+                    <div class="modal-buttons mt-3">
+                        <button type="button" class="btn btn-primary" id="addRowButton">추가</button>
+                        <button type="button" class="btn btn-danger" id="removeRowButton">제거</button>
+                    </div>
+                    <!-- 동적 입력 필드 영역 -->
+                    <div class="dynamic-rows mt-3" id="dynamicRowsContainer">
+                        <!-- 추가된 입력 필드가 여기에 생성됨 -->
+                        <div class="dynamic-row">
+                            <div class="cell">차수</div>
+                            <div class="cell">티켓팅 시작 날짜</div>
+                            <div class="cell">티켓팅 종료 날짜</div>
+                            <div class="cell">티켓팅 오픈 날짜</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveTicketingButton" class="btn btn-primary">저장</button>
+                    <button type="button" class="btn btn-secondary closeBtn" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>티켓팅 일정 등록</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group d-flex">
+                    <input type="text" id="titleSearch" class="form-control mb-3 mr-2" placeholder="제목을 입력하여 검색" style="width: 250px;">
+                    <select id= "genre-code" class="form-control mb-3 mr-2" style="width: 200px;" name="genre-code">
+                    </select>
+                    <button class="btn btn-primary mb-3" id="searchButton">검색</button>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 10%;">Event ID</th>
+                        <th style="width: 35%;">제목</th>
+                        <th style="width: 10%;">공연 시작일</th>
+                        <th style="width: 10%;">공연 종료일</th>
+                        <th style="width: 15%;">지역</th>
+                        <th style="width: 15%;">장르</th>
+                        <th style="width: 10%;">등록</th>
+                    </tr>
+                    </thead>
+                    <tbody id="savedEventList">
+
+                    </tbody>
+                </table>
+                <ul id="pagination" class="pagination">
+                    <!-- 페이징 버튼들이 여기에 동적으로 추가됩니다 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+<!--    <div id="map"></div>-->
+</div>
+<!--	content layout end  -->
+
+<!-- JavaScript -->
+
+<th:block layout:fragment="javascript">
+    <script th:src="@{/js/ticket/ticket.js}"></script>
+    <script th:inline="javascript"></script>
+</th:block>
+</body>
+</html>

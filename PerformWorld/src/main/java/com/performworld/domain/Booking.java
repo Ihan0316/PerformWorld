@@ -3,6 +3,8 @@ package com.performworld.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "bookings")
 @Getter
@@ -25,9 +27,13 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
     private EventSchedule eventSchedule;  // EventSchedules 테이블과의 관계
 
-    @ManyToOne
-    @JoinColumn(name = "seat_id", referencedColumnName = "seat_id")
-    private Seat seat;  // Seats 테이블과의 관계
+    @ManyToMany
+    @JoinTable(
+            name = "booking_seat",  // 중간 테이블 이름
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "seat_id")
+    )
+    private List<Seat> seats;  // Seats 테이블과의 관계
 
     @Column(name = "is_delivery", nullable = false)
     private boolean isDelivery;  // 배송 여부
