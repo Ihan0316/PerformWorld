@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${response.data.discountRate}%</td>
             `;
             tbody.appendChild(newRow);
+            location.reload(); // 페이지 새로고침
         } catch (error) {
             const errorMessage = error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
             alert(`오류: ${errorMessage}`);
