@@ -437,6 +437,10 @@ const init = () => {
         }
 
         // 결제정보 DB 저장
+        let address = "";
+        if(document.querySelector("input[name='isDelivery']").checked) {
+            address = `${document.querySelector("input[name='address1']").value} ${document.querySelector("input[name='address2']").value} (${document.querySelector("input[name='postcode']").value})`;
+        }
         await axios({
             method : 'post',
             url : '/pay/regist',
@@ -445,6 +449,7 @@ const init = () => {
                 scheduleId: selectedSchedule,
                 seatIds: selectedSeats,
                 isDelivery: document.querySelector("input[name='isDelivery']").checked,
+                address: address,
                 totalPrice: totalPay.textContent.replace(/,/g, ''),
                 payment: { paymentId: result.paymentId }
             },
@@ -452,11 +457,11 @@ const init = () => {
                 'Content-Type' : 'application/json'
             }
         }).then(res => {
-            let msg = "";
             switch (res.data.resultCode) {
                 case 200 :
                     alert("예매가 완료되었습니다.");
-                    window.location.href = `/user/book/${res.data.bookindId}`;
+                    console.log(res.data.bookingId)
+                    // window.location.href = `/user/book/${res.data.bookingId}`;
                     break;
                 case 900 :
                     alert("이미 결제된 좌석입니다.");
