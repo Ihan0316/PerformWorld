@@ -24,18 +24,18 @@ public class FAQController {
     public String getFAQListPage(){
         List<FAQDTO> faqList = faqService.getAllFAQs();
         //faqList를 view로 전달
-        return "board/faq";
+        return "board/sc";
     }
 
     //FAQ 등록 페이지
     @GetMapping("/register")
     public String getRegisterPage(){
-        return "board/faq"; //등록 폼 페이지로 이동
+        return "board/sc"; //등록 폼 페이지로 이동
     }
 
     //FAQ 수정 페이지
     @GetMapping("/update")
     public String getUpdatePage(){
-        return "board/faq"; //수정 폼 페이지로 이동
+        return "board/sc"; //수정 폼 페이지로 이동
     }
 }

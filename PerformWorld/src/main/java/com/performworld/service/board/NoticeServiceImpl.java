@@ -5,6 +5,7 @@ import com.performworld.dto.board.NoticeDTO;
 import com.performworld.dto.board.NoticeRequestDTO;
 import com.performworld.dto.board.NoticeResponseDTO;
 import com.performworld.repository.board.NoticeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
@@ -13,11 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
 
-    @Autowired
-    private NoticeRepository noticeRepository;
-    private ModelMapper modelMapper;
+
+    private final NoticeRepository noticeRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<NoticeDTO> getAllNotices(NoticeDTO noticeDTO) {
