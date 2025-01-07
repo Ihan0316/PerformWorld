@@ -86,7 +86,7 @@ function updateTableData(users, tiers) {
             <td>${user.postcode}</td>
             <td>${user.tierName}</td>
             <td>
-                <button class="btn btn-danger delete-user-btn" data-user-id="${user.userId}" onclick="deleteUser(this)">Delete</button>
+                <button class="btn btn-danger delete-user-btn" data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
             </td>
         `;
         userTableBody.appendChild(row);
@@ -103,13 +103,6 @@ function updateTableData(users, tiers) {
             <td>${tier.minSpent.toLocaleString()} 원</td>
             <td>${tier.maxSpent.toLocaleString()} 원</td>
             <td>${tier.discountRate} %</td>
-            <td>
-            <button 
-                class="btn btn-primary update-tier-btn" 
-                data-tier-id="${tier.tierId}" onclick="updateTier(this)">
-                Edit
-            </button>
-            </td>
         `;
         tierTableBody.appendChild(row);
     });

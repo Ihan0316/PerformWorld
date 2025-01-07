@@ -12,7 +12,8 @@ async function openEditSectionModal() {
         sections.forEach(section => {
             const option = document.createElement("option");
             option.value = section.section; // section은 SeatDTO의 section 필드
-            option.textContent = `${section.section} - ${section.price}`; // 섹션과 가격을 표시
+            option.textContent = section.section; // 섹션만 표시 (가격 제거)
+            option.dataset.price = section.price; // 가격 정보를 data 속성에 저장
             sectionDropdown.appendChild(option);
         });
 
@@ -50,7 +51,7 @@ document.getElementById('seatSection').addEventListener('change', function () {
     const selectedSection = this.value;
     const sections = Array.from(document.getElementById('seatSection').options).map(option => ({
         section: option.value,
-        price: option.text.split('-')[1].trim() // 가격 정보만 추출
+        price: option.dataset.price // data 속성에서 가격 정보 가져오기
     }));
 
     loadPriceForSection(selectedSection, sections);

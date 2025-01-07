@@ -5,26 +5,26 @@
       layout:decorate="~{layout/base.html}">
 <head>
   <meta charset="UTF-8">
-  <title>Tier,User,Seat 조회</title>
+  <title>티어, 유저, 좌석 조회</title>
 </head>
 <body>
 <div id="fh5co-main" layout:fragment="content">
   <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
     <div class="row">
 
-      <!-- User 조회 섹션 (상단) -->
-      <h2>User 조회</h2>
+      <!-- 유저 조회 섹션 (상단) -->
+      <h2>유저 조회</h2>
       <div class="col-md-12">
         <table id="userTable" class="table table-striped">
           <thead>
           <tr>
-            <th>User ID</th>
+            <th>유저 아이디</th>
             <th>이름</th>
-            <th>Email</th>
+            <th>이메일</th>
             <th>전화번호</th>
             <th>주소</th>
             <th>우편번호</th>
-            <th>Tier</th>
+            <th>티어</th>
             <th>삭제</th>
           </tr>
           </thead>
@@ -38,24 +38,24 @@
             <td th:text="${user.postcode}"></td>
             <td th:text="${user.tierName}"></td>
             <td>
-              <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">Delete</button>
+              <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
             </td>
           </tr>
           </tbody>
         </table>
       </div>
-    </div> <!-- User 조회 섹션 end -->
+    </div> <!-- 유저 조회 섹션 end -->
 
     <hr> <!-- 구분선 추가 -->
 
-    <!-- Tier 및 Seat 조회 섹션 (옆에 배치) -->
+    <!-- 티어 및 좌석 조회 섹션 (옆에 배치) -->
     <div class="row">
       <div class="col-md-8">
         <!-- Tier 조회 섹션 -->
-        <h2>Tier 조회</h2>
+        <h2>티어 조회</h2>
         <div class="row">
           <div class="col-md-12 text-end">
-            <button class="btn btn-primary add-tier-btn">Add Tier</button>
+            <button class="btn btn-primary add-tier-btn">티어 추가</button>
           </div>
         </div>
         <!-- Tier 조회 테이블 -->
@@ -64,12 +64,11 @@
             <table id="tierTable" class="table table-striped" style="text-align: center;">
               <thead>
               <tr style="text-align: center;">
-                <th>Tier ID</th>
-                <th>Tier 이름</th>
+                <th>티어 아이디</th>
+                <th>티어 이름</th>
                 <th>최소 소비 금액</th>
                 <th>최대 소비 금액</th>
                 <th>할인율 (%)</th>
-                <th>수정</th>
               </tr>
               </thead>
               <tbody>
@@ -79,32 +78,29 @@
                 <td th:text="${tier.minSpent} + ' 원'"></td>
                 <td th:text="${tier.maxSpent} + ' 원'"></td>
                 <td th:text="${tier.discountRate} + '%'"></td>
-                <td>
-                  <button class="btn btn-primary update-tier-btn" th:data-tier-id="${tier.tierId}" onclick="updateTier(this)">Edit</button>
-                </td>
               </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div> <!-- Tier 조회 섹션 end -->
+      </div> <!-- 티어 조회 섹션 end -->
 
       <div class="col-md-4">
-        <!-- Seat 조회 섹션 -->
-        <h2>Seat 조회</h2>
-        <!-- Seat 수정 버튼 -->
+        <!-- 좌석 조회 섹션 -->
+        <h2>좌석 조회</h2>
+        <!-- 좌석 수정 버튼 -->
         <div class="row">
           <div class="col-md-12 text-end">
-            <button onclick="openEditSectionModal()" class="btn btn-primary">Edit Section</button>
+            <button onclick="openEditSectionModal()" class="btn btn-primary">섹션 수정</button>
           </div>
         </div>
-        <!-- Seat 조회 테이블 -->
+        <!-- 좌석 조회 테이블 -->
         <div class="row">
           <div class="col-md-12">
             <table id="seatTable" class="table table-striped">
               <thead>
               <tr >
-                <th style="text-align: center;">Seat ID</th>
+                <th style="text-align: center;">좌석 아이디</th>
                 <th style="text-align: center;">섹션</th>
                 <th style="text-align: center;">가격</th>
               </tr>
@@ -139,7 +135,7 @@
           <div class="modal-body">
             <form id="addTierForm">
               <div class="form-group">
-                <label for="tierName">Tier 이름</label>
+                <label for="tierName">티어 이름</label>
                 <input type="text" class="form-control" id="tierName" required>
               </div>
               <div class="form-group">
@@ -154,52 +150,19 @@
                 <label for="discountRate">할인율 (%)</label>
                 <input type="number" class="form-control" id="discountRate" min="0" max="100" required>
               </div>
-              <button type="submit" class="btn btn-primary addTierBtn">Tier 추가</button>
+              <button type="submit" class="btn btn-primary addTierBtn">티어 추가</button>
             </form>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Tier 수정 모달 -->
-    <div id="editTierModal" class="modal" style="display: none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Tier 수정</h4>
-            <button type="button" class="close" onclick="closeEditModal()">&times;</button>
-          </div>
-          <div class="modal-body">
-            <form id="editTierForm">
-              <div class="form-group">
-                <label for="editTierName">Tier 이름</label>
-                <input type="text" class="form-control" id="editTierName" name="tierName" required>
-              </div>
-              <div class="form-group">
-                <label for="editMinSpent">최소 소비 금액</label>
-                <input type="number" class="form-control" id="editMinSpent" name="minSpent" min="0" required>
-              </div>
-              <div class="form-group">
-                <label for="editMaxSpent">최대 소비 금액</label>
-                <input type="number" class="form-control" id="editMaxSpent" name="maxSpent" min="0" required>
-              </div>
-              <div class="form-group">
-                <label for="editDiscountRate">할인율 (%)</label>
-                <input type="number" class="form-control" id="editDiscountRate" name="discountRate" min="0" max="100" required>
-              </div>
-              <button type="submit" class="btn btn-primary">수정</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 시트 수정 모달 -->
+    <!-- 좌석 수정 모달 -->
     <div id="editSectionModal" class="modal" style="display: none;">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Seat 수정</h4>
+            <h4 class="modal-title">좌석 수정</h4>
             <button type="button" class="close" onclick="closeSectionModal()">&times;</button>
           </div>
           <div class="modal-body">

@@ -34,7 +34,7 @@ public class TierDTO {
     // 생성자에서 유효성 검사 추가
     public TierDTO(Long tierId, String tierName, Long minSpent, Long maxSpent, Long discountRate) {
         if (minSpent >= maxSpent) {
-            throw new IllegalArgumentException("Min Spent should be less than Max Spent");
+            throw new IllegalArgumentException("Min Spent 는 Max Spent 보다 작아야 됩니다.");
         }
         this.tierId = tierId;
         this.tierName = tierName;
