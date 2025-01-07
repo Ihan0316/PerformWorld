@@ -153,3 +153,85 @@ div.header_naviWrapper__6fe56 {
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+/*포스터 크기 조정*/
+.img-responsive {
+    display: inline-block; /* block 대신 inline-block으로 설정 */
+    max-width: 60%;       /* 크기를 원하는 값으로 조정 */
+    height: auto;         /* 높이 유지 */
+}
+
+/* 버튼 기본 스타일 설정 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 2000px; /* 스크롤 테스트용 */
+}
+
+/* Top 버튼 스타일 */
+.topButton {
+    position: fixed;
+    right: 40px;
+    bottom: 50px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-weight: 500;
+    font-size: 12px;
+    display: none;
+}
+
+.topButton:hover {
+    background: #000;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+/* 버튼 반응형 스타일 */
+@media (max-width: 800px) {
+    .topButton {
+        width: 40px; /* 버튼 크기 축소 */
+        height: 40px;
+        font-size: 12px; /* 텍스트 크기 축소 */
+        line-height: 15%; /* 텍스트 중앙 정렬 조정 */
+        right: 10px; /* 오른쪽 간격 조정 */
+        bottom: 30px; /* 아래쪽 간격 조정 */
+    }
+}
+
+@media (max-width: 480px) {
+    .topButton {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+        line-height: 15%;
+        right: 10px;
+        bottom: 30px;
+    }
+}
+
+/*포스터 크기 조정*/
+.img-responsive.poster {
+    display: block; /* 블록 요소로 설정하여 margin이 적용 가능 */
+    margin: 0 auto; /* 수평 중앙 정렬 */
+    max-width: 80%; /* 이미지의 최대 너비 제한 (뷰포트의 80%) */
+    height: auto; /* 비율 유지 */
+}
+
+@media (min-width: 768px) { /* 화면 너비가 768px 이상일 때 */
+    .img-responsive.poster {
+        max-width: 200px; /* 최대 크기 제한 (400px) */
+    }
+}
+
+@media (max-width: 767px) { /* 화면 너비가 767px 이하일 때 */
+    .img-responsive.poster {
+        max-width: 50%; /* 작은 화면에서는 이미지가 전체 너비를 차지 */
+    }
+}
+
+ /*카테고리의 전체*/
+.categoryList[data-id="all"] .header_link__5ddf2 {
+    font-weight: bold;
+}

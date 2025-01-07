@@ -20,22 +20,23 @@
 
             <!-- 검색목록 -->
             <menu class="Ticket_GNB_PC header_wrapMenu__02b29">
-                <ul class="header_genreMenu__34716">
-                    <li><a class="header_link__5ddf2" href="">연극</a></li>
-                    <li><a class="header_link__5ddf2" href="">무용</a></li>
-                    <li><a class="header_link__5ddf2" href="">서양음악(클래식)</a></li>
-                    <li><a class="header_link__5ddf2" href="">한국음악(국악)</a></li>
-                    <li><a class="header_link__5ddf2" href="">무용(서양/한국무용)</a></li>
-                    <li><a class="header_link__5ddf2" href="">대중무용</a></li>
-                    <li><a class="header_link__5ddf2" href="">복합</a></li>
-                    <li><a class="header_link__5ddf2" href="">서커스/마술</a></li>
-                    <li><a class="header_link__5ddf2" href="">뮤지컬</a></li>
+<!--                <ul class="header_genreMenu__34716">-->
+<!--                    <li><a class="header_link__5ddf2" href="">연극</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">무용</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">서양음악(클래식)</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">한국음악(국악)</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">무용(서양/한국무용)</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">대중무용</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">복합</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">서커스/마술</a></li>-->
+<!--                    <li><a class="header_link__5ddf2" href="">뮤지컬</a></li>-->
+<!--                </ul>-->
+
+                <ul class="header_genreMenu__34716" >
+                    <!-- JavaScript로 데이터를 동적으로 추가 -->
                 </ul>
-                <div class="header_menuDivider__01d75"></div>
-                <ul class="header_categoryMenu__4fbf3">
-                    <li><a class="header_link__5ddf2" href="">공연상태</a></li>
-                    <li><a class="header_link__5ddf2" href="">지역</a></li>
-                </ul>
+
+                <!--  검색창-->
                 <div class="header_searchWrapper">
                     <input type="text" class="header_searchInput" placeholder="검색어를 입력하세요..." onkeypress="handleSearch(event)">
                 </div>
@@ -56,6 +57,7 @@
 </div>
 
 <!-- JavaScript 파일 연결 -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <th:block layout:fragment="javascript">
 <script th:src="@{/js/event/theater.js}"></script>
 </th:block>
