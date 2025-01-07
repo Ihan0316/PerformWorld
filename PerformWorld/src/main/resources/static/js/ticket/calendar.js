@@ -1,20 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // 예매된 날짜 데이터를 서버에서 받아오기
-    fetchBookedDates();
+    let bookedDates = []; // 예매된 날짜 데이터 저장 변수
 
-    // 예매된 날짜를 서버에서 가져오는 함수
-    let bookedDates = [];
+    // 예매된 날짜를 서버에서 가져오기
     function fetchBookedDates() {
-        const status = 'Y'; // 예매 완료된 날짜만 가져오기
-
+        const status = 'Y'; // 예매 완료 상태만 조회
         axios.get(`/ticket/calendar/api/booked-dates?status=${status}`)
             .then(response => {
-                console.log("response:", response);  // 응답 확인
-                bookedDates = response.data;  // 응답에서 bookedDates 가져오기
-                console.log("bookedDates:", bookedDates);  // 데이터 확인
-
-                // 캘린더 초기화
-                initializeCalendar();
+                bookedDates = response.data || []; // 응답 데이터 저장
+                initializeCalendar(); // 캘린더 초기화
             })
             .catch(error => {
                 console.error('예매된 날짜를 가져오는 데 실패했습니다:', error);
@@ -25,52 +18,118 @@ document.addEventListener("DOMContentLoaded", function () {
     // Toast UI Calendar 초기화
     function initializeCalendar() {
         const calendar = new tui.Calendar('#calendar', {
-            defaultView: 'month',  // 월별 보기로 설정
+            defaultView: 'month', // 기본 월별 보기
             taskView: ['milestone', 'task'],
             scheduleView: ['time', 'allday'],
+            // useDetailPopup: true,  // 상세보기 팝업 사용
+            selectable: false, // 날짜 선택 비활성화
+            isReadOnly: true,
             template: {
-                milestone: function(schedule) {
-                    return `<span style="color:${schedule.color};">${schedule.title}</span>`;
-                }
+                milestone: schedule => `<span style="color:${schedule.color};">${schedule.title}</span>`,
             },
-            useFormPopup: true,      // 일정 생성 팝업 사용
-            useDetailPopup: true,    // 일정 상세 팝업 사용
+            locale: 'ko', // 한글 표시
         });
 
-        // 예매된 날짜를 캘린더에 표시
+        // 예매된 날짜를 캘린더에 추가
         const events = bookedDates.map(event => {
-            if (event && event.dateTime && event.title) {  // event.dateTime과 event.title이 모두 존재하는지 확인
-                console.log("Processing event:", event); // 이벤트 정보 확인
-
-                // dateTime을 사용하여 처리
-                const dateTimeStr = event.dateTime;  // '2025-01-10 20:00:00.000000' 형식
-                const [date, time] = dateTimeStr.split(' ');  // 날짜와 시간을 분리
+            if (event && event.dateTime && event.title) {
+                const [date, time] = event.dateTime.split(' ');
                 const [year, month, day] = date.split('-');
                 const [hour, minute, second] = time.split(':');
-
-                // 시작 시간 (2025-01-10 20:00:00 형식)
                 const startDate = new Date(year, month - 1, day, hour, minute, second);
                 const endDate = new Date(startDate);
 
-                // 일정 객체 생성
                 return {
                     id: event.dateTime,
                     calendarId: 'cal1',
-                    title: event.title,  // 예매된 제목 사용
-                    start: startDate.toISOString(),  // ISO 형식으로 변환
-                    end: endDate.toISOString(),  // ISO 형식으로 변환
-                    isAllday: false,  // 시간도 포함되어 있으므로 AllDay는 false로 설정
+                    title: event.title,
+                    start: startDate.toISOString(),
+                    end: endDate.toISOString(),
+                    isAllday: false,
                     category: 'time',
-                    backgroundColor: '#ff6f61',  // 예매된 날짜 강조 색상
+                    backgroundColor: '#ff6f61',
                     borderColor: '#ff6f61'
                 };
-            } else {
-                console.error('Invalid event or date value:', event); // event 객체가 없거나 날짜 값이 없을 경우
-                return null;
             }
-        }).filter(event => event !== null); // null인 이벤트 필터링
+            return null;
+        }).filter(event => event !== null);
 
-        // createEvents 메서드를 사용하여 일정을 추가
         calendar.createEvents(events);
+
+        // 초기 년/월 표시 업데이트
+        updateCalendarTitle(calendar);
+
+        // 버튼 이벤트 초기화
+        initializeMenu(calendar);
+
+        // 일정 클릭 시 팝업 위치 조정
+        // calendar.on('beforeOpenDetailPopup', (event) => {
+        //     adjustPopupPosition(event);
+        // });
     }
+
+    // 년/월 표시를 업데이트하는 함수
+    function updateCalendarTitle(calendar) {
+        const currentDate = calendar.getDate(); // 현재 표시 중인 날짜
+        const year = currentDate.getFullYear(); // 현재 년도
+        const month = currentDate.getMonth() + 1; // 현재 월
+        const calendarTitle = document.getElementById('calendar-title'); // 제목 영역
+        if (calendarTitle) {
+            calendarTitle.textContent = `${year}년 ${month}월`;
+        }
+    }
+
+    // 메뉴 버튼 이벤트 초기화
+    function initializeMenu(calendar) {
+        document.getElementById('btn-month-view').addEventListener('click', () => {
+            calendar.changeView('month', true); // 월별 보기로 전환
+            updateCalendarTitle(calendar);
+        });
+
+        document.getElementById('btn-week-view').addEventListener('click', () => {
+            calendar.changeView('week', true); // 주별 보기로 전환
+            updateCalendarTitle(calendar);
+        });
+
+        document.getElementById('btn-today').addEventListener('click', () => {
+            calendar.today(); // 오늘 날짜로 이동
+            updateCalendarTitle(calendar);
+        });
+
+        // 이전/다음 버튼 클릭 시 월 이동
+        document.getElementById('btn-prev-month').addEventListener('click', () => {
+            calendar.prev(); // 이전 월로 이동
+            updateCalendarTitle(calendar);
+        });
+
+        document.getElementById('btn-next-month').addEventListener('click', () => {
+            calendar.next(); // 다음 월로 이동
+            updateCalendarTitle(calendar);
+        });
+
+        // 캘린더에서 일정 클릭 시 제목 업데이트
+        // calendar.on('beforeRenderSchedule', () => updateCalendarTitle(calendar));
+    }
+
+    // function adjustPopupPosition(event) {
+    //     const popup = document.querySelector('.tui-full-calendar-popup'); // 팝업 요소
+    //     const scheduleElement = event.schedule; // 클릭된 일정 요소
+    //     if (popup && scheduleElement) {
+    //         const scheduleRect = scheduleElement.getBoundingClientRect(); // 일정 요소의 위치
+    //         const popupRect = popup.getBoundingClientRect(); // 팝업 요소의 위치
+    //
+    //         // X 축: 일정의 왼쪽을 기준으로 팝업을 위치시킴
+    //         const offsetX = scheduleRect.left;
+    //
+    //         // Y 축: 일정 위로 팝업을 표시 (기존 방식 유지)
+    //         const offsetY = scheduleRect.top - popupRect.height - 10;
+    //
+    //         // 팝업 위치를 클릭된 일정 위치로 설정
+    //         popup.style.left = `${offsetX}px`;
+    //         popup.style.top = `${offsetY}px`;
+    //     }
+    // }
+
+    // 데이터 가져오기 시작
+    fetchBookedDates();
 });
