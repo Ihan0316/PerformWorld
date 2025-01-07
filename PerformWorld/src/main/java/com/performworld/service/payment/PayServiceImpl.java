@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -92,6 +93,46 @@ public class PayServiceImpl implements PayService {
         }
 
         return BookingDTO.builder().resultCode(400).build();
+    }
+
+    // 예매 내역 조회
+    @Override
+    public List<BookingDTO> getBknList(BookingDTO bookingDTO) {
+        return payRepository.getBknList(bookingDTO);
+    }
+
+    // 예매 상세 조회
+    @Override
+    public BookingDTO getBknInfo(Long bookingId) {
+        return payRepository.getBknInfo(bookingId);
+    }
+
+    // 예매 취소
+    @Override
+    public BookingDTO cancelPayment(BookingDTO bookingDTO) {
+        Optional<Booking> bookingOptional = bookRepository.findById(bookingDTO.getBookingId());
+
+        if (bookingOptional.isPresent()) {
+            Booking booking = bookingOptional.get();
+            Payment payment = payRepository.findByBooking_BookingId(bookingDTO.getBookingId()).orElseThrow();
+            // 결제 취소
+            cancelPayment(payment.getPaymentId());
+            // 예매 및 결제 업데이트
+            SystemCode cancelCode = systemCodeRepository.findByCode("N").orElseThrow();
+            booking.chnStatus(cancelCode);
+            bookRepository.save(booking);
+            payment.chnStatus(cancelCode);
+            payRepository.save(payment);
+            // 회원 소비금액 및 등급 업데이트
+            User user = userRepository.findByUserId(bookingDTO.getUserId()).orElseThrow();
+            user.chnTotalSpent(
+                    user.getTotalSpent() - payment.getPaymentAmount()
+                    , tierRepository.findAll()
+            );
+            userRepository.save(user);
+        }
+
+        return BookingDTO.builder().resultCode(200).build();
     }
 
 

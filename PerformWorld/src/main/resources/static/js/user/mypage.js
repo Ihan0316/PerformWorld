@@ -3,35 +3,30 @@ const initBkGrid = () => {
     const BookGrid = tui.Grid;
 
     // 테마
-    BookGrid.applyTheme('default',  {
+    BookGrid.applyTheme('clean',  {
         cell: {
             normal: {
-                border: 'gray'
+                border: 'gray',
+                showVerticalBorder: true,
+                showHorizontalBorder: true
             },
             header: {
                 background: 'gray',
                 text: 'white',
-                border: 'gray'
-            },
-            rowHeaders: {
-                header: {
-                    background: 'gray',
-                    text: 'white'
-                }
+                border: 'white'
             }
         }
     });
 
     // 세팅
-    return new BookGrid({
+    const grid = new BookGrid({
         el: document.getElementById('bookingGrid'),
         scrollX: false,
         scrollY: false,
-        minBodyHeight: 150,
-        rowHeaders: ['rowNum'],
+        minBodyHeight: 120,
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
-            perPage: 5
+            perPage: 4
         },
         columns: [
             {
@@ -41,102 +36,91 @@ const initBkGrid = () => {
             },
             {
                 header: '공연명',
-                name: 'title',
-                align: 'center'
-            },
-            {
-                header: '공연장',
-                name: 'location',
-                align: 'center'
-            },
-            {
-                header: '예매상태',
-                name: 'bookingStatus',
-                align: 'center'
+                name: 'eventInfo',
+                align: 'center',
+                minWidth: 200
             },
             {
                 header: '관람일',
                 name: 'eventDate',
+                align: 'center',
+                width: 100,
                 formatter: (value) => {
                     if (value) {
                         const data = value.value;
-                        return `${data[0]}-${data[1]}-${data[2]} ${data[3]}:${data[4]}`;
+                        return data.split('T')[0]
                     }
                     return "";
                 }
             },
             {
-                header: '캐스팅',
-                name: 'eventCast',
+                header: '공연장',
+                name: 'eventLocation',
                 align: 'center',
-                // formatter: (value) => {
-                //     if (value) {
-                //         const data = value.value;
-                //         return `${data ? '완료' : '취소'}`;
-                //     }
-                //     return "";
-                // }
-            },
-            {
-                header: '좌석정보',
-                name: 'seat',
-                // formatter: (value) => {
-                //     if (value) {
-                //         const data = value.value;
-                //         return `${data[0]}-${data[1]}-${data[2]}`;
-                //     }
-                //     return "";
-                // }
-            },
-            {
-                header: '금액',
-                name: 'totalPrice',
-                align: 'center'
+                minWidth: 150
             },
             {
                 header: '예매일',
                 name: 'regDate',
+                align: 'center',
+                width: 100,
                 formatter: (value) => {
                     if (value) {
                         const data = value.value;
-                        return `${data[0]}-${data[1]}-${data[2]}`;
+                        return data.split('T')[0];
                     }
                     return "";
                 }
+            },
+            {
+                header: '상태',
+                name: 'status',
+                align: 'center',
+                width: 50
             }
         ]
     });
+
+    // 행 더블클릭 시 상세 페이지로
+    grid.on('dblclick', (e) => {
+        const rowKey = e.rowKey;  // 클릭한 행의 rowKey
+        if (rowKey !== null) {
+            window.location.href = `/user/book/${grid.getRow(rowKey).bookingId}`;
+        }
+    });
+
+    // resize
+    window.addEventListener('resize', function(e) {
+        grid.refreshLayout();
+    });
+
+    return grid;
 }
 const initRvGrid = () => {
     const ReviewGrid = tui.Grid;
 
     // 테마
-    ReviewGrid.applyTheme('default',  {
+    ReviewGrid.applyTheme('clean',  {
         cell: {
             normal: {
-                border: 'gray'
+                border: 'gray',
+                showVerticalBorder: true,
+                showHorizontalBorder: true
             },
             header: {
                 background: 'gray',
                 text: 'white',
-                border: 'gray'
-            },
-            rowHeaders: {
-                header: {
-                    background: 'gray',
-                    text: 'white'
-                }
+                border: 'white'
             }
         }
     });
 
     // 세팅
-    return new ReviewGrid({
+    const grid = new ReviewGrid({
         el: document.getElementById('reviewGrid'),
         scrollX: false,
         scrollY: false,
-        minBodyHeight: 150,
-        rowHeaders: ['rowNum'],
+        minBodyHeight: 120,
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
             perPage: 4
@@ -149,37 +133,66 @@ const initRvGrid = () => {
             },
             {
                 header: '공연명',
-                name: 'title',
-                align: 'center'
-            },
-            {
-                header: '관람일',
-                name: 'eventDate',
+                name: 'eventInfo',
+                align: 'center',
+                width: 220,
                 formatter: (value) => {
                     if (value) {
                         const data = value.value;
-                        return `${data[0]}-${data[1]}-${data[2]} ${data[3]}:${data[4]}`;
+                        return data.split(" : ")[0]
                     }
                     return "";
                 }
             },
             {
                 header: '내용',
-                name: 'content'
+                name: 'content',
+                minWidth: 200
+            },
+            {
+                header: '작성자',
+                name: 'userId',
+                align: 'center',
+                width: 100
             },
             {
                 header: '작성일',
                 name: 'regDate',
+                align: 'center',
+                width: 100,
                 formatter: (value) => {
                     if (value) {
                         const data = value.value;
-                        return `${data[0]}-${data[1]}-${data[2]}`;
+                        return data.split('T')[0];
                     }
                     return "";
                 }
             }
         ]
     });
+
+    // 행 더블클릭 시 상세 정보로
+    grid.on('dblclick', (e) => {
+        const rowKey = e.rowKey;  // 클릭한 행의 rowKey
+        if (rowKey !== null) {
+            console.log('클릭된 행:', grid.getRow(rowKey));
+            const row = grid.getRow(rowKey);
+
+            document.querySelector("input[name='reviewId']").value = row.reviewId;
+            document.querySelector("select[name='booking']").innerHTML =
+                `<option value="${row.bookingId}">${row.eventInfo}</option>`;
+            document.querySelector("textarea[name='rvContent']").value = row.content;
+
+            rvDtlModal.show();
+        }
+    });
+
+    // resize
+    window.addEventListener('resize', function(e) {
+        grid.refreshLayout();
+    });
+
+    return grid;
 }
 
 const init = () => {
@@ -187,17 +200,9 @@ const init = () => {
 
     // grid 초기 세팅
     const bookingGrid = initBkGrid();
-    // getBkList().then(res => {
-    //     bookingGrid.resetData(res.data);  // grid에 세팅
-    // }).catch(e => {
-    //     alert("예매내역을 불러오는데 실패했습니다.");
-    // })
+    getBkList();
     const reviewGrid = initRvGrid();
-    // getRvList().then(res => {
-    //     reviewGrid.resetData(res.data);  // grid에 세팅
-    // }).catch(e => {
-    //     alert("후기목록을 불러오는데 실패했습니다.");
-    // })
+    getRvList();
 
     // 비밀번호 변경
     document.querySelector(".chnPwBtn").addEventListener("click", function (e) {
@@ -263,6 +268,53 @@ const init = () => {
                 window.location.href = '/';
             }).catch(e => {
                 alert("회원 탈퇴에 실패했습니다.");
+            });
+        }
+    });
+
+    // 예매상태 조회 변경
+    document.querySelectorAll('input[name="bookStatus"]').forEach((radio) => {
+        radio.addEventListener('change', function (e) {
+            const selectedStatus = e.target.value;
+            getBkList(selectedStatus);
+        });
+    });
+
+    // 후기 수정
+    document.querySelector(".updRvBtn").addEventListener("click", function (e) {
+        if (e.target.value === '수정하기') {
+            document.querySelector("textarea[name='rvContent']").disabled = false;
+            e.target.value = '수정 완료';
+
+        } else {
+            if(document.querySelector("textarea[name='rvContent']").value.trim() === "") {
+                alert("내용을 작성해주세요.");
+                return;
+            }
+
+            if(confirm("후기를 수정하시겠습니까?")) {
+                updateReview().then(res => {
+                    alert("후기 수정에 성공했습니다.");
+                    getRvList();  // 목록 재조회
+                    rvDtlModal.hide();
+                    document.querySelector("textarea[name='rvContent']").disabled = true;
+                    e.target.value = '수정하기';
+                }).catch(e => {
+                    alert("후기 수정에 실패했습니다.");
+                });
+            }
+        }
+    });
+
+    // 후기 삭제
+    document.querySelector(".delRvBtn").addEventListener("click", function (e) {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            deleteReview().then(res => {
+                alert("후기 삭제에 성공했습니다.");
+                getRvList();  // 목록 재조회
+                rvDtlModal.hide();
+            }).catch(e => {
+                alert("후기 삭제에 실패했습니다.");
             });
         }
     });
@@ -369,11 +421,53 @@ const init = () => {
     }
 
     // 예매내역 조회
-    async function getBkList() {
-        const res = await axios({
+    async function getBkList(selectedStatus) {
+        const data = {
+            userId: 'user123',  // loginInfo
+            status: selectedStatus
+        }
+
+        await axios({
             method : 'post',
-            url : '/book/getBknList',
+            url : '/pay/getBknList',
+            data : data,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then(res => {
+            bookingGrid.resetData(res.data);  // grid에 세팅
+        }).catch(e => {
+            alert("예매내역을 불러오는데 실패했습니다.");
+        });
+    }
+
+    // 후기목록 조회
+    async function getRvList() {
+        await axios({
+            method : 'post',
+            url : '/review/getRvList',
             data : { userId: 'user123' },  // loginInfo
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then(res => {
+            reviewGrid.resetData(res.data);  // grid에 세팅
+        }).catch(e => {
+            alert("후기목록을 불러오는데 실패했습니다.");
+        });
+    }
+
+    // 후기 수정
+    async function updateReview() {
+        const data = {
+            reviewId: document.querySelector("input[name='reviewId']").value,
+            content: document.querySelector("textarea[name='rvContent']").value
+        };
+
+        const res = await axios({
+            method : 'put',
+            url : '/review',
+            data : data,
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -381,12 +475,12 @@ const init = () => {
         return res.data;
     }
 
-    // 후기목록 조회
-    async function getRvList() {
+    // 후기 삭제
+    async function deleteReview() {
         const res = await axios({
-            method : 'post',
-            url : '/review/getRvList',
-            data : { userId: 'user123' },  // loginInfo
+            method : 'delete',
+            url : '/review',
+            data : { reviewId: document.querySelector("input[name='reviewId']").value },
             headers : {
                 'Content-Type' : 'application/json'
             }
