@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,6 +21,8 @@ public class EventScheduleDTO {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime eventDate;
     private String eventCast;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate searchDate;  // 날짜별 회차 조회용
+    private List<String> seats;  // 예매 좌석 조회용
 }

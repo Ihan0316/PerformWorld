@@ -23,13 +23,13 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     Page<EventSavedListDTO> findAllWithThumbnailAndCategory(Pageable pageable);
 
     // 제목과 카테고리로 이벤트 검색 (Event 엔티티 반환)
-    Page<Event> findByTitleContainingAndCategory_CodeName(String title, String genre, Pageable pageable);
+    Page<Event> findByTitleContainingAndCategory_Code(String title, String genre, Pageable pageable);
 
     // 제목으로 이벤트 검색 (Event 엔티티 반환)
     Page<Event> findByTitleContaining(String title, Pageable pageable);
 
     // 카테고리로 이벤트 검색 (Event 엔티티 반환)
-    Page<Event> findByCategory_CodeName(String genre, Pageable pageable);
+    Page<Event> findByCategory_Code(String genre, Pageable pageable);
 
     // 모든 이벤트 반환 (Event 엔티티 반환)
     Page<Event> findAll(Pageable pageable);

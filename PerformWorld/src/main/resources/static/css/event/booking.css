@@ -34,6 +34,33 @@
     margin-bottom: 15px;
     font-weight: bold;
     font-size: x-large;
+    position: relative;
+}
+
+.section-info {
+    position: absolute;
+    height: 70px;
+    padding: 0 10px;
+    z-index: 10;  /* section-info가 seat-stage 위에 오도록 설정 */
+}
+
+.section-info-item {
+    display: flex;
+    justify-content: space-between;  /* 색깔, 등급, 가격이 한 줄에 배치되도록 설정 */
+    align-items: center;
+    width: 100%;
+}
+
+.section-name {
+    font-weight: bold;
+    text-align: left;
+    margin-right: 10px;
+}
+
+.section-price {
+    font-size: 12px;
+    color: #666;
+    text-align: right;
 }
 
 .seat-selection {
@@ -69,15 +96,22 @@
     color: white;
 }
 
-.vip-seat {
+.seat.unavailable {
+    background-color: lightgray;
+    color: darkgray;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.VIP-seat {
     background-color: mediumorchid;
 }
 
-.r-seat {
+.R-seat {
     background-color: mediumseagreen;
 }
 
-.s-seat {
+.S-seat {
     background-color: skyblue;
 }
 

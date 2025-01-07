@@ -1,6 +1,7 @@
 package com.performworld.dto.ticket;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.performworld.domain.Event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

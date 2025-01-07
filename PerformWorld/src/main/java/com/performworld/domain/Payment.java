@@ -14,26 +14,27 @@ import java.time.LocalDateTime;
 public class Payment extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
-    private Long paymentId;
+    private String paymentId;
 
     @OneToOne
     @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
     private Booking booking;  // Bookings 테이블과의 관계
 
-    @OneToOne
-    @JoinColumn(name = "payment_method", referencedColumnName = "code")
-    private SystemCode paymentMethod;  // 결제 방법 (예: 카드, 현금 등)
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod;  // 결제 방법
 
     @Column(name = "payment_amount", nullable = false)
-    private Long paymentAmount;  // 결제 금액
+    private Integer paymentAmount;  // 결제 금액
 
     @Column(name = "payment_date", nullable = false)
     private LocalDateTime paymentDate;  // 결제 일시
 
-    @OneToOne
+    @Column(name = "email", nullable = false)
+    private String email;  // 결과 전송 이메일
+
+    @ManyToOne
     @JoinColumn(name = "status", referencedColumnName = "code")
-    private SystemCode status;  // 결제 상태 (예: 결제 완료, 취소 등)
+    private SystemCode status;  // 결제 상태
 
 }

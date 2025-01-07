@@ -1,6 +1,7 @@
 package com.performworld.service.admin;
 
 import com.performworld.dto.admin.TierDTO;
+import com.performworld.domain.Tier;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface TierService {
     TierDTO updateTier(Long tierId, TierDTO tierDTO);
 
     TierDTO getTierById(Long tierId);
+    TierDTO getUserTier(String userId);
 }

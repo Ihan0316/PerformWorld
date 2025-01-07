@@ -2,7 +2,7 @@ package com.performworld.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "seats")
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Seat extends BaseEntity{
 
+
     @Id
     @Column(name = "seat_id", length = 10)
     private String seatId;  // 좌석 ID (예: A11, C20)
@@ -22,4 +23,7 @@ public class Seat extends BaseEntity{
 
     @Column(name = "price", nullable = false)
     private Long price;  // 좌석 가격
+
+    @ManyToMany(mappedBy = "seats", fetch = FetchType.LAZY)
+    private List<Booking> bookings;
 }

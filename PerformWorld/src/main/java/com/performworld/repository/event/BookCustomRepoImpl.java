@@ -1,8 +1,6 @@
 package com.performworld.repository.event;
 
-import com.performworld.domain.QEvent;
-import com.performworld.domain.QTicketing;
-import com.performworld.domain.Ticketing;
+import com.performworld.domain.*;
 import com.performworld.dto.ticket.TicketingDTO;
 import com.querydsl.core.Tuple;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -50,7 +48,7 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                 .collect(Collectors.toList());
     }
 
-    // 해당 공연, 모든 티켓팅 조회
+    // 해당 공연, 오픈된 모든 티켓팅 조회
     @Override
     public List<TicketingDTO> getEventTicketing(Long eventId) {
         QTicketing ticketing = QTicketing.ticketing;
@@ -60,6 +58,7 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
         List<Tuple> result = from(ticketing)
                 .leftJoin(ticketing.event, event)
                 .where(ticketing.event.eventId.eq(eventId))
+                .where(ticketing.openDatetime.before(LocalDateTime.now()))
                 .orderBy(ticketing.ticketingId.asc())
 
                 .select(
@@ -82,4 +81,5 @@ public class BookCustomRepoImpl extends QuerydslRepositorySupport implements Boo
                         .build())
                 .collect(Collectors.toList());
     }
+
 }

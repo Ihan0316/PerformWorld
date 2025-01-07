@@ -34,6 +34,12 @@ public class TierServiceImpl implements TierService {
         return TierDTO.fromEntity(tierRepository.save(tier));
     }
 
+    // 회원 등급 조회
+    @Override
+    public TierDTO getUserTier(String userId) {
+        return tierRepository.getUserTier(userId);
+    }
+
     // 티어 수정
     @Override
     public TierDTO updateTier(Long tierId, TierDTO tierDTO) {
