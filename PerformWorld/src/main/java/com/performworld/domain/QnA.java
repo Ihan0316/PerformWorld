@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QnA extends BaseEntity{
+public class QnA extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +25,19 @@ public class QnA extends BaseEntity{
     private User user;  // Users 테이블과의 관계
 
     @Column(name = "title", nullable = false)
-    private String title;  // 문의 제목
+    private String title; // 문의 제목
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
-    private String content;  // 문의 내용
+    private String content; // 문의 내용
 
     @Column(name = "response", columnDefinition = "TEXT")
-    private String response;  // 답변 내용 (nullable)
+    private String response; // 답변 내용 (nullable)
 
-    @Column(name = "response_date")
-    private LocalDateTime responseDate;  // 답변 날짜 (nullable)
+    @Column(name = "response_datetime")
+    private LocalDateTime responseDatetime; // 답변 날짜 및 시간
 
+    public void updateQnA(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

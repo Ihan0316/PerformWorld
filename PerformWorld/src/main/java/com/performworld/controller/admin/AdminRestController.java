@@ -103,4 +103,27 @@ public class AdminRestController {
         }
     }
 
+    @PutMapping("/section")
+    public ResponseEntity<String> updateSectionPrice(@Valid @RequestBody SeatDTO seatDTO) {
+        try {
+            seatService.updateSectionPrice(seatDTO.getSection(), seatDTO.getPrice());
+            return ResponseEntity.ok("섹션 가격 수정이 완료되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body("잘못된 요청입니다: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("섹션 가격 수정에 실패했습니다. 서버 오류 발생.");
+        }
+    }
+
+    // 섹션 목록과 가격을 받아오기
+    @GetMapping("/sections")
+    public ResponseEntity<List<SeatDTO>> getAllSectionsWithPrices() {
+        try {
+            List<SeatDTO> sections = seatService.getAllSectionsWithPrices();
+            return ResponseEntity.ok(sections);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null); // 500 Internal Server Error
+        }
+    }
+
 }
