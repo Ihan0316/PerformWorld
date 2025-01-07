@@ -106,6 +106,22 @@ public class EventRestController {
         return ResponseEntity.ok(eventDTO);
     }
 
+    // 목록 카테고리 검색
+    @GetMapping("/category/{genre}")
+    public ResponseEntity<List<EventDTO>> getEventListByCategory(@PathVariable String genre) {
+        try {
+            System.out.println("Received genre: " + genre); // 요청된 genre 값 확인용 로그
+            List<EventDTO> eventList = eventService.getEventList(genre);
+            if (eventList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(eventList);
+            }
+            return ResponseEntity.ok(eventList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 
 
