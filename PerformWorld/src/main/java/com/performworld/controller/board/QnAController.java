@@ -29,7 +29,7 @@ public class QnAController {
         requestDTO.setSize(size);
         List<QnADTO> qnaList = qnaService.getList(requestDTO);
         model.addAttribute("qnaList", qnaList);
-        return "board/qna"; // Thymeleaf 템플릿 렌더링
+        return "board/sc"; // Thymeleaf 템플릿 렌더링
     }
 
     // QnA 등록 페이지
@@ -44,7 +44,7 @@ public class QnAController {
         log.info("Fetching QnA for update: ID={}", id);
         QnADTO qnaDTO = qnaService.getQnAById(id);
         model.addAttribute("qna", qnaDTO);
-        return "board/qna";
+        return "board/sc";
     }
 
     // QnA 삭제 확인 페이지
@@ -53,7 +53,7 @@ public class QnAController {
         log.info("Preparing delete page for QnA ID={}", id);
         QnADTO qnaDTO = qnaService.getQnAById(id);
         model.addAttribute("qna", qnaDTO);
-        return "board/qna";
+        return "board/sc";
     }
 }
 
