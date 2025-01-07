@@ -37,4 +37,8 @@ public class Payment extends BaseEntity{
     @JoinColumn(name = "status", referencedColumnName = "code")
     private SystemCode status;  // 결제 상태
 
+    // 취소 상태로 변경
+    public void chnStatus(SystemCode chnStatus) {
+        this.status = chnStatus;
+    }
 }
