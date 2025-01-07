@@ -2,6 +2,7 @@ package com.performworld.service.board;
 
 import com.performworld.domain.FAQ;
 import com.performworld.dto.board.FAQDTO;
+import com.performworld.dto.board.FaqSaveDTO;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface FAQService {
     void deleteFAQ(Long faqId);
 
     List<FAQ> searchFAQsByKeyWord(String keyword);
+
+    // FAQ 저장 메서드
+    void saveFAQ(FaqSaveDTO faqSaveDTO);
+
 }
