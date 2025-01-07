@@ -1,0 +1,65 @@
+.modal-row {
+    display: flex;
+    justify-content: space-between; /* 셀 간 간격을 균등하게 */
+    align-items: center; /* 세로 정렬 */
+    margin-bottom: 10px;
+}
+
+.modal-row.header-row {
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.modal-row.data-row {
+    margin-top: 5px;
+    color: #000000;
+}
+
+.cell {
+    flex: 1; /* 셀의 너비를 균등하게 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    padding: 0 5px;
+}
+
+.dynamic-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dynamic-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dynamic-row .cell {
+    flex: 1;
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+.dynamic-row input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.dynamic-row .cell, .dynamic-row input {
+    text-align: center;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.modal-buttons button {
+    margin-right: 10px;
+}
+
+.modal-buttons .btn {
+    font-size: 0.9rem;
+}

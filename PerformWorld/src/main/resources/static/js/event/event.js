@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const startDate = document.querySelector("input[name='start-date']").value;
         const endDate = document.querySelector("input[name='end-date']").value;
         const locationCode = document.querySelector("select[name='location-code']").value;
+        const genre = document.querySelector("select[name='genre-select']").value;
 
         // 공연 시작일과 종료일을 입력하지 않으면 경고 메시지 표시
         if (!startDate || !endDate) {
@@ -35,14 +36,14 @@ document.addEventListener("DOMContentLoaded", function () {
             return;  // 함수 종료하여 API 호출을 막음
         }
         // API 호출
-        fetchPerformances(performName, startDate, endDate, locationCode, currentPage);
+        fetchPerformances(performName, startDate, endDate, locationCode, genre, currentPage);
 
         modal.show();  // 모달 띄우기
     });
 
-    function fetchPerformances(performName, startDate, endDate, locationCode, page) {
+    function fetchPerformances(performName, startDate, endDate, locationCode, genre, page) {
         // API URL 설정
-        const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&page=${page}&size=${pageSize}`;
+        const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&genre=${genre}&page=${page}&size=${pageSize}`;
         fetch(apiUrl)
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
@@ -140,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("input[name='start-date']").value,
             document.querySelector("input[name='end-date']").value,
             document.querySelector("select[name='location-code']").value,
+            document.querySelector("select[name='genre-select']").value,
             currentPage
         );
 
@@ -157,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                     .catch((error) => {
                         console.error("상세 조회 또는 저장 실패:", error);
-                        alert(error);
+                        // alert(error);
                         alert("저장에 실패했습니다.");
                     });
             }
@@ -240,9 +242,98 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!response.ok) {
             const errorText = await response.text();  // 응답 본문을 텍스트로 읽기
+            alert("저장에 실패 했습니다. "+ errorText)
             throw new Error(`저장 실패: ${response.status} - ${errorText}`);
-        }
 
-        alert("이벤트가 성공적으로 저장되었습니다.");
+        }
+        alert("공연을 저장했습니다.")
     }
+
+    async function getRegionList() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'RGN' },  // 장르 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
+
+    getRegionList().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='location-code']");
+        const optionElement = document.createElement("option");
+        optionElement.value = ""
+        optionElement.textContent = "지역 선택";  // 이름
+        selectElement.appendChild(optionElement);
+        for(const region of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = region.code;  // 코드
+            optionElement.textContent = region.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+
+    async function getCategoryList() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'CTG' },  // 장르 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
+    getCategoryList().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='genre-code']");
+        const optionElement = document.createElement("option");
+        optionElement.value = ""
+        optionElement.textContent = "장르 선택";  //
+        selectElement.appendChild(optionElement);
+        for(const genre of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = genre.code;  // 코드
+            optionElement.textContent = genre.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+
+    async function getCategoryList2() {
+        const res = await axios({
+            method: 'post',
+            url: '/sys/getList',
+            data: { mainCode: 'CTG' },  // 장르 카테고리
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return res.data;
+    }
+    getCategoryList2().then(data => {
+        console.log(data);
+        const selectElement = document.querySelector("select[name='genre-select']");
+        const optionElement = document.createElement("option");
+        optionElement.value = ""
+        optionElement.textContent = "장르 선택";  //
+        selectElement.appendChild(optionElement);
+        for(const category of data) {
+            const optionElement = document.createElement("option");
+            optionElement.value = category.code;  // 코드
+            optionElement.textContent = category.codeName;  // 이름
+
+            selectElement.appendChild(optionElement);
+        }
+    }).catch(e => {
+        console.error(e);
+    });
 });

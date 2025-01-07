@@ -9,11 +9,12 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter
-@ToString
+@ToString(exclude = {"password"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User extends BaseEntity {
+
     @Id
     @Column(name = "user_id", length = 20)
     private String userId;
@@ -33,7 +34,7 @@ public class User extends BaseEntity {
     @Column(name = "total_spent", precision = 10, scale = 2)
     private Long totalSpent;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "tier_id", referencedColumnName = "tier_id")
     private Tier tier;
 
@@ -66,5 +67,15 @@ public class User extends BaseEntity {
         this.address1 = userDTO.getAddress1();
         this.address2 = userDTO.getAddress2();
         this.postcode = userDTO.getPostcode();
+    }
+
+    // 소비금액 및 등급 변경
+    public void chnTotalSpent(Long spent, List<Tier> tiers) {
+        this.totalSpent = spent;
+
+        tiers.stream()
+                .filter(tier -> (tier.getMinSpent() <= totalSpent) && (totalSpent <= tier.getMaxSpent()))
+                .findFirst()
+                .ifPresent(tier -> this.tier = tier);
     }
 }

@@ -5,6 +5,7 @@ import com.performworld.domain.EventSchedule;
 import com.performworld.repository.event.EventRepository;
 import com.performworld.dto.event.EventScheduleDTO;
 import com.performworld.repository.eventSchedule.EventScheduleRepository;
+import com.performworld.service.eventSchedule.EventScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Log4j2
 @Service
@@ -32,7 +35,6 @@ public class EventScheduleServiceImpl implements EventScheduleService {
     private final EventScheduleRepository eventScheduleRepository;
     private final EventRepository eventRepository;
 
-    // 공연 날짜별 회차 목록 조회
     @Override
     public List<EventScheduleDTO> getScheduleList(EventScheduleDTO scheduleDTO) {
         return eventScheduleRepository.getScheduleList(scheduleDTO);
@@ -101,11 +103,13 @@ public class EventScheduleServiceImpl implements EventScheduleService {
 
         log.info("dtguidance: {}", guidance);
 
-        // dtguidance를 콤마로 분리
-        String[] daySchedules = guidance.split(",");
-        for (String daySchedule : daySchedules) {
-            // 공백 제거
-            daySchedule = daySchedule.trim();
+        // 정규식을 사용하여 괄호 안의 내용을 하나의 항목으로 처리하며 쉼표로 분리
+        Pattern pattern = Pattern.compile("[^,]+\\([^)]*\\)|[^,]+");
+        Matcher matcher = pattern.matcher(guidance);
+
+        while (matcher.find()) {
+            String daySchedule = matcher.group().trim();
+            log.info("daySchedule: {}", daySchedule);
 
             // 괄호가 포함된 경우만 처리
             if (daySchedule.contains("(")) {
@@ -116,15 +120,15 @@ public class EventScheduleServiceImpl implements EventScheduleService {
                     continue;  // 유효하지 않은 형식은 건너뜁니다
                 }
 
-                String days = parts[0].trim();  // 요일 범위 (예: "화요일 ~ 금요일")
-                String times = parts[1].replaceAll("\\)$", "").trim();  // 마지막 괄호 제거 후 시간들 (예: "14:00, 15:30, 17:00")
+                String days = parts[0].trim();  // 요일 (예: "금요일 ~ 토요일")
+                String times = parts[1].replaceAll("\\)$", "").trim();  // 마지막 괄호 제거 후 시간들 (예: "19:00, 14:00, 19:00")
 
                 log.info("시간들: {}", times);
 
                 // 시간들이 쉼표로 구분되기 때문에 쉼표로 분리하고 각 시간을 Trim하여 공백을 제거
                 List<LocalTime> timesList = parseTimes(times);  // 시간 파싱 로직을 별도 메서드로 분리
 
-                // 요일 범위에서 각 요일을 추출
+                // 요일을 DayOfWeek로 변환 (범위가 있을 경우)
                 List<DayOfWeek> daysOfWeek = parseDays(days);
 
                 // 각 요일에 대해 해당 시간 리스트 추가
@@ -137,8 +141,6 @@ public class EventScheduleServiceImpl implements EventScheduleService {
         }
         return scheduleMap;
     }
-
-
 
 
     private List<DayOfWeek> parseDays(String days) {
@@ -173,23 +175,31 @@ public class EventScheduleServiceImpl implements EventScheduleService {
     // 요일을 DayOfWeek로 변환하는 메서드
     private DayOfWeek getDayOfWeek(String day) {
         switch (day) {
-            case "월요일": return DayOfWeek.MONDAY;
-            case "화요일": return DayOfWeek.TUESDAY;
-            case "수요일": return DayOfWeek.WEDNESDAY;
-            case "목요일": return DayOfWeek.THURSDAY;
-            case "금요일": return DayOfWeek.FRIDAY;
-            case "토요일": return DayOfWeek.SATURDAY;
-            case "일요일": return DayOfWeek.SUNDAY;
-            default: throw new IllegalArgumentException("알 수 없는 요일: " + day);
+            case "월요일":
+                return DayOfWeek.MONDAY;
+            case "화요일":
+                return DayOfWeek.TUESDAY;
+            case "수요일":
+                return DayOfWeek.WEDNESDAY;
+            case "목요일":
+                return DayOfWeek.THURSDAY;
+            case "금요일":
+                return DayOfWeek.FRIDAY;
+            case "토요일":
+                return DayOfWeek.SATURDAY;
+            case "일요일":
+                return DayOfWeek.SUNDAY;
+            default:
+                return null;
         }
     }
 
     private List<LocalTime> parseTimes(String timeString) {
         List<LocalTime> times = new ArrayList<>();
-
+        log.info("괄호제거한 전 :" + timeString);
         // 시간 문자열에서 괄호를 제거하는 정규식 사용
         timeString = timeString.replaceAll("[()]", "");  // 괄호 제거
-
+        log.info("괄호제거한 후 :" + timeString);
         // 시간 문자열을 콤마로 분리하여 각각 LocalTime으로 변환
         String[] timeArray = timeString.split(",");
         for (String time : timeArray) {

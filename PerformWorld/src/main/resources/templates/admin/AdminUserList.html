@@ -15,7 +15,7 @@
       <!-- User 조회 섹션 (상단) -->
       <h2>User 조회</h2>
       <div class="col-md-12">
-        <table id="userTable" class="table table-striped" style="text-align: right;">
+        <table id="userTable" class="table table-striped">
           <thead>
           <tr>
             <th>User ID</th>
@@ -38,7 +38,7 @@
             <td th:text="${user.postcode}"></td>
             <td th:text="${user.tierName}"></td>
             <td>
-              <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
+              <button class="btn btn-danger delete-user-btn" th:data-user-id="${user.userId}" onclick="deleteUser(this)">Delete</button>
             </td>
           </tr>
           </tbody>
@@ -63,7 +63,7 @@
           <div class="col-md-12">
             <table id="tierTable" class="table table-striped" style="text-align: center;">
               <thead>
-              <tr>
+              <tr style="text-align: center;">
                 <th>Tier ID</th>
                 <th>Tier 이름</th>
                 <th>최소 소비 금액</th>
@@ -80,7 +80,7 @@
                 <td th:text="${tier.maxSpent} + ' 원'"></td>
                 <td th:text="${tier.discountRate} + '%'"></td>
                 <td>
-                  <button class="btn btn-primary update-tier-btn" th:data-tier-id="${tier.tierId}" onclick="updateTier(this)">수정</button>
+                  <button class="btn btn-primary update-tier-btn" th:data-tier-id="${tier.tierId}" onclick="updateTier(this)">Edit</button>
                 </td>
               </tr>
               </tbody>
@@ -92,22 +92,28 @@
       <div class="col-md-4">
         <!-- Seat 조회 섹션 -->
         <h2>Seat 조회</h2>
+        <!-- Seat 수정 버튼 -->
+        <div class="row">
+          <div class="col-md-12 text-end">
+            <button onclick="openEditSectionModal()" class="btn btn-primary">Edit Section</button>
+          </div>
+        </div>
         <!-- Seat 조회 테이블 -->
         <div class="row">
           <div class="col-md-12">
-            <table id="seatTable" class="table table-striped" style="text-align: center;">
+            <table id="seatTable" class="table table-striped">
               <thead>
-              <tr>
-                <th>Seat ID</th>
-                <th>섹션</th>
-                <th>가격</th>
+              <tr >
+                <th style="text-align: center;">Seat ID</th>
+                <th style="text-align: center;">섹션</th>
+                <th style="text-align: center;">가격</th>
               </tr>
               </thead>
               <tbody>
               <tr th:each="seat : ${seats}">
                 <td th:text="${seat.seatId}"></td>
                 <td th:text="${seat.section}"></td>
-                <td th:text="${seat.price} + ' 원'"></td> <!-- 가격 표시 -->
+                <td th:text="${seat.price} + ' 원'"></td>
               </tr>
               </tbody>
             </table>
@@ -155,7 +161,7 @@
       </div>
     </div>
 
-    <!-- 수정 모달 -->
+    <!-- Tier 수정 모달 -->
     <div id="editTierModal" class="modal" style="display: none;">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -188,12 +194,43 @@
       </div>
     </div>
 
+    <!-- 시트 수정 모달 -->
+    <div id="editSectionModal" class="modal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Seat 수정</h4>
+            <button type="button" class="close" onclick="closeSectionModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="editSectionForm">
+              <!-- 섹션 선택 (드롭다운) -->
+              <div class="form-group">
+                <label for="seatSection">섹션</label>
+                <select id="seatSection" class="form-control" required>
+                  <!-- 섹션 리스트가 여기에 동적으로 채워짐 -->
+                </select>
+              </div>
+              <!-- 가격 입력 -->
+              <div class="form-group">
+                <label for="seatPrice">가격</label>
+                <input type="number" id="seatPrice" class="form-control" min="0" required>
+              </div>
+              <!-- 수정 버튼 -->
+              <button type="submit" class="btn btn-primary">수정</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </div> <!-- fh5co-main end -->
 
   <th:block layout:fragment="javascript">
     <script th:src="@{/js/admin/tier-management.js}"></script>
     <script th:src="@{/js/admin/user-management.js}"></script>
+    <script th:src="@{/js/admin/seat-management.js}"></script>
     <script th:src="@{/js/admin/data.js}"></script>
   </th:block>
 </body>

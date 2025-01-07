@@ -8,9 +8,13 @@ import com.performworld.repository.admin.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +26,7 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public List<SeatDTO> getAllSeats() {
         // Retrieve all seats and map to SeatDTO
-        List<Seat> seats = seatRepository.findAll();
+        List<Seat> seats = seatRepository.findAll(Sort.by(Sort.Order.asc("seatId")));
         return seats.stream()
                 .map(seat -> new SeatDTO(seat.getSeatId(), seat.getSection(), seat.getPrice()))
                 .collect(Collectors.toList());
@@ -54,5 +58,27 @@ public class SeatServiceImpl implements SeatService {
                 seat.getSection(),       // 섹션
                 seat.getPrice()          // 가격
         );
+    }
+
+    // 섹션 가격 수정
+    @Override
+    @Transactional
+    public void updateSectionPrice(String section, Long price) {
+        seatRepository.updatePriceBySection(section, price);
+    }
+
+
+    @Override
+    public List<SeatDTO> getAllSectionsWithPrices() {
+        List<Object[]> result = seatRepository.findDistinctSectionsAndPrices();
+        List<SeatDTO> seatDTOList = new ArrayList<>();
+
+        for (Object[] row : result) {
+            String section = (String) row[0];
+            Long price = (Long) row[1];
+            seatDTOList.add(new SeatDTO(null, section, price));
+        }
+
+        return seatDTOList;
     }
 }

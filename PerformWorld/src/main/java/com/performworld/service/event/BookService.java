@@ -9,4 +9,5 @@ public interface BookService {
     List<TicketingDTO> findRecentTicketing(Long eventId);
 
     List<TicketingDTO> getEventTicketing(Long eventId);
+
 }

@@ -37,10 +37,11 @@ public class EventRestController {
             log.info("공연 목록 API 호출 시작 - 시작일: {}, 종료일: {}, 공연명: {}, 지역코드: {}",
                     stdate, eddate, shprfnm, signgucode);
 
-            EventSearchListDTO performances = eventService.getPerformances(stdate, eddate, shprfnm, signgucode ,page , size);
+//            EventSearchListDTO performances = eventService.getPerformances(stdate, eddate, shprfnm, signgucode ,page , size);
 
-            log.info("공연 목록 API 호출 성공 - 결과 수: {}", performances.getPerformances().size());
-            return performances;
+//            log.info("공연 목록 API 호출 성공 - 결과 수: {}", performances.getPerformances().size());
+//            return performances;
+            return null;
 
         } catch (Exception e) {
             log.error("공연 목록 API 호출 중 오류 발생: {}", e.getMessage(), e);
@@ -83,6 +84,14 @@ public class EventRestController {
         return ResponseEntity.ok("Event deleted successfully");
     }
 
+    // DB에 저장된 event 목록 가져오기
+    @GetMapping( "/getEventList")
+    public List<EventDTO> getAllEvent() {
+
+        return eventService.getAllEvents();// 서비스에서 eventId로 이벤트 가져오기
+    }
+
+    // 목록에 포스트 이미지 조회
     @PostMapping ("/details/{eventId}")
     public EventDTO getOneEvents(@PathVariable Long eventId) {
         // 상세 조회 API 호출 및 XML 반환
@@ -90,14 +99,14 @@ public class EventRestController {
 
     }
 
-    // DB에 저장된 event 목록 가져오기
-    @GetMapping( "/getEventList")
-    public List<EventDTO> getAllEvent() {
-
-       return eventService.getAllEvents();// 서비스에서 eventId로 이벤트 가져오기
-
-
+    // 상세이미지 조회
+    @PostMapping("/details/{eventId}/images")
+    public ResponseEntity<EventDTO> getOneImages(@PathVariable Long eventId) {
+        EventDTO eventDTO = eventService.getOneImages(eventId);
+        return ResponseEntity.ok(eventDTO);
     }
+
+
 
 
 

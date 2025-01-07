@@ -9,4 +9,5 @@ public interface BookCustomRepo {
     List<TicketingDTO> findRecentTicketing(Long eventId);
 
     List<TicketingDTO> getEventTicketing(Long eventId);
+
 }

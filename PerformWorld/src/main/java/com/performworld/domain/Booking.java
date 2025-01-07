@@ -3,7 +3,7 @@ package com.performworld.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "bookings")
@@ -27,9 +27,13 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
     private EventSchedule eventSchedule;  // EventSchedules 테이블과의 관계
 
-    @ManyToOne
-    @JoinColumn(name = "seat_id", referencedColumnName = "seat_id")
-    private Seat seat;  // Seats 테이블과의 관계
+    @ManyToMany
+    @JoinTable(
+            name = "booking_seat",  // 중간 테이블 이름
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "seat_id")
+    )
+    private List<Seat> seats;  // Seats 테이블과의 관계
 
     @Column(name = "is_delivery", nullable = false)
     private boolean isDelivery;  // 배송 여부
@@ -37,6 +41,7 @@ public class Booking extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private Long totalPrice;  // 총 예매 금액
 
-    @Column(name = "status", length = 50)
-    private String status;  // 예매 상태 (예: 예약 완료, 취소 등)
+    @ManyToOne
+    @JoinColumn(name = "status", referencedColumnName = "code")
+    private SystemCode status;  // 예매 상태
 }
