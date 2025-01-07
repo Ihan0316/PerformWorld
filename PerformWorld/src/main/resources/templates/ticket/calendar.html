@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/base.html}">
+
+<head>
+	<link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+</head>
+
+<body>
+<div id="fh5co-main" layout:fragment="content" data-animate-effect="fadeInLeft">
+	<div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+		<h1 id="calendar-header">예매 내역 캘린더</h1>
+		<div id="calendar" style="height: 600px;"></div>
+	</div>
+</div>
+
+<th:block layout:fragment="javascript">
+	<!-- Toast UI Calendar JS 추가 -->
+	<script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.ie11.min.js"></script>
+
+	<!-- calendar.js는 반드시 라이브러리 이후에 로드 -->
+	<script th:src="@{/js/ticket/calendar.js}"></script>
+</th:block>
+</body>
+</html>
