@@ -92,6 +92,13 @@ const init = () => {
 
 }
 
+document.querySelector(".ticketingRegBtn").addEventListener("click",function (e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    window.location.href="/ticketing/register";
+})
+
 window.onload = () => {
     init();
 }
