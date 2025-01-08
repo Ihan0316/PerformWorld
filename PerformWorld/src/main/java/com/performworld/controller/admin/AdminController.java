@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -42,7 +41,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/admin/getTiers")
+    @GetMapping("/getTiers")
     public ResponseEntity<List<TierDTO>> getTiers() {
         List<TierDTO> tiers = tierService.getAllTiers();  // DB에서 모든 Tier 목록 가져오기
         return ResponseEntity.ok(tiers);  // 모든 정보를 그대로 반환

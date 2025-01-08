@@ -1,3 +1,23 @@
+// DOM이 완전히 로드된 후에 실행되도록 설정
+document.addEventListener('DOMContentLoaded', function () {
+    const sectionDropdown = document.getElementById('seatSection');
+
+    // seatSection 요소가 존재하는지 확인
+    if (sectionDropdown) {
+        sectionDropdown.addEventListener('change', function () {
+            const selectedSection = this.value;
+            const sections = Array.from(sectionDropdown.options).map(option => ({
+                section: option.value,
+                price: option.dataset.price
+            }));
+
+            loadPriceForSection(selectedSection, sections);
+        });
+    } else {
+        console.error("seatSection 요소를 찾을 수 없습니다.");
+    }
+});
+
 // 1. 섹션 수정 모달 열기
 async function openEditSectionModal() {
     try {
@@ -5,7 +25,14 @@ async function openEditSectionModal() {
         const response = await axios.get('/admin/sections');
         const sections = response.data;
 
-        const sectionDropdown = document.getElementById('seatSection'); // 올바른 ID 참조
+        const sectionDropdown = document.getElementById('seatSection');
+
+        // seatSection 요소가 존재하는지 확인
+        if (!sectionDropdown) {
+            console.error('seatSection 요소를 찾을 수 없습니다.');
+            return;
+        }
+
         sectionDropdown.innerHTML = ""; // 기존 목록 초기화
 
         // 섹션 목록을 드롭다운에 추가
@@ -27,40 +54,24 @@ async function openEditSectionModal() {
         document.getElementById('editSectionModal').style.display = 'block';
     } catch (error) {
         console.error('섹션 목록을 불러오는 데 오류 발생:', error);
-        alert('섹션 목록을 불러오는 데 실패했습니다.');
+        alert('섹션 목록을 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
 }
 
 // 섹션을 선택하면 가격을 가져와서 input에 표시
 function loadPriceForSection(section, sections) {
-    try {
-        // 섹션에 해당하는 가격을 sections 배열에서 찾기
-        const selectedSection = sections.find(s => s.section === section);
-        const price = selectedSection ? selectedSection.price : 0; // 섹션에 해당하는 가격 추출
-
-        // 가격을 입력란에 자동으로 채워넣기
-        document.getElementById('seatPrice').value = price;
-    } catch (error) {
-        console.error('가격을 불러오는 데 오류 발생:', error);
-        alert('가격을 불러오는 데 실패했습니다.');
-    }
+    const selectedSection = sections.find(s => s.section === section);
+    const price = selectedSection ? selectedSection.price : 0;
+    document.getElementById('seatPrice').value = price;
 }
-
-// 섹션 변경 시, 가격 자동 갱신
-document.getElementById('seatSection').addEventListener('change', function () {
-    const selectedSection = this.value;
-    const sections = Array.from(document.getElementById('seatSection').options).map(option => ({
-        section: option.value,
-        price: option.dataset.price // data 속성에서 가격 정보 가져오기
-    }));
-
-    loadPriceForSection(selectedSection, sections);
-});
 
 // 2. 모달 닫기
 function closeSectionModal() {
     // 모달 닫기
     document.getElementById('editSectionModal').style.display = 'none';
+    // 선택된 섹션 및 가격 초기화
+    document.getElementById('seatSection').value = '';
+    document.getElementById('seatPrice').value = '';
 }
 
 // 3. 섹션 수정 폼 제출 시
@@ -103,6 +114,6 @@ document.getElementById('editSectionForm').addEventListener('submit', async func
         if (error.response) {
             console.error("서버 응답 데이터:", error.response.data);
         }
-        alert("섹션 수정에 실패했습니다.");
+        alert("섹션 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     }
 });
