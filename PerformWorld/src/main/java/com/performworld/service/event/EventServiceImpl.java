@@ -271,5 +271,14 @@ public class EventServiceImpl implements EventService{
                 .build();
     }
 
+    // 각 카테고리 기능
+    @Override
+    public List<EventDTO> getEventList(String genre) {
+        List<Event> events = eventRepository.findByCategory_Code(genre);
+        System.out.println("Events retrieved from database: " + events);
+
+        return events.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
 
 }

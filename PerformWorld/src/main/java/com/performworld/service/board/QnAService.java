@@ -8,7 +8,7 @@ import java.util.List;
 public interface QnAService {
 
     // QnA 목록 조회
-    List<QnADTO> getList(QnARequestDTO qnaRequestDTO);
+    List<QnADTO> getList(QnADTO qnADTO);
 
     // QnA 등록
     Long registerQnA(QnARequestDTO qnaRequestDTO);

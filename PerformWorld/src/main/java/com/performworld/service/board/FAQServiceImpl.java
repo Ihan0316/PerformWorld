@@ -2,6 +2,7 @@ package com.performworld.service.board;
 
 import com.performworld.domain.FAQ;
 import com.performworld.dto.board.FAQDTO;
+import com.performworld.dto.board.FaqSaveDTO;
 import com.performworld.repository.board.FAQRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -53,6 +54,15 @@ public class FAQServiceImpl implements FAQService {
     @Override
     public List<FAQ> searchFAQsByKeyWord(String keyword) {
         return faqRepository.findByQuestionContaining(keyword);
+    }
+
+    @Override
+    public void saveFAQ(FaqSaveDTO faqSaveDTO) {
+        FAQ faq = FAQ.builder()
+                .question(faqSaveDTO.getQuestion())
+                .answer(faqSaveDTO.getAnswer())
+                .build();
+        faqRepository.save(faq);  // DB에 저장
     }
 }
 
