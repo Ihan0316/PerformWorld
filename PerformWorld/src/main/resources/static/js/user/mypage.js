@@ -23,10 +23,10 @@ const initBkGrid = () => {
         el: document.getElementById('bookingGrid'),
         scrollX: false,
         scrollY: false,
-        minBodyHeight: 120,
+        minBodyHeight: 80,
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
-            perPage: 4
+            perPage: 2
         },
         columns: [
             {
@@ -96,6 +96,7 @@ const initBkGrid = () => {
 
     return grid;
 }
+
 const initRvGrid = () => {
     const ReviewGrid = tui.Grid;
 
@@ -120,10 +121,10 @@ const initRvGrid = () => {
         el: document.getElementById('reviewGrid'),
         scrollX: false,
         scrollY: false,
-        minBodyHeight: 120,
+        minBodyHeight: 80,
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
-            perPage: 4
+            perPage: 2
         },
         columns: [
             {
@@ -195,6 +196,82 @@ const initRvGrid = () => {
     return grid;
 }
 
+const initQnAGrid = () => {
+    const QnAGrid = tui.Grid;
+
+    // 테마
+    QnAGrid.applyTheme('clean',  {
+        cell: {
+            normal: {
+                border: 'gray',
+                showVerticalBorder: true,
+                showHorizontalBorder: true
+            },
+            header: {
+                background: 'gray',
+                text: 'white',
+                border: 'white'
+            }
+        }
+    });
+
+    // 세팅
+    const grid = new QnAGrid({
+        el: document.getElementById('myQnaGrid'),
+        scrollX: false,
+        scrollY: false,
+        minBodyHeight: 80,
+        pageOptions: {
+            useClient: true,  // 프론트에서 페이징
+            perPage: 2
+        },
+        columns: [
+            {
+                header: '번호',
+                name: 'qnaId',
+                hidden: true
+            },
+            {
+                header: '문의',
+                name: 'title'
+            },
+            {
+                header: '답변',
+                name: 'response',
+                minWidth: 200
+            },
+            {
+                header: '작성일',
+                name: 'regDate',
+                align: 'center',
+                width: 100,
+                formatter: (value) => {
+                    if (value) {
+                        const data = value.value;
+                        return data.split('T')[0];
+                    }
+                    return "";
+                }
+            }
+        ]
+    });
+
+    // 행 더블클릭 시 상세 페이지로
+    grid.on('dblclick', (e) => {
+        const rowKey = e.rowKey;  // 클릭한 행의 rowKey
+        if (rowKey !== null) {
+            // window.location.href = `/user/book/${grid.getRow(rowKey).bookingId}`;
+        }
+    });
+
+    // resize
+    window.addEventListener('resize', function(e) {
+        grid.refreshLayout();
+    });
+
+    return grid;
+}
+
 const init = () => {
      getUserInfo();
 
@@ -203,6 +280,8 @@ const init = () => {
     getBkList();
     const reviewGrid = initRvGrid();
     getRvList();
+    const myQnaGrid = initQnAGrid();
+    getQnaList();
 
     // 비밀번호 변경
     document.querySelector(".chnPwBtn").addEventListener("click", function (e) {
@@ -486,6 +565,25 @@ const init = () => {
             }
         });
         return res.data;
+    }
+
+    // 문의내역 조회
+    async function getQnaList() {
+        await axios({
+            method : 'post',
+            url : '/board/getQnAList',
+            data : { userId: 'user123' },  // loginInfo
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then(res => {
+            console.log(res)
+            if(res.data !== "") {
+                myQnaGrid.resetData(res.data);  // grid에 세팅
+            }
+        }).catch(e => {
+            alert("문의내역을 불러오는데 실패했습니다.");
+        });
     }
 
     // 주소 api
