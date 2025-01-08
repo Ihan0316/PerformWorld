@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { selector: '.casting', key: 'casting', apply: (el, value) => { el.textContent = `출연진: ${value || '정보 없음'}`; } },
         ];
 
+
         // 매핑에 따라 데이터 적용
         mappings.forEach(({ selector, key, apply }) => {
             const element = document.querySelector(selector);
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// 버튼 참조
+// top 버튼
 const topButton = document.querySelector(".topButton");
 
 topButton.addEventListener("click", function(){
