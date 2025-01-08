@@ -460,8 +460,7 @@ const init = () => {
             switch (res.data.resultCode) {
                 case 200 :
                     alert("예매가 완료되었습니다.");
-                    console.log(res.data.bookingId)
-                    // window.location.href = `/user/book/${res.data.bookingId}`;
+                    window.location.href = `/user/book/${res.data.bookingId}`;
                     break;
                 case 900 :
                     alert("이미 결제된 좌석입니다.");
