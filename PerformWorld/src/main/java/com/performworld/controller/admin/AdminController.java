@@ -23,11 +23,13 @@ public class AdminController {
 
     private final TierService tierService;
 
+    // userlist 이동
     @GetMapping("/userlist")
     public String showUserList() {
         return "admin/AdminUserList";
     }
 
+    // tierID를 이용해 tier 호출
     @GetMapping("/tier/{tierId}")
     @ResponseBody
     public ResponseEntity<TierDTO> getTier(@PathVariable Long tierId) {
