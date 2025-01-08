@@ -1,20 +1,15 @@
 package com.performworld.service.admin;
 
 import com.performworld.domain.Seat;
-import com.performworld.dto.admin.PagingRequestDTO;
-import com.performworld.dto.admin.PagingResponseDTO;
 import com.performworld.dto.admin.SeatDTO;
 import com.performworld.repository.admin.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,24 +25,6 @@ public class SeatServiceImpl implements SeatService {
         return seats.stream()
                 .map(seat -> new SeatDTO(seat.getSeatId(), seat.getSection(), seat.getPrice()))
                 .collect(Collectors.toList());
-    }
-
-    // 페이징 처리된 좌석 조회
-    @Override
-    public PagingResponseDTO<SeatDTO> getPagedSeats(PagingRequestDTO request) {
-        // PageRequest를 사용하여 페이징 처리
-        Page<Seat> seatPage = seatRepository.findAll(PageRequest.of(request.getPage(), request.getSize()));
-        // Page 객체에서 content만 추출하여 DTO로 변환
-        List<SeatDTO> seatDTOList = seatPage.getContent().stream()
-                .map(this::convertToDTO)  // DTO 변환을 위한 메서드 호출
-                .collect(Collectors.toList());
-        // PagingResponseDTO로 반환
-        return new PagingResponseDTO<>(
-                seatDTOList,
-                seatPage.getTotalElements(),  // 전체 데이터 개수
-                seatPage.getTotalPages(),     // 전체 페이지 개수
-                seatPage.getNumber()          // 현재 페이지 번호
-        );
     }
 
     // Seat 엔티티를 SeatDTO로 변환하는 메서드
@@ -74,9 +51,15 @@ public class SeatServiceImpl implements SeatService {
         List<SeatDTO> seatDTOList = new ArrayList<>();
 
         for (Object[] row : result) {
+            // 섹션과 가격이 올바르게 반환되는지 확인
             String section = (String) row[0];
-            Long price = (Long) row[1];
-            seatDTOList.add(new SeatDTO(null, section, price));
+            Long price = (Long) row[1];  // 이 부분은 가격이 Long으로 반환된다고 가정
+            seatDTOList.add(new SeatDTO(null, section, price));  // seatId는 필요없으면 null로 처리
+        }
+
+        if (seatDTOList.isEmpty()) {
+            // 빈 결과 처리
+            System.out.println("No sections found.");
         }
 
         return seatDTOList;
