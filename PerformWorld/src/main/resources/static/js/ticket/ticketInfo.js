@@ -2,21 +2,17 @@ const initGrid = () => {
     const Grid = tui.Grid;
 
     // 테마
-    Grid.applyTheme('default',  {
+    Grid.applyTheme('clean',  {
         cell: {
             normal: {
-                border: 'gray'
+                border: 'gray',
+                showVerticalBorder: true,
+                showHorizontalBorder: true
             },
             header: {
                 background: 'gray',
                 text: 'white',
-                border: 'gray'
-            },
-            rowHeaders: {
-                header: {
-                    background: 'gray',
-                    text: 'white'
-                }
+                border: 'white'
             }
         }
     });
