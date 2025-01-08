@@ -117,4 +117,53 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         updateEventList(data); // 초기 데이터를 화면에 렌더링
     });
+
+    // 검색 처리 함수
+    function handleSearch(event) {
+        if (event.key === 'Enter') {  // Enter 키를 눌렀을 때
+            const searchQuery = event.target.value;  // 입력된 검색어
+
+            // 검색어가 비어있지 않으면 서버에 요청
+            if (searchQuery.trim() !== '') {
+                searchEvents(searchQuery);  // 검색 결과를 가져오는 함수 호출
+            }
+        }
+    }
+
+    // 이벤트 검색 함수
+    async function searchEvents(query) {
+        try {
+            const res = await axios({
+                method: 'get',
+                url: `/event/search`,
+                params: { searchQuery: query },  // 검색어를 query 파라미터로 전송
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (res.status === 200) {
+                updateEventList(res.data);  // 검색된 이벤트 목록을 화면에 업데이트
+            } else {
+                console.error('검색 결과가 없습니다.');
+            }
+        } catch (error) {
+            console.error('검색 요청 실패:', error);
+        }
+    }
 });
+
+    // top 버튼
+    const topButton = document.querySelector(".topButton");
+
+    topButton.addEventListener("click", function(){
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" // 부드러운 스크롤
+        });
+    })
+    window.addEventListener("scroll", function () {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            topButton.style.display = "block"; // 스크롤 200px 이상에서 표시
+        } else {
+            topButton.style.display = "none"; // 숨김
+        }
+    });
