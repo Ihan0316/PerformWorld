@@ -5,24 +5,12 @@ import com.performworld.dto.board.*;
 import java.util.List;
 
 public interface NoticeService {
-    // 전체 공지사항 조회
-    List<NoticeDTO> getAllNotices(NoticeDTO noticeDTO);
 
-    List<NoticeDTO> getNotices();
+    List<NoticeDTO> getNotices(NoticeDTO noticeDTO);
 
-    // 공지사항 단건 조회
-    NoticeDTO getNoticeById(Long id);
+    void saveNotice(NoticeDTO noticeDTO);
 
-    // 공지사항 등록
-    NoticeResponseDTO registerNotice(NoticeRequestDTO noticeRequestDTO);
-
-    // 공지사항 수정
-    NoticeDTO updateNotice(Long id, NoticeRequestDTO noticeDTO);
-
-    // 공지사항 삭제
-    void deleteNotice(Long id);
-
-    void saveNotice(NoticeSaveDTO noticeSaveDTO);
+    void deleteNotice(Long noticeId);
 }
 
 
