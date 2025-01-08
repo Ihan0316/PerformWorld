@@ -1,23 +1,22 @@
 package com.performworld.service.board;
 
 import com.performworld.domain.Notice;
-import com.performworld.dto.board.NoticeDTO;
-import com.performworld.dto.board.NoticeRequestDTO;
-import com.performworld.dto.board.NoticeResponseDTO;
+import com.performworld.dto.board.*;
 import com.performworld.repository.board.NoticeRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
 
-    @Autowired
-    private NoticeRepository noticeRepository;
-    private ModelMapper modelMapper;
+    private final NoticeRepository noticeRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<NoticeDTO> getAllNotices(NoticeDTO noticeDTO) {
@@ -25,6 +24,14 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeRepository.findAll()
                 .stream()
                 .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NoticeDTO> getNotices() {
+        return noticeRepository.findAll()
+                .stream()
+                .map(notice -> modelMapper.map(notice, NoticeDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -59,6 +66,15 @@ public class NoticeServiceImpl implements NoticeService {
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notice not found with id: " + id)); // 예외 처리
         noticeRepository.delete(notice);
+    }
+
+    @Override
+    public void saveNotice(NoticeSaveDTO noticeSaveDTO) {
+        Notice notice = Notice.builder()
+                .title(noticeSaveDTO.getTitle())
+                .content(noticeSaveDTO.getContent())
+                .build();
+        noticeRepository.save(notice);  // DB에 저장
     }
 
 

@@ -66,6 +66,7 @@ public class PayServiceImpl implements PayService {
                     .eventSchedule(EventSchedule.builder().scheduleId(bookingDTO.getScheduleId()).build())
                     .seats(seats)
                     .isDelivery(bookingDTO.isDelivery())
+                    .address(bookingDTO.getAddress())
                     .totalPrice(bookingDTO.getTotalPrice())
                     .status(statusCode)
                     .build();
