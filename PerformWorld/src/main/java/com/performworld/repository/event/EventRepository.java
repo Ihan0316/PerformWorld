@@ -1,6 +1,7 @@
 package com.performworld.repository.event;
 
 import com.performworld.domain.Event;
+import com.performworld.dto.event.EventDTO;
 import com.performworld.dto.event.EventSavedListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,9 @@ public interface EventRepository extends JpaRepository<Event,Long> {
 
     // 카테고리로 이벤트 검색 (Event 엔티티 반환)
     Page<Event> findByCategory_Code(String genre, Pageable pageable);
+
+    // 목록 카테고리 검색
+    List<Event> findByCategory_Code(String genre);
 
     // 모든 이벤트 반환 (Event 엔티티 반환)
     Page<Event> findAll(Pageable pageable);

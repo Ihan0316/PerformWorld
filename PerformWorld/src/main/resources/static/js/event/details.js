@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-
     async function getEventDetails(eventId) {
         try {
             const res = await axios({
@@ -17,36 +16,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     getEventDetails(eventId).then(data => {
         if (!data) {
-            console.error('event details를 찾을수 없음');
+            console.error('event details를 찾을 수 없음');
             return;
         }
-        console.log(data)
-        // 동적으로 데이터 렌더링
-        const posterImg = document.querySelector('.poster'); // 포스터 이미지
-        const titleElement = document.querySelector('.title'); // 공연 제목
-        const descriptionElement = document.querySelector('.description'); // 공연 설명
-        const genreElement = document.querySelector('.genre'); // 공연 장르
-        const dateElement = document.querySelector('.date'); // 공연 날짜
-        const locationElement = document.querySelector('.location'); // 공연 장소
-        const detailsContainer = document.querySelector('.details-container');
 
-        // 데이터 적용
-        const elements = [
-            { el: posterImg, key: 'poster', action: (el, value) => { el.src = value || ''; el.alt = `${data.title || '제목 없음'} 포스터`; } },
-            { el: titleElement, key: 'title', action: (el, value) => { el.textContent = value || '제목 없음'; } },
-            { el: descriptionElement, key: 'description', action: (el, value) => { el.textContent = value || '상세 설명 없음'; } },
-            { el: genreElement, key: 'genreName', action: (el, value) => { el.textContent = `장르: ${value || '정보 없음'}`; } },
-            { el: dateElement, key: 'prfpdfrom', action: (el, value) => { el.textContent = `공연 기간: ${value || '알 수 없음'} ~ ${data.prfpdto || '알 수 없음'}`; } },
-            { el: locationElement, key: 'fcltynm', action: (el, value) => { el.textContent = `공연 장소: ${value || '정보 없음'}`; } }
+        console.log(data); // 디버깅용 데이터 출력
+
+        // 속성-요소 매핑
+        const mappings = [
+            { selector: '.poster', key: 'poster', apply: (el, value) => { el.src = value || ''; el.alt = `${data.title || '제목 없음'} 포스터`; } },
+            { selector: '.title', key: 'title', apply: (el, value) => { el.textContent = value || '제목 없음'; } },
+            { selector: '.description', key: 'description', apply: (el, value) => { el.textContent = value || '상세 설명 없음'; } },
+            { selector: '.genre', key: 'genreName', apply: (el, value) => { el.textContent = `장르: ${value || '정보 없음'}`; } },
+            { selector: '.date', key: 'prfpdfrom', apply: (el, value) => { el.textContent = `공연 기간: ${value || '알 수 없음'} ~ ${data.prfpdto || '알 수 없음'}`; } },
+            { selector: '.location', key: 'fcltynm', apply: (el, value) => { el.textContent = `공연 장소: ${value || '정보 없음'}`; } },
+            { selector: '.runtime', key: 'runtime', apply: (el, value) => { el.textContent = `상영 시간: ${value || '정보 없음'}분`; } },
+            { selector: '.casting', key: 'casting', apply: (el, value) => { el.textContent = `출연진: ${value || '정보 없음'}`; } },
         ];
 
-        elements.forEach(({ el, key, action }) => {
-            if (el && data[key] !== undefined) {
-                action(el, data[key]);
+        // 매핑에 따라 데이터 적용
+        mappings.forEach(({ selector, key, apply }) => {
+            const element = document.querySelector(selector);
+            if (element && data[key] !== undefined) {
+                apply(element, data[key]);
             }
         });
 
         // 상세 이미지 렌더링
+        const detailsContainer = document.querySelector('.details-container');
         if (detailsContainer && data.imageUrls && data.imageUrls.length > 0) {
             data.imageUrls.forEach(url => {
                 const img = document.createElement('img');
@@ -58,3 +55,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// 버튼 참조
+const topButton = document.querySelector(".topButton");
+
+topButton.addEventListener("click", function(){
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth" // 부드러운 스크롤
+    });
+})
+window.addEventListener("scroll", function () {
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        topButton.style.display = "block"; // 스크롤 200px 이상에서 표시
+    } else {
+        topButton.style.display = "none"; // 숨김
+    }
+});
+
+
+
+

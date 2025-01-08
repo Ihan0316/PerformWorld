@@ -4,7 +4,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 
-<link rel="stylesheet" href="/css/event/mainstyle.css">
+<head>
+  <link rel="stylesheet" href="/css/event/mainstyle.css">
+</head>
 
 <body>
 
@@ -21,11 +23,16 @@
         <p class="genre"></p>
         <p class="date"></p>
         <p class="location"></p>
+        <p class="runtime"></p>
+        <p class="casting"></p>
       </div>
 
       <div class="details-container" style="text-align: center; margin-top: 30px;">
         <!-- JavaScript로 동적으로 이미지가 추가됩니다 -->
       </div>
+
+      <button class="topButton" title="Go to top">Top</button>
+
 
     </div>
   </div>

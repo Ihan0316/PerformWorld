@@ -2,13 +2,11 @@ package com.performworld.repository.board;
 
 import com.performworld.domain.QnA;
 import com.performworld.dto.board.QnARequestDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface QnARepository extends JpaRepository<QnA, Long> {
+public interface QnARepository extends JpaRepository<QnA, Long>, BoardCustomRepo {
 
     // QnA 업데이트(필요한 데이터만 업데이트)
     @Modifying
