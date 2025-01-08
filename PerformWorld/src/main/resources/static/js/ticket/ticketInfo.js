@@ -85,7 +85,7 @@ const init = () => {
 
             // 응답 받은 데이터로 그리드에 표시
             const ticketData = res.data;
-
+            console.log(ticketData)
             // 그리드에 데이터를 설정
             testGrid.resetData(ticketData);
         } catch (error) {
