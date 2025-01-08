@@ -18,15 +18,15 @@ public class QnARestController {
     private final QnAService qnaService;
 
     // QnA 목록 조회 (페이지 처리)
-    @PostMapping("/list")
-    public List<QnADTO> getQnAList(@RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
-        log.info("Fetching QnA list for API");
-        QnARequestDTO requestDTO = new QnARequestDTO();
-        requestDTO.setPage(page);
-        requestDTO.setSize(size);
-        return qnaService.getList(requestDTO);
-    }
+//    @PostMapping("/list")
+//    public List<QnADTO> getQnAList(@RequestParam(defaultValue = "0") int page,
+//                                   @RequestParam(defaultValue = "10") int size) {
+//        log.info("Fetching QnA list for API");
+//        QnARequestDTO requestDTO = new QnARequestDTO();
+//        requestDTO.setPage(page);
+//        requestDTO.setSize(size);
+//        return qnaService.getList(requestDTO);
+//    }
 
     // QnA 등록
     @PostMapping("/register")

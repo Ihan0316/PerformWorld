@@ -27,8 +27,6 @@ public class QnAController {
         QnARequestDTO requestDTO = new QnARequestDTO();
         requestDTO.setPage(page);
         requestDTO.setSize(size);
-        List<QnADTO> qnaList = qnaService.getList(requestDTO);
-        model.addAttribute("qnaList", qnaList);
         return "qna/list"; // Thymeleaf 템플릿 렌더링
     }
 
