@@ -1,6 +1,5 @@
 package com.performworld.service.board;
 
-
 import com.performworld.domain.QnA;
 import com.performworld.dto.board.QnADTO;
 import com.performworld.dto.board.QnARequestDTO;
@@ -13,10 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Log4j2
 @Service
@@ -27,12 +23,8 @@ public class QnAServiceImpl implements QnAService {
     private final ModelMapper modelMapper;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<QnADTO> getList(QnARequestDTO qnaRequestDTO) {
-        log.info("Fetching QnA list with filter: {}", qnaRequestDTO);
-        return qnaRepository.findAll().stream()
-                .map(entity -> modelMapper.map(entity, QnADTO.class))
-                .collect(Collectors.toList());
+    public List<QnADTO> getList(QnADTO qnADTO) {
+        return qnaRepository.getQnaList(qnADTO);
     }
 
     //등록

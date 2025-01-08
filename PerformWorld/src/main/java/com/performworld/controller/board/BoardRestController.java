@@ -1,11 +1,9 @@
 package com.performworld.controller.board;
 
-import com.performworld.dto.board.FAQDTO;
-import com.performworld.dto.board.FaqSaveDTO;
-import com.performworld.dto.board.NoticeDTO;
-import com.performworld.dto.board.NoticeSaveDTO;
+import com.performworld.dto.board.*;
 import com.performworld.service.board.FAQService;
 import com.performworld.service.board.NoticeService;
+import com.performworld.service.board.QnAService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,8 @@ import java.util.List;
 public class BoardRestController {
 
     private final FAQService faqService;
-    private  final NoticeService noticeService;
+    private final NoticeService noticeService;
+    private final QnAService qnAService;
 
     @GetMapping("/getFAQList")
     public ResponseEntity<List<FAQDTO>> getAllFAQs() {
@@ -34,16 +33,16 @@ public class BoardRestController {
 
         return ResponseEntity.ok(faqList); // JSON 형식으로 자동 변환
     }
-    @GetMapping("/getQnAList")
-    public ResponseEntity<List<FAQDTO>> getAllQnAs() {
-        List<FAQDTO> faqList = faqService.getAllFAQs();
+    @PostMapping("/getQnAList")
+    public ResponseEntity<List<QnADTO>> getAllQnAs(@RequestBody QnADTO qnADTO) {
+        List<QnADTO> qnaList = qnAService.getList(qnADTO);
 
         // 목록이 비어 있으면 204 No Content 반환
-        if (faqList.isEmpty()) {
+        if (qnaList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(faqList); // JSON 형식으로 자동 변환
+        return ResponseEntity.ok(qnaList); // JSON 형식으로 자동 변환
     }
 
     @GetMapping("/getNoticeList")
