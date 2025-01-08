@@ -48,6 +48,9 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "status", referencedColumnName = "code")
     private SystemCode status;  // 예매 상태
 
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Payment payment;
+
     // 취소 상태로 변경
     public void chnStatus(SystemCode chnStatus) {
         this.status = chnStatus;
