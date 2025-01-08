@@ -149,7 +149,7 @@ div.header_naviWrapper__6fe56 {
 /*상세이미지 크기 조정*/
 .detail-image {
     display: block;
-    width: 800px;
+    width: 70%;
     margin: 10px auto;
     display: block;
     border: 1px solid #ddd;
