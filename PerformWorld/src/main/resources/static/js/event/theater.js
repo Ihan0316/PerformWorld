@@ -167,3 +167,10 @@ document.addEventListener('DOMContentLoaded', function () {
             topButton.style.display = "none"; // 숨김
         }
     });
+
+    document.querySelector(".eventRegisterBtn").addEventListener("click",function (e){
+        e.stopPropagation()
+        e.preventDefault()
+
+        window.location.href="/event/register";
+    })
