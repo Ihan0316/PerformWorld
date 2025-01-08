@@ -40,22 +40,51 @@ function validateForm() {
     return true;
 }
 
-// 이메일 중복 체크 (AJAX 요청 예시)
-document.querySelector("input[name='email']").addEventListener('blur', function() {
-    const email = this.value;
+// 폼 제출 처리 (AJAX)
+function submitForm(event) {
+    event.preventDefault(); // 폼의 기본 제출 동작 방지
 
-    // 이메일 중복 체크를 위한 서버 요청
-    fetch(`/user/check-email?email=${email}`)
-        .then(response => response.json())
+    // 폼 데이터 가져오기
+    const formData = {
+        email: document.querySelector("input[name='email']").value,
+        name: document.querySelector("input[name='name']").value,
+        userId: document.querySelector("input[name='userId']").value,
+        password: document.querySelector("input[name='password']").value,
+        confirmPassword: document.querySelector("input[name='confirmPassword']").value,
+        phoneNumber: document.querySelector("input[name='phoneNumber']").value,
+        postcode: document.querySelector("input[name='postcode']").value,
+        address1: document.querySelector("input[name='address1']").value,
+        address2: document.querySelector("input[name='address2']").value
+    };
+
+    // 유효성 검사
+    if (!validateForm()) {
+        return;
+    }
+
+    // AJAX 요청 (fetch API 사용)
+    fetch('/user/join', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)  // JSON으로 변환하여 요청 본문에 전달
+    })
+        .then(response => response.json())  // JSON 응답을 받음
         .then(data => {
-            if (data.isAvailable) {
-                document.querySelector("#emailError").textContent = "이메일 사용 가능합니다.";
-            } else {
-                document.querySelector("#emailError").textContent = "이미 사용 중인 이메일입니다.";
+            if (data.result === "success") {
+                alert("회원가입이 완료되었습니다.");
+                window.location.href = '/user/login'; // 로그인 페이지로 리다이렉트
+            } else if (data.error === "uid") {
+                alert("이미 사용 중인 아이디입니다.");
             }
         })
-        .catch(error => console.error("중복 체크 오류:", error));
-});
+        .catch(error => {
+            alert("서버 오류가 발생했습니다.");
+            console.error("Error:", error);
+        });
+}
 
 // 주소 찾기 함수 (다음 주소 API)
 const openPostCode = () => {
