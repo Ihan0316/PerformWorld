@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/board/board.css}">
+</head>
+<body>
+<!--	content layout start  -->
+<div id="fh5co-main" layout:fragment="content">
+
+    <!-- Modal -->
+    <div class="modal boardRegisterModal" tabindex="-1">
+        <div class="modal-dialog" style="width: 80%; max-width: 600px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-summary">질문과 답변 입력</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 질문 입력 필드 -->
+                    <div class="mb-3">
+                        <label for="question" class="form-label">질문</label>
+                        <input type="text" class="form-control" id="question" placeholder="질문을 입력하세요" required>
+                    </div>
+
+                    <!-- 답변 입력 필드 -->
+                    <div class="mb-3">
+                        <label for="answer" class="form-label">답변</label>
+                        <textarea class="form-control" id="answer" rows="5" placeholder="답변을 입력하세요" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveBoard" class="btn btn-primary">저장</button>
+                    <button type="button" class="btn btn-secondary closeBtn" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Service Center</h2>
+            </div>
+        </div>
+        <div>
+            <div>
+                <button type="button" class="btn btn-primary btn-sm faqBtn">FAQ</button>
+                <button type="button" class="btn btn-primary btn-sm qnaBtn">Q&A</button>
+                <button type="button" class="btn btn-primary btn-sm noticeBtn">공지사항</button>
+            </div>
+        </div>
+        <div>
+            <div class="faq-header">
+                <h3>자주하는 질문</h3>
+                <button type="button" class="btn btn-primary btn-sm regBtn">등록</button>
+            </div>
+        </div>
+        <div class="qna-board" id="faq-board">
+            <!-- FAQ 항목들이 여기에 동적으로 추가됩니다 -->
+        </div>
+    </div>
+    <!--    <div id="map"></div>-->
+</div>
+<!--	content layout end  -->
+
+<!-- JavaScript -->
+
+<th:block layout:fragment="javascript">
+    <script th:src="@{/js/board/board.js}"></script>
+    <script th:inline="javascript"></script>
+</th:block>
+</body>
+</html>
