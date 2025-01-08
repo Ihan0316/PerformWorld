@@ -58,9 +58,9 @@ function updateSeatData(seats) {
     seats.forEach(seat => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${seat.seatId}</td>
-            <td>${seat.section}</td>
-            <td style="text-align: right;">${seat.price.toLocaleString()} 원</td>
+            <td style="text-align: center;">${seat.seatId}</td>
+            <td style="text-align: center;">${seat.section}</td>
+            <td style="text-align: center; width: 160px;">${seat.price.toLocaleString()} 원</td>
         `;
         seatTableBody.appendChild(row);
     });
@@ -86,7 +86,7 @@ function updateTableData(users, tiers) {
             <td>${user.postcode}</td>
             <td>${user.tierName}</td>
             <td>
-                <button class="btn btn-danger delete-user-btn" data-user-id="${user.userId}" onclick="deleteUser(this)">삭제</button>
+                <button class="btn btn-danger delete-user-btn" data-user-id="${user.userId}" onclick="deleteUser(this)">Delete</button>
             </td>
         `;
         userTableBody.appendChild(row);
@@ -107,7 +107,7 @@ function updateTableData(users, tiers) {
             <button 
                 class="btn btn-primary update-tier-btn" 
                 data-tier-id="${tier.tierId}" onclick="updateTier(this)">
-                수정
+                Edit
             </button>
             </td>
         `;
