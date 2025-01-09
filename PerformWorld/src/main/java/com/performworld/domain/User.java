@@ -85,7 +85,6 @@ public class User extends BaseEntity {
         this.postcode = userDTO.getPostcode();
     }
 
-    // 소비금액 및 등급 변경
     public void chnTotalSpent(Long spent, List<Tier> tiers) {
         this.totalSpent = spent;
 
@@ -93,5 +92,17 @@ public class User extends BaseEntity {
                 .filter(tier -> (tier.getMinSpent() <= totalSpent) && (totalSpent <= tier.getMaxSpent()))
                 .findFirst()
                 .ifPresent(tier -> this.tier = tier);
+
+        // 소비 금액이 모든 티어의 최대 지출 금액을 초과하는 경우
+        if (this.tier == null) {
+            Tier maxTier = tiers.stream()
+                    .filter(tier -> tier.getMaxSpent() == tiers.stream().mapToLong(Tier::getMaxSpent).max().orElse(0))
+                    .findFirst()
+                    .orElse(null);
+
+            if (maxTier != null) {
+                this.tier = maxTier;
+            }
+        }
     }
 }
