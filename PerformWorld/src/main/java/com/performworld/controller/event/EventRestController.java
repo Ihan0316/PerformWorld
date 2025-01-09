@@ -74,11 +74,10 @@ public class EventRestController {
         return ResponseEntity.ok(eventList); // 이벤트 목록 반환
     }
 
-    // 이벤트 삭제
-    @DeleteMapping("/deleteEvent/{eventId}")
-    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId) {
-        eventService.deleteEvent(eventId);  // 서비스에서 이벤트 삭제
-        return ResponseEntity.ok("Event deleted successfully");
+    @DeleteMapping("/deleteEvents")
+    public ResponseEntity<String> deleteEvents(@RequestBody List<Long> eventIds) {
+        eventService.deleteEvents(eventIds);  // 이벤트들 삭제
+        return ResponseEntity.ok("Events deleted successfully");
     }
 
     // DB에 저장된 event 목록 가져오기
