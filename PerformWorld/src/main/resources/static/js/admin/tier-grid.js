@@ -1,4 +1,4 @@
-const tinitTierGrid = () => {
+const initTierGrid = () => {
     const Grid = tui.Grid;
 
     // 테마
@@ -79,7 +79,7 @@ const tinitTierGrid = () => {
 
 const tinit = () => {
     // grid 초기화
-    const tierGrid = tinitTierGrid();
+    const tierGrid = initTierGrid();
 
     // 티어 목록 조회
     async function getTierList() {
