@@ -33,6 +33,7 @@ public class BoardRestController {
 
         return ResponseEntity.ok(faqList);
     }
+
     @PostMapping("/getQnAList")
     public ResponseEntity<List<QnADTO>> getAllQnAs(@RequestBody QnADTO qnADTO) {
         List<QnADTO> qnaList = qnAService.getQnas(qnADTO);
@@ -48,7 +49,7 @@ public class BoardRestController {
     @PostMapping("/getNoticeList")
     public ResponseEntity<List<NoticeDTO>> getNoticeList(@RequestBody NoticeDTO noticeDTO) {
         List<NoticeDTO> noticeList = noticeService.getNotices(noticeDTO);
-        if(noticeList.isEmpty()) {
+        if (noticeList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(noticeList);
@@ -126,7 +127,7 @@ public class BoardRestController {
 
     @PutMapping("/faqUpdate")
     public ResponseEntity<String> updateFaq(@RequestBody FAQDTO faqdto) {
-       try {
+        try {
             faqService.updateFAQ(faqdto);
             return ResponseEntity.ok("FAQ가 수정되었습니다.");
         } catch (Exception e) {
@@ -136,7 +137,7 @@ public class BoardRestController {
 
     @PutMapping("/qnaUpdate")
     public ResponseEntity<String> updateQna(@RequestBody QnADTO qnADTO) {
-        log.info("qnaDTO:"+qnADTO);
+        log.info("qnaDTO:" + qnADTO);
         try {
             qnAService.updateQna(qnADTO);
             return ResponseEntity.ok("QnA가 수정되었습니다.");

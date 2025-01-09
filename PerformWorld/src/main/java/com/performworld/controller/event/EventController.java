@@ -5,6 +5,8 @@ import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -18,18 +20,21 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping("/register")
-    public String register() {
+    public String register(@AuthenticationPrincipal UserDetails user, Model model) {
+        model.addAttribute("user", user);
         return "event/event";
     }
 
     @GetMapping()
-    public String mainPage() {
+    public String mainPage(@AuthenticationPrincipal UserDetails user, Model model) {
+        model.addAttribute("user", user);
         return "event/main";
     }
 
     @GetMapping("/details/{eventId}")
-    public String details(@PathVariable Long eventId, Model model) {
+    public String details(@AuthenticationPrincipal UserDetails user ,@PathVariable Long eventId, Model model) {
         model.addAttribute("eventId", eventId);
+        model.addAttribute("user", user);
         return "event/details"; // HTML 템플릿
     }
 
