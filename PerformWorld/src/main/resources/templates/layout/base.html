@@ -82,7 +82,7 @@
                         <a href="/user/mypage">My Page</a>
                     </li>
                     <!-- 관리자 로그인 시 -->
-                    <li class="nav-item"  th:if="${user != null && user.Username == 'admin'}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <li class="nav-item"  th:if="${user != null && user.Username == 'admin'}">
                         <a href="/admin/userlist">Management</a>
                     </li>
                 </ul>
