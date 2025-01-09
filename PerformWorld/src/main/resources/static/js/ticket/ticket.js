@@ -62,13 +62,13 @@ const initGrid = () => {
                 header: '장소',
                 name: 'location',
                 align: 'center',
-                sortable: true,
-                sortingType: 'desc'
             },
             {
                 header: '장르',
                 name: 'genre',
                 align: 'center',
+                sortable: true,
+                sortingType: 'desc'
             }
         ]
     });
