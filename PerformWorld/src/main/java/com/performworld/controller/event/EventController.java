@@ -1,6 +1,5 @@
 package com.performworld.controller.event;
 
-
 import com.performworld.dto.event.EventSearchListDTO;
 import com.performworld.service.event.EventService;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +22,22 @@ public class EventController {
         return "event/event";
     }
 
-    @GetMapping("/theater")
-    public String main() {
-        return "/event/theater";
+    @GetMapping()
+    public String mainPage() {
+        return "event/main";
     }
 
     @GetMapping("/details/{eventId}")
     public String details(@PathVariable Long eventId, Model model) {
         model.addAttribute("eventId", eventId);
-        return "/event/details"; // HTML 템플릿
+        return "event/details"; // HTML 템플릿
     }
 
     // 예매하기
     @GetMapping("{eventId}/book")
     public String booking(@PathVariable Long eventId, Model model) {
         model.addAttribute("eventId", eventId);
-        return "/event/booking";
+        return "event/booking";
     }
 
     @GetMapping("/search")

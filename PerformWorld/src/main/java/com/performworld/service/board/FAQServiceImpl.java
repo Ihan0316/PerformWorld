@@ -2,7 +2,6 @@ package com.performworld.service.board;
 
 import com.performworld.domain.FAQ;
 import com.performworld.dto.board.FAQDTO;
-import com.performworld.dto.board.FaqSaveDTO;
 import com.performworld.repository.board.FAQRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +19,7 @@ public class FAQServiceImpl implements FAQService {
     private final FAQRepository faqRepository;
     private final ModelMapper modelMapper;
 
+    // FAQ 목록 조회
     @Override
     public List<FAQDTO> getAllFAQs() {
         return faqRepository.findAll().stream()
@@ -27,42 +27,31 @@ public class FAQServiceImpl implements FAQService {
                 .collect(Collectors.toList());
     }
 
+    // FAQ 등록
     @Override
-    public void registerFAQ(FAQDTO faqDTO) {
-        FAQ faq = modelMapper.map(faqDTO, FAQ.class);
-        faqRepository.save(faq);
+    public void saveFAQ(FAQDTO faqDTO) {
+        FAQ faq = FAQ.builder()
+                .question(faqDTO.getQuestion())
+                .answer(faqDTO.getAnswer())
+                .build();
+        faqRepository.save(faq);  // DB에 저장
     }
 
-    @Override
-    public void updateFAQ(FAQDTO faqDTO) {
-        FAQ faq = modelMapper.map(faqDTO, FAQ.class);
-        faqRepository.save(faq);
-    }
-
-    @Override
-    public FAQDTO getFAQById(Long faqId) {
-        FAQ faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new IllegalArgumentException("FAQ not found for id: " + faqId));
-        return modelMapper.map(faq, FAQDTO.class);
-    }
-
+    // FAQ 삭제
     @Override
     public void deleteFAQ(Long faqId) {
         faqRepository.deleteById(faqId);
     }
 
     @Override
-    public List<FAQ> searchFAQsByKeyWord(String keyword) {
-        return faqRepository.findByQuestionContaining(keyword);
-    }
-
-    @Override
-    public void saveFAQ(FaqSaveDTO faqSaveDTO) {
+    public void updateFAQ(FAQDTO faqDTO) {
         FAQ faq = FAQ.builder()
-                .question(faqSaveDTO.getQuestion())
-                .answer(faqSaveDTO.getAnswer())
+                .faqId(faqDTO.getFaqId())
+                .question(faqDTO.getQuestion())
+                .answer(faqDTO.getAnswer())
                 .build();
-        faqRepository.save(faq);  // DB에 저장
+
+        faqRepository.save(faq);
     }
 }
 

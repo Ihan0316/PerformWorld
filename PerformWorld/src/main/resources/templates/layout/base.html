@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,6 +48,7 @@
     <script th:src="@{/js/jquery.waypoints.min.js}"></script>
     <script th:src="@{/js/jquery.flexslider-min.js}"></script>
 
+
     <!-- MAIN JS -->
     <script th:src="@{/js/main.js}"></script>
 
@@ -65,17 +67,25 @@
         <h1 id="fh5co-logo"><a href="/">The Ticket</a></h1>
         <nav id="fh5co-main-menu" role="navigation">
             <ul>
-                <li><a href="/event/theater">Main</a></li>
-                <li><a href="/ticketing/info">Ticketing</a></li>
+                <li><a href="/event">Events</a></li>
+                <li><a href="/ticketing/info">Ticketings</a></li>
                 <li><a href="/board/review">Reviews</a></li>
                 <li><a href="/ticket/calendar">Calendar</a></li>
-                <li><a href="about.html">Service Center</a></li>
-                <th:block th:unless="${session.user != null}">
-                    <li><a href="/user/login">Login</a></li>
-                </th:block>
-                <th:block th:if="${session.user != null}">
-                    <li><a href="/user/mypage">My Page</a></li>
-                </th:block>
+                <li><a href="/board/list">Service Center</a></li>
+                <ul>
+                    <!-- 로그인하지 않았을 경우 -->
+                    <li class="nav-item" th:if="${user} == null">
+                            <a href="/user/login">Login</a>
+                        </li>
+                    <!-- 유저 로그인 시 -->
+                    <li class="nav-item" th:if="${user} != null">
+                        <a href="/user/mypage">My Page</a>
+                    </li>
+                    <!-- 관리자 로그인 시 -->
+                    <li class="nav-item"  sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a href="/admin/userlist">Management</a>
+                    </li>
+                </ul>
             </ul>
         </nav>
 
@@ -96,10 +106,10 @@
     <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 
     <th:block layout:fragment="javascript"></th:block>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener('DOMContentLoaded', function () {
         const menuItems = document.querySelectorAll('#fh5co-main-menu a');
         const currentUrl = window.location.pathname;
 

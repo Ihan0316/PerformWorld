@@ -26,7 +26,7 @@ const initGrid = () => {
         // rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
-            perPage: 10
+            perPage: 15
         },
         draggable: false, // 드래그 비활성화
         columns: [
@@ -81,7 +81,7 @@ const init = () => {
 
             // 응답 받은 데이터로 그리드에 표시
             const ticketData = res.data;
-
+            console.log(ticketData)
             // 그리드에 데이터를 설정
             testGrid.resetData(ticketData);
         } catch (error) {
@@ -91,6 +91,13 @@ const init = () => {
     getTicketingList();
 
 }
+
+document.querySelector(".ticketingRegBtn").addEventListener("click",function (e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    window.location.href="/ticketing/register";
+})
 
 window.onload = () => {
     init();

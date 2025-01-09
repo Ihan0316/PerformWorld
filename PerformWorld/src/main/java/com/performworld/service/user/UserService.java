@@ -1,13 +1,14 @@
 package com.performworld.service.user;
 
 import com.performworld.dto.user.UserDTO;
-import com.performworld.domain.User;
 
 public interface UserService {
+    static class MidExistException extends Exception{
+    }
 
-    User signUp(UserDTO userDTO);  // 회원가입
+    void signUp(UserDTO userDTO) throws MidExistException;  // 회원가입
 
-    User login(String userId, String password);  // 로그인
+    UserDTO login(String userId, String password);  // 로그인
 
     void findPw(String email); // 비밀번호 찾기
 

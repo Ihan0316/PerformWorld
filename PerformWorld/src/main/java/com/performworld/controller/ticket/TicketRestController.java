@@ -59,6 +59,7 @@ public class TicketRestController {
     // 모든 티켓 데이터를 가져오는 API 엔드포인트
     @GetMapping("/ticketingInfo")
     public List<TicketingInfoDTO> getAllTickets() {
+        log.info("result:"+ticketService.findAllList());
         return ticketService.findAllList(); // 서비스 레이어에서 티켓 리스트 반환
     }
 }

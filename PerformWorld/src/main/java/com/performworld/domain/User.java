@@ -4,12 +4,14 @@ import com.performworld.dto.user.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Getter
-@ToString(exclude = {"password"})
+//@ToString(exclude = "roleSet")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -54,9 +56,23 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QnA> qnas;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<UserRole> roleSet = new HashSet<>();
+
+    private boolean del;
+    private boolean social;
+
+
+
     // 비밀번호 변경
     public void chnUserInfo(String password) {
         this.password = password;
+    }
+
+    //권한 추가
+    public void addRole(UserRole userRole) {
+        this.roleSet.add(userRole);
     }
 
     // 정보 수정

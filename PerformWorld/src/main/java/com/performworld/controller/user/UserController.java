@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // 로그인 페이지 보여주기
+    //로그인 페이지 보여주기
     @GetMapping("/login")
     public String showLoginPage() {
         return "user/login";  // 로그인 페이지 반환

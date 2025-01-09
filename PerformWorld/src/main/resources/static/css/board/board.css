@@ -6,38 +6,77 @@ body {
     background-color: #f4f4f9;
 }
 
-/* 자주하는 질문 제목 스타일 */
-.faq-header {
-    display: flex;
-    justify-content: flex-start;  /* 제목과 버튼 사이에 공간을 두기 */
-    align-items: center;          /* 수직 중앙 정렬 */
-    margin: 30px 0;               /* 제목 상하 여백 */
-    padding-left: 5%;             /* 왼쪽 여백 */
+/* 메뉴 컨테이너 기본 스타일 */
+#menu {
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
 }
 
-.faq-header h3 {
-    font-size: 24px;              /* 제목 크기 */
-    font-weight: bold;            /* 제목 굵게 */
-    color: #333;                  /* 제목 색상 */
-    margin: 0;                    /* 기본 마진 제거 */
-    padding: 0;                   /* 기본 패딩 제거 */
+/* 탭을 담고 있는 리스트 스타일 */
+.board-header {
+    display: flex;
+    justify-content: left;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* 각 탭의 기본 스타일 */
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+    border: 1px solid transparent;
+    border-radius: 5px 5px 0 0; /* 위쪽 테두리만 둥글게 */
+    margin-right: 5px;
+}
+
+/* 마우스 오버 시 배경색 변경 */
+.tab:hover {
+    background-color: #f0f0f0;
+}
+
+/* 활성화된 탭의 스타일 */
+.tab.active {
+    background-color: #228896;
+    color: white;
+    border: 1px solid #228896;
+    border-radius: 5px 5px 0 0; /* 활성화된 탭만 강조 */
+}
+
+/* 비활성화된 탭의 스타일 */
+.tab:not(.active) {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* 내용 기본 스타일 */
+.board {
+    display: none;
+}
+
+/* 활성화된 탭의 내용만 보이게 */
+.board.active {
+    display: block;
 }
 
 /* FAQ 목록 스타일 */
-.qna-board {
-    width: 80%;
-    margin: 50px auto;
+.faq-board {
+    width: 100%;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
-.qna-item {
+.faq-item {
     border-bottom: 1px solid #ddd;
 }
 
-.qna-question {
+.faq-question {
     width: 100%;
     padding: 15px;
     text-align: left;
@@ -48,11 +87,11 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.qna-question:hover {
+.faq-question:hover {
     background-color: #ddd;
 }
 
-.qna-answer {
+.faq-answer {
     padding: 0;  /* 초기 padding 0 */
     background-color: #fafafa;
     font-size: 14px;
@@ -63,12 +102,12 @@ body {
     transition: max-height 0.5s ease-out, padding 0.5s ease-out;  /* 애니메이션 설정 */
 }
 
-.qna-answer.open {
+.faq-answer.open {
     padding: 15px;  /* 열렸을 때 padding 원래대로 복원 */
     max-height: 1000px; /* 충분히 큰 값으로 설정하여 내용이 잘리지 않게 */
 }
 
-.qna-answer p {
+.faq-answer p {
     margin: 0;
 }
 
@@ -77,14 +116,10 @@ body {
     overflow-y: auto;  /* 세로 스크롤을 활성화 */
 }
 
-#faq-board::-webkit-scrollbar {
-    display: none;  /* 스크롤바를 숨깁니다 */
-}
-
-.qna-answer {
+.faq-answer {
     white-space: pre-wrap; /* 공백 및 줄바꿈을 그대로 렌더링 */
 }
 
-.faq-header .regBtn {
-    margin-left: 10px;  /* 버튼과 제목 사이에 간격 추가 */
+.regBtn {
+    margin-bottom: 10px;  /* 버튼과 제목 사이에 간격 추가 */
 }

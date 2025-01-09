@@ -25,13 +25,6 @@ public class BookRestController {
     private final SeatService seatService;
     private final TierService tierService;
 
-    // 5분 내로 시작되는 특정 공연 티켓팅 조회
-    @PostMapping("/getRecentTicketing")
-    public List<TicketingDTO> getRecentTicketing(@RequestBody TicketingDTO ticketingDTO) {
-        log.info(ticketingDTO);
-        return bookService.findRecentTicketing(ticketingDTO.getEventId());
-    }
-
     // 특정 공연의 오픈된 모든 티켓팅 조회
     @PostMapping("/getEventTicketing")
     public List<TicketingDTO> getEventTicketing(@RequestBody TicketingDTO ticketingDTO) {
