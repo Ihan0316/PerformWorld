@@ -48,7 +48,8 @@ public class CustomSecurityConfig {
                 authorizeRequests -> {
                     authorizeRequests.requestMatchers
                             ("/css/**", "/js/**","/images/**",
-                                    "/","/event/**", "/sys/**","/user/**",
+                                    "/","/event/**", "/sys/**","/user/**","/review/getRvList",
+                                    "/board/**",
                                     "http://localhost:8080/login/oauth2/code/kakao",
                                     "https://kauth.kakao.com",
                                     "https://kapi.kakao.com").permitAll();
