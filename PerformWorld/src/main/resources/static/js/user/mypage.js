@@ -421,11 +421,12 @@ const init = () => {
 
     // 정보 조회
     async function getUserInfo() {
+    const userID = document.getElementById('username').value
         try {
             const res = await axios({
                 method: 'post',
                 url: '/user/getInfo',
-                data: { userId: 'user123' }, // loginInfo
+                data: { userId: userID }, // loginInfo
                 headers: {
                     'Content-Type': 'application/json'
                 }

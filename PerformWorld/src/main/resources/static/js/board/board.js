@@ -246,7 +246,7 @@ const init = () => {
                 noticeRegModal.show();
             }
             if (modalType === 'qna') {
-                document.querySelector(".qnaRegModal input[name='userId']").value = 'user123';  // loginInfo
+                document.querySelector(".qnaRegModal input[name='userId']").value;  // loginInfo
                 qnaRegModal.show();
             }
             if (modalType === 'faq') {
@@ -513,6 +513,13 @@ const init = () => {
             }
             // qna 탭일 경우
             if (modalType === 'qna') {
+                const modal = document.querySelector(".qnaDtlModal");
+                const contentuserId = modal.querySelector("input[name='userId']").value;
+                const userID = document.getElementById('username').value;
+                if (contentuserId !== userID) {
+                    alert("Q&A를 삭제할 수 없는 회원이에요.");
+                    return;
+                }
                 await axios({
                     method: 'delete',
                     url: '/board/qna',
@@ -617,6 +624,12 @@ const init = () => {
                 const titleInput = modal.querySelector("input[name='title']");
                 const contentTextarea = modal.querySelector("textarea[name='content']");
                 const ResponseArea = modal.querySelector("textarea[name='response']");
+                const contentuserId = modal.querySelector("input[name='userId']").value;
+                const userID = document.getElementById('username').value;
+                if (contentuserId !== userID) {
+                    alert("Q&A를 수정할 수 없는 회원이에요.");
+                    return;
+                }
                 if (ResponseArea.value.trim() ==="") {
                     if (updateBtn.textContent === '수정') {
                         // 입력 필드를 수정 가능하도록 활성화
