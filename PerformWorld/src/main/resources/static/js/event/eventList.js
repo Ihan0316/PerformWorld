@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 리사이즈 이벤트 처리
     window.addEventListener('resize', () => {
-        grid.bodyHeight = getGridHeight(); // 창 크기 변경 시 그리드 높이 갱신
         grid.refreshLayout(); // 그리드 레이아웃 갱신
     });
 

@@ -336,4 +336,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }).catch(e => {
         console.error(e);
     });
+
+    document.querySelector("input[name='perform-name']").addEventListener('keydown', (event) => {
+        // 기본 엔터키 동작을 막음
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
 });
