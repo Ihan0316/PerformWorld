@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         el: document.getElementById('eventListGrid'),
         scrollX: false, // 가로 스크롤 비활성화
         scrollY: false, // 세로 스크롤 비활성화
-        minBodyHeight: 590, // 최소 높이 설정
+        minBodyHeight: 400, // 최소 높이 설정
         pageOptions: {
             useClient: true,
             perPage: 10
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: 'thumbnailUrl',
                 align: 'center',
                 width: 100,
-                formatter: ({ value }) => `<img src="${value}" alt="썸네일" style=" height: 50px;">`
+                formatter: ({ value }) => `<img src="${value}" alt="썸네일" style=" height: 32px;">`
             },
             { header: '이벤트 ID', name: 'eventId', align: 'center', minWidth: 10, hidden: true },
             { header: '제목', name: 'title', align: 'center', minWidth: 250 },
