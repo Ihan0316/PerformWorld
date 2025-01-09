@@ -62,13 +62,13 @@ const initGrid = () => {
                 header: '장소',
                 name: 'location',
                 align: 'center',
+                sortable: true,
+                sortingType: 'desc'
             },
             {
                 header: '장르',
                 name: 'genre',
                 align: 'center',
-                sortable: true,
-                sortingType: 'desc'
             }
         ]
     });
@@ -175,11 +175,24 @@ const init = () =>{
         if (phaseCount == 0) {
             return
         }
-        // 마지막 입력 필드 삭제
-        if (container.lastElementChild) {
-            container.removeChild(container.lastElementChild);
-            phaseCount--; // 차수 감소
+        // 마지막 행을 가져옵니다.
+        const lastRow = container.lastElementChild;
+
+        // 마지막 행의 오픈일을 가져옵니다.
+        const openDatetimeInput = lastRow.querySelector("input[name='open-datetime']");
+        const openDatetime = new Date(openDatetimeInput.value);
+
+        // 현재 시간과 오픈일을 비교
+        const currentDate = new Date();
+        if (openDatetime <= currentDate) {
+            // 오픈일이 지나면 삭제 불가
+            alert("이 티켓팅의 오픈일이 지나서 더 이상 삭제할 수 없습니다.");
+            return;
         }
+
+        // 오픈일이 지나지 않으면 행을 삭제하고 차수 감소
+        container.removeChild(lastRow);
+        phaseCount--; // 차수 감소
     });
 
 
@@ -370,12 +383,35 @@ const init = () =>{
                 <input type="date" name="ticketing-start" class="cell" value="${ticket.eventPeriodStart}" required />
                 <input type="date" name="ticketing-end" class="cell" value="${ticket.eventPeriodEnd}" required />
                 <input type="datetime-local" name="open-datetime" class="cell" value="${ticket.openDatetime}" required />
+                <button class="remove-row-button">삭제</button>
             `;
 
                     container.appendChild(row); // 컨테이너에 행 추가
 
-                    // 삭제 버튼 추가 (행 삭제 기능)
+                    // 날짜가 지나면 수정 불가하도록 설정
+                    const openDatetimeInput = row.querySelector("input[name='open-datetime']");
+                    const eventPeriodStartInput = row.querySelector("input[name='ticketing-start']");
+                    const eventPeriodEndInput = row.querySelector("input[name='ticketing-end']");
+
+                    const openDatetime = new Date(openDatetimeInput.value);
+                    const currentDate = new Date();
+
+                    if (openDatetime <= currentDate) {
+                        // 날짜가 지나면 입력 필드를 비활성화
+                        eventPeriodStartInput.disabled = true;
+                        eventPeriodEndInput.disabled = true;
+                        openDatetimeInput.disabled = true;
+                    }
+
+                    // 삭제 버튼 클릭 이벤트 추가 (행 삭제 기능)
                     row.querySelector('.remove-row-button').addEventListener('click', function () {
+                        // 오픈일이 지나면 삭제 불가
+                        if (openDatetime <= currentDate) {
+                            alert("이 티켓팅의 오픈일이 지나서 더 이상 삭제할 수 없습니다.");
+                            return;
+                        }
+
+                        // 오픈일이 지나지 않으면 행을 삭제하고 차수 감소
                         container.removeChild(row);
                         phaseCount--; // 차수 감소
                     });
