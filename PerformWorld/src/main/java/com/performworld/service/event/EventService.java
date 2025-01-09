@@ -21,7 +21,7 @@ public interface EventService {
 //    List<EventSavedListDTO> getAllEventsWithThumbnails();
 
 //    Page<EventSavedListDTO> getSavedEventList(int page, int size);
-    Page<EventSavedListDTO> getSavedEventList(int page, int size, String title, String genre);
+List<EventSavedListDTO> getSavedEventList(String title, String genre);
 
 
 }
