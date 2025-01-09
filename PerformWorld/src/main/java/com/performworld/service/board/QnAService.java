@@ -11,4 +11,8 @@ public interface QnAService {
     void saveQnA(QnADTO qnADTO);
 
     void deleteQnA(Long qnaId);
+
+    void updateQna(QnADTO qnADTO);
+
+    void updateResponseQna(QnADTO qnADTO);
 }

@@ -3,7 +3,7 @@ const initNoticeGrid = () => {
     const NoticeGrid = tui.Grid;
 
     // 테마
-    NoticeGrid.applyTheme('clean',  {
+    NoticeGrid.applyTheme('clean', {
         cell: {
             normal: {
                 border: 'gray',
@@ -79,7 +79,7 @@ const initNoticeGrid = () => {
     });
 
     // resize
-    window.addEventListener('resize', function(e) {
+    window.addEventListener('resize', function (e) {
         noticeGrid.refreshLayout();
     });
 
@@ -90,7 +90,7 @@ const initQnaGrid = () => {
     const QnaGrid = tui.Grid;
 
     // 테마
-    QnaGrid.applyTheme('clean',  {
+    QnaGrid.applyTheme('clean', {
         cell: {
             normal: {
                 border: 'gray',
@@ -166,7 +166,7 @@ const initQnaGrid = () => {
     });
 
     // resize
-    window.addEventListener('resize', function(e) {
+    window.addEventListener('resize', function (e) {
         qnaGrid.refreshLayout();
     });
 
@@ -180,7 +180,7 @@ const init = () => {
     let noticeGrid = initNoticeGrid();
     let qnaGrid = initQnaGrid();
     loadNotices().then(res => {
-        if(res !== "") {
+        if (res !== "") {
             noticeGrid.resetData(res);  // grid에 세팅
         }
     }).catch(e => {
@@ -188,12 +188,12 @@ const init = () => {
     });
 
     // 공지사항 탭
-    document.getElementById("notice-tab").addEventListener("click", function() {
+    document.getElementById("notice-tab").addEventListener("click", function () {
         setActiveTab("notice-tab", "notice-board");
         modalType = 'notice';
         noticeGrid = initNoticeGrid();
         loadNotices().then(res => {
-            if(res !== "") {
+            if (res !== "") {
                 noticeGrid.resetData(res);  // grid에 세팅
             }
         }).catch(e => {
@@ -202,12 +202,12 @@ const init = () => {
     });
 
     // QnA 탭
-    document.getElementById("qna-tab").addEventListener("click", function() {
+    document.getElementById("qna-tab").addEventListener("click", function () {
         setActiveTab("qna-tab", "qna-board");
         modalType = 'qna';
         qnaGrid = initQnaGrid();
         loadQnas().then(res => {
-            if(res !== "") {
+            if (res !== "") {
                 qnaGrid.resetData(res);  // grid에 세팅
             }
         }).catch(e => {
@@ -216,7 +216,7 @@ const init = () => {
     });
 
     // FAQ 탭
-    document.getElementById("faq-tab").addEventListener("click", function() {
+    document.getElementById("faq-tab").addEventListener("click", function () {
         setActiveTab("faq-tab", "faq-board");
         modalType = 'faq';
         loadFAQs();
@@ -242,14 +242,14 @@ const init = () => {
     // 등록 버튼 클릭 시 tab에 따라 다른 모달 오픈
     document.querySelectorAll('.regBtn').forEach(btn => {
         btn.addEventListener('click', function () {
-            if(modalType === 'notice') {
+            if (modalType === 'notice') {
                 noticeRegModal.show();
             }
-            if(modalType === 'qna') {
+            if (modalType === 'qna') {
                 document.querySelector(".qnaRegModal input[name='userId']").value = 'user123';  // loginInfo
                 qnaRegModal.show();
             }
-            if(modalType === 'faq') {
+            if (modalType === 'faq') {
                 faqRegModal.show();
             }
         });
@@ -259,11 +259,11 @@ const init = () => {
     function setActiveTab(tabId, contentId) {
         // active 클래스 제거
         let tabs = document.querySelectorAll(".tab");
-        tabs.forEach(function(tab) {
+        tabs.forEach(function (tab) {
             tab.classList.remove("active");
         });
         let contents = document.querySelectorAll(".board");
-        contents.forEach(function(content) {
+        contents.forEach(function (content) {
             content.classList.remove("active");
         });
         // 클릭한 탭 및 콘텐츠에 active 클래스 추가
@@ -274,11 +274,11 @@ const init = () => {
     // 공지사항 목록 조회
     async function loadNotices() {
         const res = await axios({
-            method : 'post',
-            url : '/board/getNoticeList',
-            data : { title: '' },
-            headers : {
-                'Content-Type' : 'application/json'
+            method: 'post',
+            url: '/board/getNoticeList',
+            data: {title: ''},
+            headers: {
+                'Content-Type': 'application/json'
             }
         });
         return res.data;
@@ -287,11 +287,11 @@ const init = () => {
     // qna 목록 조회
     async function loadQnas() {
         const res = await axios({
-            method : 'post',
-            url : '/board/getQnAList',
-            data : { userId: '' },
-            headers : {
-                'Content-Type' : 'application/json'
+            method: 'post',
+            url: '/board/getQnAList',
+            data: {userId: ''},
+            headers: {
+                'Content-Type': 'application/json'
             }
         });
         return res.data;
@@ -300,14 +300,14 @@ const init = () => {
     // faq 목록 조회 후 세팅
     async function loadFAQs() {
         await axios({
-            method : 'post',
-            url : '/board/getFAQList',
-            headers : {
-                'Content-Type' : 'application/json'
+            method: 'post',
+            url: '/board/getFAQList',
+            headers: {
+                'Content-Type': 'application/json'
             }
         }).then(res => {
             const faqs = res.data;
-            if(faqs !== "") {
+            if (faqs !== "") {
                 const faqBoard = document.getElementById('faq-board');
                 faqBoard.innerHTML = ''; // 기존 내용을 비운다
 
@@ -342,7 +342,6 @@ const init = () => {
                         document.querySelector(".faqDtlModal input[name='faqId']").value = faq.faqId;
                         document.querySelector(".faqDtlModal input[name='question']").value = faq.question;
                         document.querySelector(".faqDtlModal textarea[name='answer']").value = faq.answer;
-
                         faqDtlModal.show();
                     };
 
@@ -378,7 +377,7 @@ const init = () => {
     document.querySelectorAll("button[name='saveBoard']").forEach(regBtn => {
         regBtn.addEventListener('click', async function () {
             // notice 탭일 경우
-            if(modalType === 'notice') {
+            if (modalType === 'notice') {
                 const title = document.querySelector(".noticeRegModal input[name='title']").value.trim();
                 const content = document.querySelector(".noticeRegModal textarea[name='content']").value.trim();
                 if (!title || !content) {
@@ -386,18 +385,18 @@ const init = () => {
                     return;
                 }
 
-                const data = { title: title, content: content };
+                const data = {title: title, content: content};
                 await axios({
-                    method : 'post',
-                    url : '/board/noticeSave',
-                    data : data,
-                    headers : {
-                        'Content-Type' : 'application/json'
+                    method: 'post',
+                    url: '/board/noticeSave',
+                    data: data,
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(res => {
                     alert("공지사항 등록에 성공했습니다.");
                     loadNotices().then(res => {
-                        if(res !== "") {
+                        if (res !== "") {
                             noticeGrid.resetData(res);  // grid에 세팅
                         }
                         noticeRegModal.hide();
@@ -410,7 +409,7 @@ const init = () => {
                 });
             }
             // qna 탭일 경우
-            if(modalType === 'qna') {
+            if (modalType === 'qna') {
                 const title = document.querySelector(".qnaRegModal input[name='title']").value.trim();
                 const content = document.querySelector(".qnaRegModal textarea[name='content']").value.trim();
                 if (!title || !content) {
@@ -424,16 +423,16 @@ const init = () => {
                     , userId: 'user123'  // loginInfo
                 };
                 await axios({
-                    method : 'post',
-                    url : '/board/qnaSave',
-                    data : data,
-                    headers : {
-                        'Content-Type' : 'application/json'
+                    method: 'post',
+                    url: '/board/qnaSave',
+                    data: data,
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(res => {
                     alert("Q&A 등록에 성공했습니다.");
                     loadQnas().then(res => {
-                        if(res !== "") {
+                        if (res !== "") {
                             qnaGrid.resetData(res);  // grid에 세팅
                         }
                         qnaRegModal.hide();
@@ -446,7 +445,7 @@ const init = () => {
                 });
             }
             // faq 탭일 경우
-            if(modalType === 'faq') {
+            if (modalType === 'faq') {
                 const question = document.querySelector(".faqRegModal input[name='question']").value.trim();
                 const answer = document.querySelector(".faqRegModal textarea[name='answer']").value.trim();
                 if (!question || !answer) {
@@ -454,13 +453,13 @@ const init = () => {
                     return;
                 }
 
-                const data = { question: question, answer: answer };
+                const data = {question: question, answer: answer};
                 await axios({
-                    method : 'post',
-                    url : '/board/faqSave',
-                    data : data,
-                    headers : {
-                        'Content-Type' : 'application/json'
+                    method: 'post',
+                    url: '/board/faqSave',
+                    data: data,
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(res => {
                     alert("FAQ 등록에 성공했습니다.");
@@ -479,16 +478,16 @@ const init = () => {
             // notice 탭일 경우
             if (modalType === 'notice') {
                 await axios({
-                    method : 'delete',
-                    url : '/board/notice',
-                    data : { noticeId: document.querySelector("input[name='noticeId']").value },
-                    headers : {
-                        'Content-Type' : 'application/json'
+                    method: 'delete',
+                    url: '/board/notice',
+                    data: {noticeId: document.querySelector("input[name='noticeId']").value},
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(res => {
                     alert("공지사항 삭제에 성공했습니다.");
                     loadNotices().then(res => {
-                        if(res !== "") {
+                        if (res !== "") {
                             noticeGrid.resetData(res);  // grid에 세팅
                         }
                         noticeDtlModal.hide();
@@ -503,16 +502,16 @@ const init = () => {
             // qna 탭일 경우
             if (modalType === 'qna') {
                 await axios({
-                    method : 'delete',
-                    url : '/board/qna',
-                    data : { qnaId: document.querySelector("input[name='qnaId']").value },
-                    headers : {
-                        'Content-Type' : 'application/json'
+                    method: 'delete',
+                    url: '/board/qna',
+                    data: {qnaId: document.querySelector("input[name='qnaId']").value},
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(res => {
                     alert("Q&A 삭제에 성공했습니다.");
                     loadQnas().then(res => {
-                        if(res !== "") {
+                        if (res !== "") {
                             qnaGrid.resetData(res);  // grid에 세팅
                         }
                         qnaDtlModal.hide();
@@ -525,13 +524,13 @@ const init = () => {
                 });
             }
             // faq 탭일 경우
-            if(modalType === 'faq') {
+            if (modalType === 'faq') {
                 await axios({
-                    method : 'delete',
-                    url : '/board/faq',
-                    data : { faqId: document.querySelector("input[name='faqId']").value },
-                    headers : {
-                        'Content-Type' : 'application/json'
+                    method: 'delete',
+                    url: '/board/faq',
+                    data: {faqId: document.querySelector("input[name='faqId']").value},
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(res => {
                     alert("FAQ 삭제에 성공했습니다.");
@@ -543,8 +542,186 @@ const init = () => {
             }
         });
     });
-}
 
+    // 수정하기
+    document.querySelectorAll("button[name='updateBoard']").forEach(updateBtn => {
+        updateBtn.addEventListener('click', async function () {
+            // notice 탭일 경우
+            if (modalType === 'notice') {
+                const modal = document.querySelector(".noticeDtlModal");
+                const titleInput = modal.querySelector("input[name='title']");
+                const contentTextarea = modal.querySelector("textarea[name='content']");
+                if (updateBtn.textContent === '수정') {
+                    // 입력 필드를 수정 가능하도록 활성화
+                    titleInput.disabled = false;
+                    contentTextarea.disabled = false;
+                    updateBtn.textContent = '저장';  // 버튼 텍스트를 '저장'으로 변경
+                } else {
+                    // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
+                    const updatedNoticeData = {
+                        noticeId: modal.querySelector("input[name='noticeId']").value,
+                        title: titleInput.value,
+                        content: contentTextarea.value
+                    };
+
+                    await axios({
+                        method: 'put',
+                        url: '/board/noticeUpdate',
+                        data: updatedNoticeData,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => {
+                        alert("공지사항 수정에 성공했습니다.");
+                        loadNotices().then(res => {
+                            if (res !== "") {
+                                noticeGrid.resetData(res);  // grid에 세팅
+                            }
+                            // 수정 후 버튼을 다시 '수정'으로 변경하고 입력창을 비활성화
+                            titleInput.disabled = true;
+                            contentTextarea.disabled = true;
+                            updateBtn.textContent = '수정';
+                            noticeDtlModal.hide();
+
+                        }).catch(e => {
+                            alert("공지사항 수정에 실패했습니다.");
+                        });
+                    }).catch(e => {
+                        alert("공지사항 수정에 실패했습니다.");
+                    });
+                }
+            }
+            // qna 탭일 경우
+            if (modalType === 'qna') {
+                const modal = document.querySelector(".qnaDtlModal");
+                const titleInput = modal.querySelector("input[name='title']");
+                const contentTextarea = modal.querySelector("textarea[name='content']");
+                const ResponseArea = modal.querySelector("textarea[name='response']");
+                if (ResponseArea.value.trim() ==="") {
+                    if (updateBtn.textContent === '수정') {
+                        // 입력 필드를 수정 가능하도록 활성화
+                        titleInput.disabled = false;
+                        contentTextarea.disabled = false;
+                        updateBtn.textContent = '저장';  // 버튼 텍스트를 '저장'으로 변경
+                    } else {
+                        // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
+                        const updatedQnAData = {
+                            qnaId: modal.querySelector("input[name='qnaId']").value,
+                            userId: modal.querySelector("input[name='userId']").value,
+                            title: titleInput.value,
+                            content: contentTextarea.value,
+                            response: modal.querySelector("textarea[name='response']").value
+                        };
+                        await axios({
+                            method: 'put',
+                            url: '/board/qnaUpdate',
+                            data: updatedQnAData,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            alert("Q&A 수정에 성공했습니다.");
+                            titleInput.disabled = true;
+                            contentTextarea.disabled = true;
+                            updateBtn.textContent = '수정';
+                            qnaDtlModal.hide();
+                            loadQnas().then(res => {
+                                if (res !== "") {
+                                    qnaGrid.resetData(res);  // grid에 세팅
+                                }
+                            }).catch(e => {
+                                alert("Q&A 수정에 실패했습니다.");
+                            });
+
+                        }).catch(e => {
+                            alert("Q&A 수정에 실패했습니다.");
+                        });
+                    }
+                }else{
+                    alert("답변 등록 후에는 수정이 불가능합니다.")
+                }
+            }
+            // faq 탭일 경우
+            if (modalType === 'faq') {
+                const modal = document.querySelector(".faqDtlModal");
+                const titleInput = modal.querySelector("input[name='question']");
+                const contentTextarea = modal.querySelector("textarea[name='answer']");
+                if (updateBtn.textContent === '수정') {
+                    // 입력 필드를 수정 가능하도록 활성화
+                    titleInput.disabled = false;
+                    contentTextarea.disabled = false;
+                    updateBtn.textContent = '저장';  // 버튼 텍스트를 '저장'으로 변경
+                } else {
+                    // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
+                    const updatedFAQData = {
+                        faqId: modal.querySelector("input[name='faqId']").value,
+                        question: titleInput.value,
+                        answer: contentTextarea.value
+                    };
+                    await axios({
+                        method: 'put',
+                        url: '/board/faqUpdate',
+                        data: updatedFAQData,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => {
+                        alert("FAQ 수정에 성공했습니다.");
+                        loadFAQs();
+                        titleInput.disabled = true;
+                        contentTextarea.disabled = true;
+                        updateBtn.textContent = '수정';
+                        faqDtlModal.hide();
+                    }).catch(e => {
+                        alert("FAQ 수정에 실패했습니다.");
+                    });
+                }
+            }
+        })
+    })
+
+    document.querySelector("button[name='regResponse']").addEventListener('click', async function () {
+        const modal = document.querySelector(".qnaDtlModal");
+        const responseUpdateBtn = modal.querySelector("button[name='regResponse']");
+        const responseInput = modal.querySelector("textarea[name='response']");
+        if (responseUpdateBtn.textContent === '답변 등록') {
+            // 입력 필드를 수정 가능하도록 활성화
+            responseInput.disabled = false;
+            responseUpdateBtn.textContent = '답변 저장';  // 버튼 텍스트를 '저장'으로 변경
+        } else {
+            // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
+            const updatedQnAResponseData = {
+                qnaId: modal.querySelector("input[name='qnaId']").value,
+                userId: modal.querySelector("input[name='userId']").value,
+                response: responseInput.value
+            };
+            await axios({
+                method: 'put',
+                url: '/board/qnaResponseUpdate',
+                data: updatedQnAResponseData,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => {
+                alert("Q&A 답변 등록에 성공했습니다.");
+                responseInput.disabled = true;
+                responseUpdateBtn.textContent = '답변 등록';
+                qnaDtlModal.hide();
+                loadQnas().then(res => {
+                    if (res !== "") {
+                        qnaGrid.resetData(res);  // grid에 세팅
+                    }
+                }).catch(e => {
+                    alert("Q&A 답변 등록에 실패했습니다.");
+                });
+
+            }).catch(e => {
+                alert("Q&A 답변 등록에 실패했습니다.");
+            });
+        }
+    })
+
+}
 window.onload = () => {
     init();
 }
