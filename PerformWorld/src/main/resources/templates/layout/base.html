@@ -85,6 +85,12 @@
                     <li class="nav-item"  th:if="${user != null && user.Username == 'admin'}">
                         <a href="/admin/userlist">Management</a>
                     </li>
+                    <br>
+                    <br>
+                    <!-- 로그아웃 -->
+                    <li class="nav-item"  th:if="${user != null}">
+                        <a href="/user/logout">Logout</a>
+                    </li>
                 </ul>
             </ul>
         </nav>
