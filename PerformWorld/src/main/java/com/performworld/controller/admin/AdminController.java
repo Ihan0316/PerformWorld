@@ -1,5 +1,6 @@
 package com.performworld.controller.admin;
 
+import com.performworld.domain.Tier;
 import com.performworld.dto.admin.TierDTO;
 import com.performworld.service.admin.TierService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -20,11 +23,13 @@ public class AdminController {
 
     private final TierService tierService;
 
+    // userlist 이동
     @GetMapping("/userlist")
     public String showUserList() {
         return "admin/AdminUserList";
     }
 
+    // tierID를 이용해 tier 호출
     @GetMapping("/tier/{tierId}")
     @ResponseBody
     public ResponseEntity<TierDTO> getTier(@PathVariable Long tierId) {
@@ -36,6 +41,12 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
+    }
+
+    @GetMapping("/getTiers")
+    public ResponseEntity<List<TierDTO>> getTiers() {
+        List<TierDTO> tiers = tierService.getAllTiers();  // DB에서 모든 Tier 목록 가져오기
+        return ResponseEntity.ok(tiers);  // 모든 정보를 그대로 반환
     }
 
 }

@@ -38,10 +38,21 @@ public class Booking extends BaseEntity {
     @Column(name = "is_delivery", nullable = false)
     private boolean isDelivery;  // 배송 여부
 
+    @Column(name = "address", length = 100)
+    private String address;  // 배송지
+
     @Column(name = "total_price", nullable = false)
     private Long totalPrice;  // 총 예매 금액
 
     @ManyToOne
     @JoinColumn(name = "status", referencedColumnName = "code")
     private SystemCode status;  // 예매 상태
+
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Payment payment;
+
+    // 취소 상태로 변경
+    public void chnStatus(SystemCode chnStatus) {
+        this.status = chnStatus;
+    }
 }

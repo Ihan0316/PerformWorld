@@ -1,29 +1,25 @@
 package com.performworld.dto.board;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class QnADTO {
 
     private Long qnaId;
+    private String userId;
     private String title;
     private String content;
-
+    private String response;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;  // 등록일
-
+    private LocalDateTime responseDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime updatedAt;  // 수정일
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime responseDate;  // 답변일
-
-    private String response;  // 답변내용
+    private LocalDateTime regDate;
 }
 
 

@@ -40,24 +40,6 @@ public class TierServiceImpl implements TierService {
         return tierRepository.getUserTier(userId);
     }
 
-    // 티어 수정
-    @Override
-    public TierDTO updateTier(Long tierId, TierDTO tierDTO) {
-        return tierRepository.findById(tierId)
-                .map(tier -> {
-                    Tier updatedTier = new Tier(
-                            tierId,
-                            tierDTO.getTierName(),
-                            tierDTO.getMinSpent(),
-                            tierDTO.getMaxSpent(),
-                            tierDTO.getDiscountRate()
-                    );
-                    tierRepository.save(updatedTier);
-                    return new TierDTO(updatedTier);
-                })
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Tier입니다."));
-    }
-
     // 특정 tierId에 해당하는 Tier 조회
     @Override
     public TierDTO getTierById(Long tierId) {

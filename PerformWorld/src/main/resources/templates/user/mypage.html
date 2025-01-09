@@ -30,10 +30,36 @@
 				</div>
 			</div>
 		</div>
+		<!-- 후기 상세 모달 -->
+		<div class="modal rvDtlModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">후기 상세</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" name="reviewId">
+						<div class="input-group mb-3">
+							<div class="input-group">관람 공연</div>
+							<select class="form-control" name="booking" disabled></select>
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group">내용</div>
+							<textarea class="form-control" rows="20" name="rvContent" style="resize: none" disabled></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-primary updRvBtn" value="수정하기">
+						<input type="button" class="btn btn-primary delRvBtn" value="삭제하기">
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
 			<div class="row">
 				<div class="col-md-4">
-					<h2>My Page</h2>
+					<h2>마이 페이지</h2>
 				</div>
 			</div>
 			<form>
@@ -57,7 +83,7 @@
 										<input type="text" name="name" class="form-control" required disabled>
 									</div>
 									<div class="col-lg-4 p-0">
-										<input type="text" name="tierName" class="form-control" value="VIP" disabled>
+										<input type="text" name="tierName" class="form-control" disabled>
 									</div>
 								</div>
 								<label style="margin-top: 10px">이메일</label>
@@ -83,12 +109,19 @@
 									<input type="button" class="btn btn-primary btn-md delUserBtn" style="margin-top: 20px" value="회원 탈퇴">
 								</div>
 							</div>
-							<!-- 캘린더, 예매내역, 후기목록 -->
+							<!-- 예매내역, 후기목록, QnA -->
 							<div class="col-lg-6">
 								<label class="fs-2">예매내역</label>
+								<div class="form-group d-flex">
+									<input type="radio" class="radio-inline" name="bookStatus" value="" checked>전체
+									<input type="radio" class="radio-inline" name="bookStatus" value="1">예매
+									<input type="radio" class="radio-inline" name="bookStatus" value="0">취소
+								</div>
 								<div id="bookingGrid"></div>
 								<label class="fs-2">후기목록</label>
 								<div id="reviewGrid"></div>
+								<label class="fs-2">문의내역</label>
+								<div id="myQnaGrid"></div>
 							</div>
 						</div>
 					</div>
@@ -103,6 +136,7 @@
 			const loginUser = [[${session.user}]];
 			console.log(loginUser);
 			const chnPwModal = new bootstrap.Modal(document.querySelector('.chnPwModal'));
+			const rvDtlModal = new bootstrap.Modal(document.querySelector('.rvDtlModal'));
 		</script>
 		<script th:src="@{/js/user/mypage.js}"></script>
 	</th:block>

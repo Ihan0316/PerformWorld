@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -101,18 +100,24 @@ public class EventRestController {
 
     // 상세이미지 조회
     @PostMapping("/details/{eventId}/images")
-    public ResponseEntity<EventDTO> getOneImages(@PathVariable Long eventId) {
-        EventDTO eventDTO = eventService.getOneImages(eventId);
-        return ResponseEntity.ok(eventDTO);
+    public ResponseEntity<List<String>> getOneImages(@PathVariable Long eventId) {
+        return ResponseEntity.ok(eventService.getDtlImages(eventId));
     }
 
-
-
-
-
-
-
-
-
+    // 목록 카테고리 검색
+    @GetMapping("/category/{genre}")
+    public ResponseEntity<List<EventDTO>> getEventListByCategory(@PathVariable String genre) {
+        try {
+            System.out.println("Received genre: " + genre); // 요청된 genre 값 확인용 로그
+            List<EventDTO> eventList = eventService.getEventList(genre);
+            if (eventList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(eventList);
+            }
+            return ResponseEntity.ok(eventList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

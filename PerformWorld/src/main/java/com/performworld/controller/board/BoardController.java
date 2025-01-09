@@ -13,4 +13,10 @@ public class BoardController {
     public String review() {
         return "board/review";
     }
+
+    // 관리자 게시판
+    @GetMapping("/list")
+    public String getlist() {
+        return "board/board";
+    }
 }

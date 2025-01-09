@@ -2,21 +2,17 @@ const initGrid = () => {
     const Grid = tui.Grid;
 
     // 테마
-    Grid.applyTheme('default',  {
+    Grid.applyTheme('clean',  {
         cell: {
             normal: {
-                border: 'gray'
+                border: 'gray',
+                showVerticalBorder: true,
+                showHorizontalBorder: true
             },
             header: {
                 background: 'gray',
                 text: 'white',
-                border: 'gray'
-            },
-            rowHeaders: {
-                header: {
-                    background: 'gray',
-                    text: 'white'
-                }
+                border: 'white'
             }
         }
     });
@@ -85,7 +81,7 @@ const init = () => {
 
             // 응답 받은 데이터로 그리드에 표시
             const ticketData = res.data;
-
+            console.log(ticketData)
             // 그리드에 데이터를 설정
             testGrid.resetData(ticketData);
         } catch (error) {
@@ -95,6 +91,13 @@ const init = () => {
     getTicketingList();
 
 }
+
+document.querySelector(".ticketingRegBtn").addEventListener("click",function (e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    window.location.href="/ticketing/register";
+})
 
 window.onload = () => {
     init();

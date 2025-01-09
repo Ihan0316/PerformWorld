@@ -22,4 +22,9 @@ public class FAQ extends BaseEntity{
 
     @Column(name = "answer", columnDefinition = "TEXT", nullable = false)
     private String answer;  // 답변
+
+    public void updateFAQ(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
 }
