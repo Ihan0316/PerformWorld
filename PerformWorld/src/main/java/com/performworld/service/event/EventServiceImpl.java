@@ -206,24 +206,23 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Page<EventSavedListDTO> getSavedEventList(int page, int size, String title, String genre) {
-        Pageable pageable = PageRequest.of(page, size); // 0-based index를 사용
-        Page<Event> eventPage;
+    public List<EventSavedListDTO> getSavedEventList(String title, String genre) {
+        List<Event> eventList;
 
         // title과 genre 조건에 따라 쿼리 실행
         if (title != null && !title.isEmpty() && genre != null && !genre.isEmpty()) {
-            eventPage = eventRepository.findByTitleContainingAndCategory_Code(title, genre, pageable);
+            eventList = eventRepository.findByTitleContainingAndCategory_Code(title, genre);
         } else if (title != null && !title.isEmpty()) {
-            eventPage = eventRepository.findByTitleContaining(title, pageable);
+            eventList = eventRepository.findByTitleContaining(title);
         } else if (genre != null && !genre.isEmpty()) {
-            eventPage = eventRepository.findByCategory_Code(genre, pageable);
+            eventList = eventRepository.findByCategory_Code(genre);
         } else {
-            eventPage = eventRepository.findAll(pageable); // 조건 없이 모든 이벤트 반환
+            eventList = eventRepository.findAll(); // 조건 없이 모든 이벤트 반환
         }
 
         // ModelMapper를 사용하여 Event 엔티티를 EventSavedListDTO로 변환
         ModelMapper modelMapper = new ModelMapper();
-        Page<EventSavedListDTO> eventSavedListDTOPage = eventPage.map(event -> {
+        List<EventSavedListDTO> eventSavedListDTOList = eventList.stream().map(event -> {
             EventSavedListDTO dto = modelMapper.map(event, EventSavedListDTO.class);
             // genre 값 설정 (카테고리 코드명)
             dto.setGenre(event.getCategory() != null ? event.getCategory().getCodeName() : null);
@@ -232,9 +231,9 @@ public class EventServiceImpl implements EventService{
                     event.getImages().stream().filter(Image::isThumbnail).findFirst().map(Image::getFilePath).orElse(null) :
                     null);
             return dto;
-        });
+        }).collect(Collectors.toList());
 
-        return eventSavedListDTOPage;
+        return eventSavedListDTOList;
     }
 
     // 목록에 포스트 이미지 조회
