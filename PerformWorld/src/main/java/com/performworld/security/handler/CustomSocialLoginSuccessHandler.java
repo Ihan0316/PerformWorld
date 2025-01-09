@@ -24,8 +24,6 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
         log.info(authentication.getPrincipal());
         UserSecurityDTO userSecurityDTO = (UserSecurityDTO)authentication.getPrincipal();
 
-        // 패스워드를 확인함, 자동로그인(소셜로그인시), 멤버 새롭게 생성되고,
-        // 패스워드가 1111 로 고정.
         String encodeUpw = userSecurityDTO.getUpw();
 
         // 소셜 로그인이고 && 패스워드가 1111

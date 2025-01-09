@@ -56,7 +56,6 @@ function submitForm(event) {
         address1: document.querySelector("input[name='address1']").value,
         address2: document.querySelector("input[name='address2']").value
     };
-
     // 유효성 검사
     if (!validateForm()) {
         return;

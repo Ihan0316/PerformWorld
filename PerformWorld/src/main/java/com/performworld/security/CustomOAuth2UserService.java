@@ -52,7 +52,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if ("kakao".equals(clientName)) {
             email = getKakaoEmail(paramMap);
         }
-
         return generateDTO(email, paramMap);
     }
 

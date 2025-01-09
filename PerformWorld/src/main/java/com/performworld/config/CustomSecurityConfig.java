@@ -33,11 +33,12 @@ public class CustomSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("===========config=================");
 
+        http.formLogin(
+                formLogin ->
+                        formLogin.loginPage("/user/login")
+        );
         http.formLogin(formLogin ->
-                formLogin
-                        .loginPage("/user/login")
-                        .loginProcessingUrl("/user/login")
-                        .defaultSuccessUrl("/", true)  // 로그인 성공 시 리다이렉트할 URL
+                formLogin.defaultSuccessUrl("/",true)
         );
 
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
@@ -47,7 +48,7 @@ public class CustomSecurityConfig {
                 authorizeRequests -> {
                     authorizeRequests.requestMatchers
                             ("/css/**", "/js/**","/images/**",
-                                    "/user/login","/user/join", "/","/event/theater",
+                                    "/","/event", "/user/**",
                                     "http://localhost:8080/login/oauth2/code/kakao",
                                     "https://kauth.kakao.com",
                                     "https://kapi.kakao.com").permitAll();
@@ -70,9 +71,9 @@ public class CustomSecurityConfig {
         http.rememberMe(
                 httpSecurityRememberMeConfigurer
                         -> httpSecurityRememberMeConfigurer.key("12345678")
-                        .tokenRepository(persistentTokenRepository()) // 밑에서, 토큰 설정 추가해야해서,
+                        .tokenRepository(persistentTokenRepository())
                         .userDetailsService(customUserDetailsService)
-                        .tokenValiditySeconds(60*60*24*30) //30일
+                        .tokenValiditySeconds(60*60*24*30)
         );
 
         http.oauth2Login(

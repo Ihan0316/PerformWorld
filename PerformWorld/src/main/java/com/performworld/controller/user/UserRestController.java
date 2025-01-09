@@ -1,6 +1,7 @@
 package com.performworld.controller.user;
 
 
+import com.performworld.domain.User;
 import com.performworld.dto.user.UserDTO;
 import com.performworld.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -82,9 +83,10 @@ public class UserRestController {
     }
     //비밀번호 찾기
     @PostMapping("/findPw")
-    public ResponseEntity<Map<String, String>> findPw(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> findPw(@RequestBody UserDTO userDTO) {
+        log.info(userDTO.getEmail());
         try {
-            userService.findPw(email);
+            userService.findPw(userDTO.getEmail());
             return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 이메일로 전송되었습니다."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

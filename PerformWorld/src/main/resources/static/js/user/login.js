@@ -1,10 +1,10 @@
 $(document).ready(function () {
     $("#loginForm").submit(function (e) {
 
-        var userId = $("input[name='userId']").val();
+        var username = $("input[name='username']").val();
         var password = $("input[name='password']").val();
 
-        if (!validateForm(userId, password)) {
+        if (!validateForm(username, password)) {
             return;
         }
 
@@ -15,13 +15,13 @@ $(document).ready(function () {
             url: '/user/login',
             type: 'POST',
             data: {
-                userId: userId,
+                username: username,
                 password: password
             },
             success: function (response) {
                 alert("로그인 성공!");
 
-                sessionStorage.setItem('currentUser', response.userId);
+                sessionStorage.setItem('currentUser', response.username);
             },
             error: function (xhr, status, error) {
                 alert(xhr.responseText || "로그인 실패");
@@ -33,8 +33,8 @@ $(document).ready(function () {
         });
     });
 
-    function validateForm(userId, password) {
-        if (!userId || !password) {
+    function validateForm(username, password) {
+        if (!username || !password) {
             alert("아이디와 비밀번호를 모두 입력해주세요.");
             return false;
         }
@@ -53,8 +53,13 @@ $(document).ready(function () {
         const email = document.getElementById('email').value;
 
         // AJAX 요청 보내기
-        fetch('/user/findPw?email=' + encodeURIComponent(email), {
+        fetch('/user/findPw', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({email: encodeURIComponent(email)})  // JSON으로 변환하여 요청 본문에 전달
         })
             .then(response => response.json())  // 서버로부터 JSON 응답 받기
             .then(data => {

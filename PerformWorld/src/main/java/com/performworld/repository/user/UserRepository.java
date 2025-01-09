@@ -24,6 +24,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     UserDTO findUserByUserId(@Param("userId") String userId);
 
     @EntityGraph(attributePaths = "roleSet")
-    @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.tier IS NOT NULL")
+    @Query("SELECT u FROM User u WHERE u.userId = :userId")
     Optional<User> getWithRoles(@Param("userId") String userId);
 }

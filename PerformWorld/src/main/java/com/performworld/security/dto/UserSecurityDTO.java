@@ -34,7 +34,6 @@ public class UserSecurityDTO extends User implements OAuth2User {
         this.email = email;
         this.del = del;
         this.social = social;
-
     }
     @Override
     public Map<String, Object> getAttributes() {

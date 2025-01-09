@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Getter
-@ToString(exclude = {"password"})
+//@ToString(exclude = "roleSet")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -59,6 +59,7 @@ public class User extends BaseEntity {
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<>();
+
     private boolean del;
     private boolean social;
 

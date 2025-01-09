@@ -21,15 +21,16 @@ public class CustomUserDetailsService implements org.springframework.security.co
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        log.info("로그인한 유저 확인: " + userId);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("로그인한 유저 확인: " + username);
 
-        Optional<User> result = userRepository.findByUserId(userId);
+        Optional<User> result = userRepository.getWithRoles(username);
         if (result.isEmpty()) {
-            throw new UsernameNotFoundException(userId);
+            throw new UsernameNotFoundException(username);
         }
 
         User user = result.get();
+        log.info("로그인한 유저 확인2: user : " + user);
         return new UserSecurityDTO(
                 user.getUserId(),
                 user.getPassword(),
