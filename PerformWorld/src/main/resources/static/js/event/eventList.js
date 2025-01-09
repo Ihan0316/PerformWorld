@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 width: 100,
                 formatter: ({ value }) => `<img src="${value}" alt="썸네일" style=" height: 50px;">`
             },
-            { header: '이벤트 ID', name: 'eventId', align: 'center', minWidth: 10 },
+            { header: '이벤트 ID', name: 'eventId', align: 'center', minWidth: 10, hidden: true },
             { header: '제목', name: 'title', align: 'center', minWidth: 250 },
             { header: '시작일', name: 'prfpdfrom', align: 'center', minWidth: 120 },
             { header: '종료일', name: 'prfpdto', align: 'center', minWidth: 120 },
