@@ -2,21 +2,17 @@ const initGrid = () => {
     const Grid = tui.Grid;
 
     // 테마
-    Grid.applyTheme('default',  {
+    Grid.applyTheme('clean',  {
         cell: {
             normal: {
-                border: 'gray'
+                border: 'gray',
+                showVerticalBorder: true,
+                showHorizontalBorder: true
             },
             header: {
                 background: 'gray',
                 text: 'white',
-                border: 'gray'
-            },
-            rowHeaders: {
-                header: {
-                    background: 'gray',
-                    text: 'white'
-                }
+                border: 'white'
             }
         }
     });
@@ -30,7 +26,7 @@ const initGrid = () => {
         // rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
-            perPage: 10
+            perPage: 15
         },
         draggable: false, // 드래그 비활성화
         columns: [
@@ -95,6 +91,13 @@ const init = () => {
     getTicketingList();
 
 }
+
+document.querySelector(".ticketingRegBtn").addEventListener("click",function (e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    window.location.href="/ticketing/register";
+})
 
 window.onload = () => {
     init();

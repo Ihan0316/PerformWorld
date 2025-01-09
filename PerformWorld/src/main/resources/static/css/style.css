@@ -448,6 +448,7 @@ body.offcanvas #fh5co-aside {
   background: #fff;
   z-index: 999;
   position: fixed;
+  visibility: visible;
 }
 body.offcanvas #fh5co-main, body.offcanvas .fh5co-nav-toggle {
   top: 0;
@@ -456,6 +457,9 @@ body.offcanvas #fh5co-main, body.offcanvas .fh5co-nav-toggle {
   -ms-transform: translateX(270px);
   -o-transform: translateX(270px);
   transform: translateX(270px);
+  visibility: visible;
+  position: fixed;
+  background-color: whitesmoke;
 }
 
 .fh5co-services {

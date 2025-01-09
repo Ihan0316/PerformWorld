@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/base.html}">
+
+<head>
+	<link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+</head>
+
+<body>
+<div id="fh5co-main" layout:fragment="content">
+	<div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
+		<!--헤더 섹션-->
+		<div class="row">
+			<div class="col-md-12">
+				<h2>예매 내역 캘린더</h2>
+			</div>
+		</div>
+
+		<!--년/월 보기-->
+		<div class="calendar-header-container d-flex justify-content-between align-items-center">
+			<button id="btn-prev-month" class="btn btn-secondary"><</button>
+			<div id="calendar-title" class="calendar-render-range text-center"></div>
+			<button id="btn-next-month" class="btn btn-secondary">></button>
+		</div>
+
+		<!--캘린더 매뉴 섹션-->
+		<div id="calendar-menu" class="mb-4">
+			<button id="btn-month-view" class="btn btn-primary">월별 보기</button>
+			<button id="btn-week-view" class="btn btn-secondary">주별 보기</button>
+			<button id="btn-today" class="btn btn-success">오늘</button>
+		</div>
+
+		<!--캘린더 섹션-->
+		<div id="calendar" style="height: 700px;"></div>
+	</div>
+</div>
+<th:block layout:fragment="javascript">
+	<!-- Toast UI Calendar JS 추가 -->
+	<script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.ie11.min.js"></script>
+
+	<!-- calendar.js는 반드시 라이브러리 이후에 로드 -->
+	<script th:src="@{/js/ticket/calendar.js}"></script>
+</th:block>
+</body>
+</html>
