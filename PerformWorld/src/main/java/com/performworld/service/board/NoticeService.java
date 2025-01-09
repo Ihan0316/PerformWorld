@@ -11,6 +11,8 @@ public interface NoticeService {
     void saveNotice(NoticeDTO noticeDTO);
 
     void deleteNotice(Long noticeId);
+
+    void updateNotice(NoticeDTO noticeDTO);
 }
 
 

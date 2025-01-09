@@ -5,12 +5,14 @@ import com.performworld.service.board.FAQService;
 import com.performworld.service.board.NoticeService;
 import com.performworld.service.board.QnAService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class BoardRestController {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(faqList); // JSON 형식으로 자동 변환
+        return ResponseEntity.ok(faqList);
     }
     @PostMapping("/getQnAList")
     public ResponseEntity<List<QnADTO>> getAllQnAs(@RequestBody QnADTO qnADTO) {
@@ -40,7 +42,7 @@ public class BoardRestController {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(qnaList); // JSON 형식으로 자동 변환
+        return ResponseEntity.ok(qnaList);
     }
 
     @PostMapping("/getNoticeList")
@@ -109,6 +111,47 @@ public class BoardRestController {
             return ResponseEntity.ok("FAQ가 삭제되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 삭제에 실패했습니다.");
+        }
+    }
+
+    @PutMapping("/noticeUpdate")
+    public ResponseEntity<String> updateNotice(@RequestBody NoticeDTO noticeDTO) {
+        try {
+            noticeService.updateNotice(noticeDTO);
+            return ResponseEntity.ok("Notice가 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Notice 수정에 실패했습니다.");
+        }
+    }
+
+    @PutMapping("/faqUpdate")
+    public ResponseEntity<String> updateFaq(@RequestBody FAQDTO faqdto) {
+       try {
+            faqService.updateFAQ(faqdto);
+            return ResponseEntity.ok("FAQ가 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 수정에 실패했습니다.");
+        }
+    }
+
+    @PutMapping("/qnaUpdate")
+    public ResponseEntity<String> updateQna(@RequestBody QnADTO qnADTO) {
+        log.info("qnaDTO:"+qnADTO);
+        try {
+            qnAService.updateQna(qnADTO);
+            return ResponseEntity.ok("QnA가 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("QnA 수정에 실패했습니다.");
+        }
+    }
+
+    @PutMapping("/qnaResponseUpdate")
+    public ResponseEntity<String> updateResponseQna(@RequestBody QnADTO qnADTO) {
+        try {
+            qnAService.updateResponseQna(qnADTO);
+            return ResponseEntity.ok("QnA 답변이 등록되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("QnA 답변 등록에 실패했습니다.");
         }
     }
 }

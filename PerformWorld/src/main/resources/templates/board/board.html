@@ -36,8 +36,8 @@
     </div>
     <!-- Notice 상세 모달 -->
     <div class="modal noticeDtlModal" tabindex="-1">
-        <div class="modal-dialog" style="width: 80%; max-width: 600px;">
-            <div class="modal-content">
+        <div class="modal-dialog" style="width: 80%; max-width: 1000px; height: 600px;">
+            <div class="modal-content" style="height: 100%; overflow-y: auto;">
                 <div class="modal-header">
                     <h5 class="modal-title">공지사항</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">내용</label>
-                        <textarea class="form-control" name="content" rows="5" style="resize: none" required disabled></textarea>
+                        <textarea class="form-control" name="content" rows="10" style="resize: none" required disabled></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -151,8 +151,8 @@
     </div>
     <!-- FAQ 상세 모달 -->
     <div class="modal faqDtlModal" tabindex="-1">
-        <div class="modal-dialog" style="width: 80%; max-width: 600px;">
-            <div class="modal-content">
+        <div class="modal-dialog" style="width: 80%; max-width: 1000px;  height: 600px;">
+            <div class="modal-content" style="height: 100%; overflow-y: auto;">
                 <div class="modal-header">
                     <h5 class="modal-title">질문과 답변</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -165,7 +165,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">답변</label>
-                        <textarea class="form-control" name="answer" rows="5" style="resize: none" required disabled></textarea>
+                        <textarea class="form-control" name="answer" rows="10" style="resize: none" required disabled></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

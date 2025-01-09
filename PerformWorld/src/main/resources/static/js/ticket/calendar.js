@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         axios.get(`/ticket/calendar/api/booked-dates?status=${status}`)
             .then(response => {
                 bookedDates = response.data || []; // 응답 데이터 저장
+                console.log("BookedDates" + bookedDates);
                 initializeCalendar(); // 캘린더 초기화
             })
             .catch(error => {

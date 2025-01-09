@@ -26,7 +26,7 @@ const initGrid = () => {
         // rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,  // 프론트에서 페이징
-            perPage: 10
+            perPage: 15
         },
         draggable: false, // 드래그 비활성화
         columns: [
