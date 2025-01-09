@@ -201,8 +201,8 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional
-    public void deleteEvent(Long eventId) {
-        eventRepository.deleteById(eventId);
+    public void deleteEvents(List<Long> eventIds) {
+        eventRepository.deleteAllById(eventIds); // 여러 이벤트 ID를 받아서 삭제
     }
 
     @Override

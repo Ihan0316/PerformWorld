@@ -13,7 +13,7 @@ public interface EventService {
     String getEventDetails(String eventID);
     void saveEvent(String eventXml);
     List<EventDTO> getAllEvents();
-    void deleteEvent(Long eventId);
+    void deleteEvents(List<Long> eventId);
     EventDTO getOneEvents(Long eventId);
     List<String> getDtlImages(Long eventId);
     List<EventDTO> getEventList (String genre);

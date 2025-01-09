@@ -33,9 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: 'select',
                 align: 'center',
                 width: 50,
-                formatter: ({ rowKey }) => {
-                    return `<input type="checkbox" class="row-checkbox" data-row-key="${rowKey}" />`;
-                }
+                formatter: () => '<input type="checkbox" class="row-checkbox" />'
             },
             {
                 header: '썸네일',
@@ -44,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 width: 100,
                 formatter: ({ value }) => `<img src="${value}" alt="썸네일" style=" height: 50px;">`
             },
-            { header: '이벤트 ID', name: 'eventId', align: 'center', minWidth: 10 , hidden: true},
+            { header: '이벤트 ID', name: 'eventId', align: 'center', minWidth: 10, hidden: true },
             { header: '제목', name: 'title', align: 'center', minWidth: 250 },
             { header: '시작일', name: 'prfpdfrom', align: 'center', minWidth: 120 },
             { header: '종료일', name: 'prfpdto', align: 'center', minWidth: 120 },
@@ -54,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         data: [] // 초기 데이터 비어있음
     });
 
-// 리사이즈 이벤트 처리
+    // 리사이즈 이벤트 처리
     window.addEventListener('resize', () => {
         grid.bodyHeight = getGridHeight(); // 창 크기 변경 시 그리드 높이 갱신
         grid.refreshLayout(); // 그리드 레이아웃 갱신
@@ -88,52 +86,60 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // 선택된 이벤트 삭제 함수
-    const deleteSelectedEvents = async () => {
-        const checkedCheckboxes = document.querySelectorAll('.row-checkbox:checked'); // 체크된 체크박스들
-        const eventIds = [];
-
-        checkedCheckboxes.forEach(checkbox => {
-            const rowKey = checkbox.getAttribute('data-row-key');
-            const rowData = grid.getRow(rowKey);
-            eventIds.push(rowData.eventId);
-        });
-
-        if (eventIds.length === 0) {
-            alert("삭제할 이벤트를 선택해주세요.");
+    const deleteSelectedEvents = async (selectedEventIds) => {
+        if (selectedEventIds.length === 0) {
+            alert('삭제할 이벤트를 선택해주세요.');
             return;
         }
 
-        if (!confirm("선택한 이벤트를 삭제하시겠습니까?")) return;
+        if (!confirm('선택한 이벤트를 삭제하시겠습니까?')) {
+            return;
+        }
 
         try {
-            // axios로 DELETE 요청 보내기
-            const response = await axios({
+            const response = await fetch('/event/deleteEvents', {
                 method: 'DELETE',
-                url: '/event/deleteEvent', // 삭제할 이벤트들의 엔드포인트
                 headers: {
-                    'Content-Type': 'application/json' // 요청 헤더
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                data: { eventIds } // 삭제할 이벤트 ID들을 요청 본문에 담아 전송
+                body: JSON.stringify(selectedEventIds) // 선택된 이벤트 ID를 JSON 형식으로 전송
             });
 
-            // 서버 응답을 처리
-            if (response.status === 200) {
+            if (response.ok) {
+                console.log('이벤트 삭제 성공');
                 alert('선택한 이벤트가 삭제되었습니다.');
-                loadEvents(); // 삭제 후 다시 로드
+                loadEvents(); // 삭제 후 이벤트 목록 새로 고침
             } else {
+                console.error('이벤트 삭제 실패');
                 alert('이벤트 삭제에 실패했습니다.');
             }
         } catch (error) {
-            console.error('Error deleting events:', error);
+            console.error('이벤트 삭제 중 오류 발생:', error);
             alert('이벤트 삭제 중 오류가 발생했습니다.');
         }
     };
+
 
     // 검색 버튼 이벤트
     document.getElementById('searchButton').addEventListener('click', loadEvents);
 
     // 삭제 버튼 이벤트
-    document.getElementById('eventDeleteBtn').addEventListener('click', deleteSelectedEvents);
+    document.getElementById('eventDeleteBtn').addEventListener('click', () => {
+        const selectedEventIds = [];
+        const checkboxes = document.querySelectorAll('.row-checkbox');
+        const rows = grid.getData();
+
+        // 선택된 체크박스의 데이터를 가져옴
+        checkboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                selectedEventIds.push(rows[index].eventId);
+            }
+        });
+
+        // 선택된 이벤트 삭제 함수 호출
+        deleteSelectedEvents(selectedEventIds);
+    });
 
     // 페이지 로드 시 이벤트 목록 초기화
     loadEvents();
