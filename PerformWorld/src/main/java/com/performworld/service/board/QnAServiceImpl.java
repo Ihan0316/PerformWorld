@@ -1,5 +1,6 @@
 package com.performworld.service.board;
 
+import com.performworld.domain.Notice;
 import com.performworld.domain.QnA;
 import com.performworld.domain.User;
 import com.performworld.dto.board.QnADTO;
@@ -38,5 +39,24 @@ public class QnAServiceImpl implements QnAService {
     @Override
     public void deleteQnA(Long qnaId) {
         qnaRepository.deleteById(qnaId);
+    }
+
+    @Override
+    public void updateQna(QnADTO qnADTO) {
+
+        QnA qnA = qnaRepository.findById(qnADTO.getQnaId())
+                .orElseThrow(() -> new RuntimeException("해당 Q&A를 찾을 수 없습니다."));
+
+        qnA.updateQnA(qnADTO.getTitle(), qnADTO.getContent(), qnA.getResponse());
+
+        qnaRepository.save(qnA);
+    }
+
+    @Override
+    public void updateResponseQna(QnADTO qnADTO) {
+        QnA qnA = qnaRepository.findById(qnADTO.getQnaId())
+                .orElseThrow(() -> new RuntimeException("해당 Q&A를 찾을 수 없습니다."));
+        qnA.registRes(qnADTO.getResponse());
+        qnaRepository.save(qnA);
     }
 }

@@ -11,4 +11,6 @@ public interface FAQService {
     void saveFAQ(FAQDTO faqDTO);
 
     void deleteFAQ(Long faqId);
+
+    void updateFAQ(FAQDTO faqDTO);
 }
