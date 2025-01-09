@@ -19,7 +19,7 @@ const initGrid = () => {
 
     // 세팅
     return new Grid({
-        el: document.getElementById('grid'),
+        el: document.getElementById('ticketinfogrid'),
         scrollX: false,
         scrollY: false,
         minBodyHeight: 30,
@@ -92,13 +92,21 @@ const init = () => {
 
 }
 
-document.querySelector(".ticketingRegBtn").addEventListener("click",function (e){
-    e.preventDefault()
-    e.stopPropagation()
+// document.querySelector(".ticketingRegBtn").addEventListener("click",function (e){
+//     e.preventDefault()
+//     e.stopPropagation()
+//
+//     window.location.href="/ticketing/register";
+// })
 
-    window.location.href="/ticketing/register";
-})
-
+var ticketingRegBtn = document.querySelector(".ticketingRegBtn");
+if (ticketingRegBtn) {
+    ticketingRegBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = "/ticketing/register";
+    });
+}
 window.onload = () => {
     init();
 }

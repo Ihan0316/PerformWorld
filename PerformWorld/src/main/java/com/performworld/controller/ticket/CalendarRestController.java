@@ -3,6 +3,7 @@ package com.performworld.controller.ticket;
 import com.performworld.dto.ticket.CalendarEventDTO;
 import com.performworld.service.ticket.CalendarService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,7 @@ public class CalendarRestController {
     @GetMapping("/booked-dates")
     public List<CalendarEventDTO> getBookedDates(@RequestParam(defaultValue = "Y") String status) {
         try {
-            String userId = "user123";  // 임시로 userId를 'user123'으로 설정
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             List<CalendarEventDTO> bookedEvents = calendarService.findBookedDatesByUserIdAndStatus(userId, status);
 
             if (bookedEvents == null || bookedEvents.isEmpty()) {

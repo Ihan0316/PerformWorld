@@ -66,7 +66,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePw(UserDTO userDTO) {
         User user = userRepository.findById(userDTO.getUserId()).orElseThrow();
-        user.chnUserInfo(userDTO.getPassword());
+
+        // 비밀번호를 암호화
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+
+        // 암호화된 비밀번호로 사용자 정보 변경
+        user.chnUserInfo(encodedPassword);
         log.info(user);
 
         userRepository.save(user);

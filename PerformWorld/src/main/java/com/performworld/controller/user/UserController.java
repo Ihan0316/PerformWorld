@@ -3,6 +3,7 @@ package com.performworld.controller.user;
 
 
 import com.performworld.service.user.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,8 +34,9 @@ public class UserController {
     }
     // 마이페이지
     @GetMapping("/mypage")
-    public String mypage(@AuthenticationPrincipal UserDetails user, Model model) {
+    public String mypage(@AuthenticationPrincipal UserDetails user, Model model, HttpSession session) {
         model.addAttribute("user", user);
+        session.setAttribute("userId", user.getUsername());
         return "user/mypage";
     }
     // 예매 상세내역

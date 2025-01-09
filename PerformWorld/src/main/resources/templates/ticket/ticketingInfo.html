@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/ticket/ticket.css}">
 </head>
 <body>
-<!--	content layout start  -->
+<!-- content layout start -->
 <div id="fh5co-main" layout:fragment="content">
     <div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
         <div class="row">
@@ -16,21 +16,19 @@
                 <h2>티켓팅 일정</h2>
             </div>
         </div>
+        <!-- 관리자만 등록 버튼이 보이도록 조건문 수정 -->
         <div>
             <div>
-                <button type="button" class="btn btn-primary btn-sm ticketingRegBtn">등록</button>
+                <button type="button" th:if="${user != null && user.Username == 'admin'}" class="btn btn-primary btn-sm ticketingRegBtn">등록</button>
             </div>
         </div>
+        <!-- 티켓팅 정보 그리드 -->
         <div>
-            <div id="grid"></div>
+            <div id="ticketinfogrid"></div>
         </div>
     </div>
-    <!--    <div id="map"></div>-->
+
 </div>
-<!--	content layout end  -->
-
-<!-- JavaScript -->
-
 <th:block layout:fragment="javascript">
     <script th:src="@{/js/ticket/ticketInfo.js}"></script>
     <script th:inline="javascript"></script>
