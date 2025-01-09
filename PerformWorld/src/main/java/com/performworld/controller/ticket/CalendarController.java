@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/ticket")
 public class CalendarController {
 
+
     @GetMapping("/calendar")
     public String calendar(@AuthenticationPrincipal UserDetails user, Model model) {
         model.addAttribute("user", user);

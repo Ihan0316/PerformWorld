@@ -44,7 +44,6 @@ public class EventController {
         model.addAttribute("eventId", eventId);
         return "event/booking";
     }
-
     @GetMapping("/search")
     public ResponseEntity<EventSearchListDTO> searchEvents(
             @RequestParam String performName,

@@ -32,7 +32,6 @@ public class AdminController {
         model.addAttribute("user", user);
         return "admin/AdminUserList";
     }
-
     // tierID를 이용해 tier 호출
     @GetMapping("/tier/{tierId}")
     @ResponseBody

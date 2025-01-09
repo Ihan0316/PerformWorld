@@ -17,7 +17,6 @@ public class BoardController {
         model.addAttribute("user", user);
         return "board/review";
     }
-
     // 관리자 게시판
     @GetMapping("/list")
     public String getlist(@AuthenticationPrincipal UserDetails user, Model model) {
