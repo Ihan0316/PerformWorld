@@ -246,7 +246,7 @@ const init = () => {
                 noticeRegModal.show();
             }
             if (modalType === 'qna') {
-                document.querySelector(".qnaRegModal input[name='userId']").value = 'user123';  // loginInfo
+                document.querySelector(".qnaRegModal input[name='userId']").value;  // loginInfo
                 qnaRegModal.show();
             }
             if (modalType === 'faq') {
@@ -400,6 +400,10 @@ const init = () => {
                             noticeGrid.resetData(res);  // grid에 세팅
                         }
                         noticeRegModal.hide();
+
+                        // 모달 입력 필드 초기화
+                        document.querySelector(".noticeRegModal input[name='title']").value = '';
+                        document.querySelector(".noticeRegModal textarea[name='content']").value = '';
                     }).catch(e => {
                         alert("Notice 목록을 가져오는데 실패했습니다.");
                     });
@@ -418,9 +422,9 @@ const init = () => {
                 }
 
                 const data = {
-                    title: title
-                    , content: content
-                    , userId: 'user123'  // loginInfo
+                    title: title,
+                    content: content,
+                    userId: 'user123'  // loginInfo
                 };
                 await axios({
                     method: 'post',
@@ -436,6 +440,10 @@ const init = () => {
                             qnaGrid.resetData(res);  // grid에 세팅
                         }
                         qnaRegModal.hide();
+
+                        // 모달 입력 필드 초기화
+                        document.querySelector(".qnaRegModal input[name='title']").value = '';
+                        document.querySelector(".qnaRegModal textarea[name='content']").value = '';
                     }).catch(e => {
                         alert("QnA 목록을 가져오는데 실패했습니다.");
                     });
@@ -465,6 +473,10 @@ const init = () => {
                     alert("FAQ 등록에 성공했습니다.");
                     loadFAQs();
                     faqRegModal.hide();
+
+                    // 모달 입력 필드 초기화
+                    document.querySelector(".faqRegModal input[name='question']").value = '';
+                    document.querySelector(".faqRegModal textarea[name='answer']").value = '';
                 }).catch(e => {
                     alert("FAQ 등록에 실패했습니다.");
                 });
@@ -501,6 +513,13 @@ const init = () => {
             }
             // qna 탭일 경우
             if (modalType === 'qna') {
+                const modal = document.querySelector(".qnaDtlModal");
+                const contentuserId = modal.querySelector("input[name='userId']").value;
+                const userID = document.getElementById('username').value;
+                if (contentuserId !== userID) {
+                    alert("Q&A를 삭제할 수 없는 회원이에요.");
+                    return;
+                }
                 await axios({
                     method: 'delete',
                     url: '/board/qna',
@@ -557,6 +576,14 @@ const init = () => {
                     contentTextarea.disabled = false;
                     updateBtn.textContent = '저장';  // 버튼 텍스트를 '저장'으로 변경
                 } else {
+                    // 입력값 검증
+                    const title = titleInput.value.trim();
+                    const content = contentTextarea.value.trim();
+
+                    if (!title || !content) {
+                        alert("제목과 내용을 모두 입력해주세요.");
+                        return;
+                    }
                     // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
                     const updatedNoticeData = {
                         noticeId: modal.querySelector("input[name='noticeId']").value,
@@ -597,6 +624,12 @@ const init = () => {
                 const titleInput = modal.querySelector("input[name='title']");
                 const contentTextarea = modal.querySelector("textarea[name='content']");
                 const ResponseArea = modal.querySelector("textarea[name='response']");
+                const contentuserId = modal.querySelector("input[name='userId']").value;
+                const userID = document.getElementById('username').value;
+                if (contentuserId !== userID) {
+                    alert("Q&A를 수정할 수 없는 회원이에요.");
+                    return;
+                }
                 if (ResponseArea.value.trim() ==="") {
                     if (updateBtn.textContent === '수정') {
                         // 입력 필드를 수정 가능하도록 활성화
@@ -604,6 +637,14 @@ const init = () => {
                         contentTextarea.disabled = false;
                         updateBtn.textContent = '저장';  // 버튼 텍스트를 '저장'으로 변경
                     } else {
+                        // 입력값 검증
+                        const title = titleInput.value.trim();
+                        const content = contentTextarea.value.trim();
+
+                        if (!title || !content) {
+                            alert('제목과 내용을 모두 입력해주세요.');
+                            return;
+                        }
                         // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
                         const updatedQnAData = {
                             qnaId: modal.querySelector("input[name='qnaId']").value,
@@ -652,6 +693,14 @@ const init = () => {
                     contentTextarea.disabled = false;
                     updateBtn.textContent = '저장';  // 버튼 텍스트를 '저장'으로 변경
                 } else {
+                    // 입력값 검증
+                    const question = titleInput.value.trim();
+                    const answer = contentTextarea.value.trim();
+
+                    if (!question || !answer) {
+                        alert('질문과 답변을 모두 입력해주세요.');
+                        return;
+                    }
                     // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
                     const updatedFAQData = {
                         faqId: modal.querySelector("input[name='faqId']").value,

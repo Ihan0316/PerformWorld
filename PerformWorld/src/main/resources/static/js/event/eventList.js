@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: 'thumbnailUrl',
                 align: 'center',
                 width: 100,
-                formatter: ({ value }) => `<img src="${value}" alt="썸네일" style=" height: 32px;">`
+                formatter: ({ value }) => `<img src="${value}" alt="썸네일" style=" height: 31px;">`
             },
             { header: '이벤트 ID', name: 'eventId', align: 'center', minWidth: 10, hidden: true },
             { header: '제목', name: 'title', align: 'center', minWidth: 250 },

@@ -19,7 +19,7 @@ const initGrid = () => {
 
     // 세팅
     return new Grid({
-        el: document.getElementById('grid'),
+        el: document.getElementById('ticketinfogrid'),
         scrollX: false,
         scrollY: false,
         minBodyHeight: 30,
