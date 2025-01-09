@@ -1,16 +1,18 @@
 package com.performworld.service.user;
 
 import com.performworld.domain.User;
+import com.performworld.domain.UserRole;
 import com.performworld.dto.user.UserDTO;
 import com.performworld.repository.user.UserRepository;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 import java.util.Random;
@@ -22,32 +24,37 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
-
-    @Autowired
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     // 회원가입
     @Override
-    public User signUp(UserDTO userDTO) {
-        Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("Email already exists");
+    public void signUp(UserDTO userDTO) throws MidExistException {
+        String userid = userDTO.getUserId();
+        boolean exist = userRepository.existsById(userid);
+        if (exist) {
+            throw new MidExistException();
         }
         User user = modelMapper.map(userDTO, User.class);
-        return userRepository.save(user);
+        user.chnUserInfo(passwordEncoder.encode(userDTO.getPassword()));
+        user.addRole(UserRole.USER);
+        userRepository.save(user);
     }
 
-    // 로그인
-    @Override
-    public User login(String userId, String password) {
-        Optional<User> user = userRepository.findByUserId(userId);
-        if (user.isEmpty()) {
+
+    //로그인
+    public UserDTO login(String userId, String password) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        if (!user.get().getPassword().equals(password)) {
+        User user = userOptional.get();
+        if (!password.equals(user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
-        return user.get();
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        return userDTO;
     }
+
 
     // 내 정보 조회
     @Override
@@ -71,13 +78,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 이메일에 해당하는 사용자가 없습니다."));
         String temporaryPassword = generateTemporaryPassword();
-        user.chnUserInfo(temporaryPassword);
+        String encodedPassword = passwordEncoder.encode(temporaryPassword);
+        user.chnUserInfo(encodedPassword);
         userRepository.save(user);
         String subject = "임시 비밀번호 안내";
         String content = "안녕하세요. \n\n" +
                 "요청하신 임시 비밀번호는 " + temporaryPassword + " 입니다. \n\n" +
                 "로그인 후 반드시 비밀번호를 변경해 주세요.";
-
         try {
             sendEmail(email, subject, content);
         } catch (Exception e) {

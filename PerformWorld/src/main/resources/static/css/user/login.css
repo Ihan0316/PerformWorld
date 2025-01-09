@@ -1,0 +1,164 @@
+/* 전체 페이지 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 36px;
+    color: #000;
+    font-family: "Roboto", Arial, sans-serif;
+}
+
+/* 폼 스타일 */
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 8px;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+/* 버튼 스타일 */
+button, input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #228896;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #1d6e77;
+}
+
+button.btn-secondary {
+    background-color: #6c757d;
+    margin-top: 0;
+}
+
+button.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* 모달창 close 버튼 스타일 */
+button.close, .btnclose {
+    width: fit-content;
+    padding: 0 4px;
+    margin: 0 0 0 auto;
+}
+
+button.close:hover, .btnclose:hover {
+    color: #000; /* 호버 시 색상 변경 */
+}
+
+
+/* 스피너 스타일 */
+.spinner-border {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* 카카오 로그인 버튼 */
+a img {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+}
+
+/* 링크 스타일 */
+a.btn-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a.btn-link:hover {
+    text-decoration: underline;
+    /*padding: 8px 0px !important;*/
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button, input[type="submit"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+/* h2 제목 중앙 정렬 */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 로그인 및 회원가입 버튼 동일 스타일 */
+button, input[type="submit"], a.btn-secondary {
+    width: 100%;
+    padding: 10px;
+    background-color: #228896;
+    color: white;
+    border: none;
+    border-radius: 4px; /* 모서리 둥글게 */
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none; /* 링크 스타일 제거 */
+}
+
+button:hover, input[type="submit"]:hover, a.btn-secondary:hover {
+    background-color: #1d6e77;
+}
+
+/* 회원가입 버튼 추가 스타일 */
+a.btn-secondary {
+    margin-top: 10px; /* 로그인 버튼과 간격 추가 */
+    background-color: #6c757d; /* 회원가입 버튼 색상 */
+}
+
+a.btn-secondary:hover {
+    background-color: #5a6268; /* 회원가입 버튼 호버 색상 */
+}
+
+/* 스피너 위치 조정 */
+.spinner-border {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+

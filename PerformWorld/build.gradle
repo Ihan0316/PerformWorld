@@ -74,6 +74,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 전송 라이브러리
 
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.4.0' // 시큐리티 설치.
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-client
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '3.4.0'// 소셜로그인(카카오)
 }
 
 tasks.named('test') {

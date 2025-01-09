@@ -1,4 +1,4 @@
-const initGrid = () => {
+const initUserGrid = () => {
     const Grid = tui.Grid;
 
     // 테마
@@ -102,8 +102,8 @@ const deleteUsers = async (selectedUserIds) => {
     window.location.reload(); // 페이지 새로고침
 };
 
-const init = () => {
-    const userGrid = initGrid();
+const uinit = () => {
+    const userGrid = initUserGrid();
     getUserList(userGrid); // 사용자 목록 조회 실행
 
     // userIDBtn 클릭 이벤트 추가
@@ -125,5 +125,5 @@ const init = () => {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    init(); // 페이지 DOM이 로드된 후 초기화 실행
+    uinit(); // 페이지 DOM이 로드된 후 초기화 실행
 });

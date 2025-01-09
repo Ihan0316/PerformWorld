@@ -1,16 +1,17 @@
 package com.performworld.controller.user;
 
+
 import com.performworld.domain.User;
 import com.performworld.dto.user.UserDTO;
 import com.performworld.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
@@ -20,7 +21,6 @@ import java.util.Map;
 public class UserRestController {
 
     private final UserService userService;
-    private final ModelMapper modelMapper;
 
     // 내 정보 조회
     @PostMapping("/getInfo")
@@ -56,40 +56,44 @@ public class UserRestController {
     }
 
     //회원 가입
-    @PostMapping("/join")
-    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
+    @PostMapping(value = "/join" , produces = "application/json")
+    public ResponseEntity<Map<String, String>> signUp(@RequestBody UserDTO userDTO) {
+        Map<String, String> response = new HashMap<>();
         try {
             userService.signUp(userDTO);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("회원가입 성공! 로그인해주세요.");
-        } catch (Exception e) {
-            log.error("회원가입 실패: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("회원가입 실패: " + e.getMessage());
+            response.put("result", "success");
+        } catch (UserService.MidExistException e) {
+            response.put("error", "uid");
         }
+        return ResponseEntity.ok(response);
     }
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String userId, @RequestParam String password) {
+    public ResponseEntity<UserDTO> login(@RequestParam String userId, @RequestParam String password, HttpSession session) {
         try {
-            User user = userService.login(userId, password);
-            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-            userDTO.setPassword(null);
+            UserDTO userDTO = userService.login(userId, password);
+            session.setAttribute("user", userDTO);
+            log.info("User logged in: {}", userDTO);
             return ResponseEntity.ok(userDTO);
-        } catch (Exception e) {
-            log.error("로그인 실패: {}", e.getMessage());
-            return ResponseEntity.ok("로그인 실패: " + e.getMessage());
+        } catch (RuntimeException e) {
+            log.warn("Login Failed - Reason: {}", e.getMessage());
+            session.setAttribute("loginError", "아이디나 비밀번호가 틀렸습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
     //비밀번호 찾기
     @PostMapping("/findPw")
-    public String findPw(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> findPw(@RequestBody UserDTO userDTO) {
+        log.info(userDTO.getEmail());
         try {
-            userService.findPw(email);
-            return "임시 비밀번호가 이메일로 전송되었습니다.";
+            userService.findPw(userDTO.getEmail());
+            return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 이메일로 전송되었습니다."));
         } catch (Exception e) {
-            return "오류가 발생했습니다: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "오류가 발생했습니다: " + e.getMessage()));
         }
     }
+
+
 
 }

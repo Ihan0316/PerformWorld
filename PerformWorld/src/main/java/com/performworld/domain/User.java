@@ -4,12 +4,14 @@ import com.performworld.dto.user.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Getter
-@ToString(exclude = {"password"})
+//@ToString(exclude = "roleSet")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -54,9 +56,23 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QnA> qnas;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<UserRole> roleSet = new HashSet<>();
+
+    private boolean del;
+    private boolean social;
+
+
+
     // 비밀번호 변경
     public void chnUserInfo(String password) {
         this.password = password;
+    }
+
+    //권한 추가
+    public void addRole(UserRole userRole) {
+        this.roleSet.add(userRole);
     }
 
     // 정보 수정
@@ -69,7 +85,6 @@ public class User extends BaseEntity {
         this.postcode = userDTO.getPostcode();
     }
 
-    // 소비금액 및 등급 변경
     public void chnTotalSpent(Long spent, List<Tier> tiers) {
         this.totalSpent = spent;
 
@@ -77,5 +92,17 @@ public class User extends BaseEntity {
                 .filter(tier -> (tier.getMinSpent() <= totalSpent) && (totalSpent <= tier.getMaxSpent()))
                 .findFirst()
                 .ifPresent(tier -> this.tier = tier);
+
+        // 소비 금액이 모든 티어의 최대 지출 금액을 초과하는 경우
+        if (this.tier == null) {
+            Tier maxTier = tiers.stream()
+                    .filter(tier -> tier.getMaxSpent() == tiers.stream().mapToLong(Tier::getMaxSpent).max().orElse(0))
+                    .findFirst()
+                    .orElse(null);
+
+            if (maxTier != null) {
+                this.tier = maxTier;
+            }
+        }
     }
 }
