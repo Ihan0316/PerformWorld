@@ -86,6 +86,20 @@ window.addEventListener("scroll", function () {
     }
 });
 
+// 예매하기
+document.querySelector(".bookingBtn").addEventListener("click", async function (e) {
+    const res = await axios({
+        method: 'post',
+        url: `/book/getEventTicketing`,
+        data : { eventId: eventId },
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
-
-
+    if(res.data.length === 0) {
+        alert("예매 가능 시간이 아닙니다.");
+        return;
+    }
+    window.location.href = `/event/${eventId}/book`;
+});

@@ -13,12 +13,6 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
-    // 티켓팅 일정 조회 (공연전시 상세 페이지용)
-    @Override
-    public List<TicketingDTO> findRecentTicketing(Long eventId) {
-        return bookRepository.findRecentTicketing(eventId);
-    }
-
     // 오픈된 티켓팅 목록 조회 (예매 페이지용)
     @Override
     public List<TicketingDTO> getEventTicketing(Long eventId) {
