@@ -42,6 +42,17 @@ public class FAQServiceImpl implements FAQService {
     public void deleteFAQ(Long faqId) {
         faqRepository.deleteById(faqId);
     }
+
+    @Override
+    public void updateFAQ(FAQDTO faqDTO) {
+        FAQ faq = FAQ.builder()
+                .faqId(faqDTO.getFaqId())
+                .question(faqDTO.getQuestion())
+                .answer(faqDTO.getAnswer())
+                .build();
+
+        faqRepository.save(faq);
+    }
 }
 
 

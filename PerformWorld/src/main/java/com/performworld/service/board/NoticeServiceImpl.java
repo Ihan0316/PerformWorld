@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +35,19 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public void deleteNotice(Long noticeId) {
         noticeRepository.deleteById(noticeId);
+    }
+
+    @Override
+    public void updateNotice(NoticeDTO noticeDTO) {
+        // notice 객체를 수정
+        Notice notice = Notice.builder()
+                .noticeId(noticeDTO.getNoticeId())
+                .title(noticeDTO.getTitle())
+                .content(noticeDTO.getContent())
+                .build();
+
+        // 수정된 Notice 객체 저장
+        noticeRepository.save(notice);
+
     }
 }
