@@ -4,7 +4,10 @@ package com.performworld.controller.user;
 
 import com.performworld.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,17 +21,20 @@ public class UserController {
 
     //로그인 페이지 보여주기
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(@AuthenticationPrincipal UserDetails user, Model model) {
+        model.addAttribute("user", user);
         return "user/login";  // 로그인 페이지 반환
     }
     // 회원가입 페이지 보여주기
     @GetMapping("/join")
-    public String showSignUpPage() {
+    public String showSignUpPage(@AuthenticationPrincipal UserDetails user, Model model) {
+        model.addAttribute("user", user);
         return "user/join";  // 회원가입 페이지 반환
     }
     // 마이페이지
     @GetMapping("/mypage")
-    public String mypage() {
+    public String mypage(@AuthenticationPrincipal UserDetails user, Model model) {
+        model.addAttribute("user", user);
         return "user/mypage";
     }
     // 예매 상세내역
