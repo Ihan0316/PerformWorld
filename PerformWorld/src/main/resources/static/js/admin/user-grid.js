@@ -25,7 +25,7 @@ const initUserGrid = () => {
         minBodyHeight: 30,
         pageOptions: {
             useClient: true,
-            perPage: 10
+            perPage: 5
         },
         draggable: false,
         columns: [
