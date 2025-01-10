@@ -203,9 +203,11 @@
             <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_USER')">질문 등록</button>
             <div id="qnaGrid"></div>
         </div>
-        <div class="board" id="faq-board">
-            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">FAQ 등록</button>
-            <!-- FAQ 항목들이 여기에 동적으로 추가됩니다 -->
+        <div>
+            <button type="button" class="btn btn-primary btn-sm regBtn regFaqBtn" onclick="faqRegModal.show();" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">FAQ 등록</button>
+            <div class="board" id="faq-board">
+                <!-- FAQ 항목들이 여기에 동적으로 추가됩니다 -->
+            </div>
         </div>
     </div>
 </div>

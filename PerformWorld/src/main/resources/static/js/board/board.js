@@ -311,19 +311,6 @@ const init = () => {
                 const faqBoard = document.getElementById('faq-board');
                 faqBoard.innerHTML = ''; // 기존 내용을 비운다
 
-                // 등록 버튼 생성
-                const saveButton = document.createElement('button');
-                saveButton.classList.add('btn');
-                saveButton.classList.add('btn-primary');
-                saveButton.classList.add('btn-sm');
-                saveButton.classList.add('regBtn');
-                saveButton.textContent = 'FAQ 등록';
-                saveButton.onclick = () => {
-                    faqRegModal.show();
-                };
-
-                faqBoard.appendChild(saveButton);
-
                 faqs.forEach(faq => {
                     const faqItem = document.createElement('div');
                     faqItem.classList.add('faq-item');
@@ -514,9 +501,8 @@ const init = () => {
             // qna 탭일 경우
             if (modalType === 'qna') {
                 const modal = document.querySelector(".qnaDtlModal");
-                const contentuserId = modal.querySelector("input[name='userId']").value;
-                const userID = document.getElementById('username').value;
-                if (contentuserId !== userID) {
+                const userId = modal.querySelector("input[name='userId']").value;
+                if (userId !== user.uid) {
                     alert("Q&A를 삭제할 수 없는 회원이에요.");
                     return;
                 }
@@ -624,9 +610,8 @@ const init = () => {
                 const titleInput = modal.querySelector("input[name='title']");
                 const contentTextarea = modal.querySelector("textarea[name='content']");
                 const ResponseArea = modal.querySelector("textarea[name='response']");
-                const contentuserId = modal.querySelector("input[name='userId']").value;
-                const userID = document.getElementById('username').value;
-                if (contentuserId !== userID) {
+                const userId = modal.querySelector("input[name='userId']").value;
+                if (userId !== user.uid) {
                     alert("Q&A를 수정할 수 없는 회원이에요.");
                     return;
                 }
