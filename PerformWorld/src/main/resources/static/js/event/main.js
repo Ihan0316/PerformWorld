@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 공연 등록
-    document.querySelector(".eventRegisterBtn").addEventListener("click",function (e){
+    document.querySelector(".eventRegisterBtn")?.addEventListener("click",function (e){
         e.stopPropagation();
         e.preventDefault();
 
