@@ -421,12 +421,11 @@ const init = () => {
 
     // 정보 조회
     async function getUserInfo() {
-    const userID = document.getElementById('username').value
         try {
             const res = await axios({
                 method: 'post',
                 url: '/user/getInfo',
-                data: { userId: userID }, // loginInfo
+                data: { userId: user.uid }, // loginInfo
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -492,7 +491,7 @@ const init = () => {
         const res = await axios({
             method : 'delete',
             url : '/user',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -503,7 +502,7 @@ const init = () => {
     // 예매내역 조회
     async function getBkList(selectedStatus) {
         const data = {
-            userId: 'user123',  // loginInfo
+            userId: user.uid,  // loginInfo
             status: selectedStatus
         }
 
@@ -526,7 +525,7 @@ const init = () => {
         await axios({
             method : 'post',
             url : '/review/getRvList',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -573,7 +572,7 @@ const init = () => {
         await axios({
             method : 'post',
             url : '/board/getQnAList',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }

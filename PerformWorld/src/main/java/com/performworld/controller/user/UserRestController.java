@@ -1,7 +1,6 @@
 package com.performworld.controller.user;
 
 
-import com.performworld.domain.User;
 import com.performworld.dto.user.UserDTO;
 import com.performworld.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -81,19 +80,15 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-    //비밀번호 찾기
-    @PostMapping("/findPw")
-    public ResponseEntity<Map<String, String>> findPw(@RequestBody UserDTO userDTO) {
-        log.info(userDTO.getEmail());
-        try {
-            userService.findPw(userDTO.getEmail());
-            return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 이메일로 전송되었습니다."));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "오류가 발생했습니다: " + e.getMessage()));
+
+    @PostMapping("/resetPw")
+    public ResponseEntity<Map<String, String>> resetPw(@RequestBody UserDTO userDTO) {
+        try{
+            userService.resetPw(userDTO.getEmail());
+            return ResponseEntity.ok(Map.of("message","임시 비밀번호는 123456입니다. 비밀번호를 즉시 변경 바랍니다."));
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message","오류 발생:"+e.getMessage()));
         }
     }
-
-
 
 }

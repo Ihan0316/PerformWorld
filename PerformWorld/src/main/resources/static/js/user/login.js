@@ -53,13 +53,13 @@ $(document).ready(function () {
         const email = document.getElementById('email').value;
 
         // AJAX 요청 보내기
-        fetch('/user/findPw', {
+        fetch('/user/resetPw', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({email: encodeURIComponent(email)})  // JSON으로 변환하여 요청 본문에 전달
+            body: JSON.stringify({email:email})  // JSON으로 변환하여 요청 본문에 전달
         })
             .then(response => response.json())  // 서버로부터 JSON 응답 받기
             .then(data => {

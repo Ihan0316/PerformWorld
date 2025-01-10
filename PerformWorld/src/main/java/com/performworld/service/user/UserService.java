@@ -10,8 +10,6 @@ public interface UserService {
 
     UserDTO login(String userId, String password);  // 로그인
 
-    void findPw(String email); // 비밀번호 찾기
-
     UserDTO getUserInfo(UserDTO userDTO);  // 회원정보 조회
 
     void changePw(UserDTO userDTO);
@@ -19,6 +17,8 @@ public interface UserService {
     void updateUser(UserDTO userDTO);  // 회원정보 수정
 
     void deleteUser(String userId);  // 회원탈퇴
+
+    void resetPw(String email);
 
 }
 
