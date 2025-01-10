@@ -346,7 +346,7 @@ const init = () => {
         const res = await axios({
             method: 'post',
             url: '/user/getInfo',
-            data: { userId: 'user123' }, // loginInfo
+            data: { userId: user.uid }, // loginInfo
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -359,7 +359,7 @@ const init = () => {
         const res = await axios({
             method : 'post',
             url : '/book/getUserTier',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -445,7 +445,7 @@ const init = () => {
             method : 'post',
             url : '/pay/regist',
             data : {
-                userId: 'user123',  // loginInfo
+                userId: user.uid,  // loginInfo
                 scheduleId: selectedSchedule,
                 seatIds: selectedSeats,
                 isDelivery: document.querySelector("input[name='isDelivery']").checked,

@@ -217,7 +217,7 @@ const init = () => {
         const res = await axios({
             method : 'post',
             url : '/review/getSeenEvent',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -228,7 +228,7 @@ const init = () => {
     // 후기 등록
     async function registReview() {
         const data = {
-            userId: 'user123',  // loginInfo
+            userId: user.uid,  // loginInfo
             bookingId: document.querySelector("select[name='seenEvent']").value,
             content: document.querySelector("textarea[name='content']").value
         };
