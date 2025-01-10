@@ -15,6 +15,7 @@ public class MainController {
     public String index(@AuthenticationPrincipal UserDetails user, Model model) {
 
         log.info("로그인 된 유저 확인 : "+user );
+        log.info("Index 호출됨");
         model.addAttribute("user", user);
         return "index";
     }

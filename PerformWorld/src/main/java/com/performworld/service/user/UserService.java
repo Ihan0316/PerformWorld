@@ -8,8 +8,6 @@ public interface UserService {
 
     void signUp(UserDTO userDTO) throws MidExistException;  // 회원가입
 
-    UserDTO login(String userId, String password);  // 로그인
-
     UserDTO getUserInfo(UserDTO userDTO);  // 회원정보 조회
 
     void changePw(UserDTO userDTO);

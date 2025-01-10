@@ -38,22 +38,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
-    //로그인
-    public UserDTO login(String userId, String password) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-        User user = userOptional.get();
-        if (!password.equals(user.getPassword())) {
-            throw new RuntimeException("Invalid password");
-        }
-        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-        return userDTO;
-    }
-
-
     // 내 정보 조회
     @Override
     public UserDTO getUserInfo(UserDTO userDTO) {

@@ -66,21 +66,6 @@ public class UserRestController {
         }
         return ResponseEntity.ok(response);
     }
-    //로그인
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestParam String userId, @RequestParam String password, HttpSession session) {
-        try {
-            UserDTO userDTO = userService.login(userId, password);
-            session.setAttribute("user", userDTO);
-            log.info("User logged in: {}", userDTO);
-            return ResponseEntity.ok(userDTO);
-        } catch (RuntimeException e) {
-            log.warn("Login Failed - Reason: {}", e.getMessage());
-            session.setAttribute("loginError", "아이디나 비밀번호가 틀렸습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-    }
-
     @PostMapping("/resetPw")
     public ResponseEntity<Map<String, String>> resetPw(@RequestBody UserDTO userDTO) {
         try{
