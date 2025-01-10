@@ -169,9 +169,11 @@ const initQnaGrid = () => {
             document.querySelector(".qnaDtlModal input[name='title']").disabled = true;
             document.querySelector(".qnaDtlModal textarea[name='content']").disabled = true;
             document.querySelector(".qnaDtlModal textarea[name='response']").disabled = true;
-            document.querySelector(".qnaDtlModal button[name='updateBoard']").textContent = '수정';
+            if(document.querySelector(".qnaDtlModal button[name='updateBoard']")) {
+                document.querySelector(".qnaDtlModal button[name='updateBoard']").textContent = '수정';
+            }
             if(document.querySelector(".qnaDtlModal button[name='regResponse']")) {
-                document.querySelector(".qnaDtlModal button[name='regResponse']").textContent = '답변 등록';
+                document.querySelector(".qnaDtlModal button[name='regResponse']").textContent = '답변 입력';
             }
             qnaDtlModal.show();
         }
@@ -755,11 +757,15 @@ const init = () => {
         const modal = document.querySelector(".qnaDtlModal");
         const responseUpdateBtn = modal.querySelector("button[name='regResponse']");
         const responseInput = modal.querySelector("textarea[name='response']");
-        if (responseUpdateBtn.textContent === '답변 등록') {
+        if (responseUpdateBtn.textContent === '답변 입력') {
             // 입력 필드를 수정 가능하도록 활성화
             responseInput.disabled = false;
             responseUpdateBtn.textContent = '답변 저장';  // 버튼 텍스트를 '저장'으로 변경
         } else {
+            if(responseInput.value.trim() === "") {
+                alert("답변을 입력해주세요.");
+                return;
+            }
             // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
             const updatedQnAResponseData = {
                 qnaId: modal.querySelector("input[name='qnaId']").value,
@@ -774,20 +780,20 @@ const init = () => {
                     'Content-Type': 'application/json'
                 }
             }).then(res => {
-                alert("Q&A 답변 등록에 성공했습니다.");
+                alert("Q&A 답변 입력에 성공했습니다.");
                 responseInput.disabled = true;
-                responseUpdateBtn.textContent = '답변 등록';
+                responseUpdateBtn.textContent = '답변 입력';
                 qnaDtlModal.hide();
                 loadQnas().then(res => {
                     if (res !== "") {
                         qnaGrid.resetData(res);  // grid에 세팅
                     }
                 }).catch(e => {
-                    alert("Q&A 답변 등록에 실패했습니다.");
+                    alert("Q&A 답변 입력에 실패했습니다.");
                 });
 
             }).catch(e => {
-                alert("Q&A 답변 등록에 실패했습니다.");
+                alert("Q&A 답변 입력에 실패했습니다.");
             });
         }
     })
