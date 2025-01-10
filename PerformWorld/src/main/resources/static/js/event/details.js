@@ -87,7 +87,7 @@ window.addEventListener("scroll", function () {
 });
 
 // 예매하기
-document.querySelector(".bookingBtn").addEventListener("click", async function (e) {
+document.querySelector(".bookingBtn")?.addEventListener("click", async function (e) {
     const res = await axios({
         method: 'post',
         url: `/book/getEventTicketing`,
