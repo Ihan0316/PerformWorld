@@ -117,8 +117,9 @@
 
     <th:block layout:fragment="javascript"></th:block>
 </div>
-<script>
-
+<script th:inline="javascript">
+    const user = [[${user}]];
+    console.log(user)
     document.addEventListener('DOMContentLoaded', function () {
         const menuItems = document.querySelectorAll('#fh5co-main-menu a');
         const currentUrl = window.location.pathname;
