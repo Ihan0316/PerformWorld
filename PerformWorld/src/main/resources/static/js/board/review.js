@@ -144,6 +144,10 @@ const init = () => {
 
                 selectElement.appendChild(optionElement);
             }
+            // 모달 내 입력값 초기화
+            document.querySelector("select[name='seenEvent']").value = ""; // 관람 공연 선택 초기화
+            document.querySelector("textarea[name='content']").value = ""; // 내용 초기화
+
             regRvModal.show();
         }).catch(e => {
            alert("관람 공연 정보를 가져오는데 실패했습니다.");

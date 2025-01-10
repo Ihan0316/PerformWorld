@@ -255,13 +255,22 @@ const init = () => {
     document.querySelectorAll('.regBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             if (modalType === 'notice') {
+                // 모달 입력 필드 초기화
+                document.querySelector(".noticeRegModal input[name='title']").value = '';
+                document.querySelector(".noticeRegModal textarea[name='content']").value = '';
                 noticeRegModal.show();
             }
             if (modalType === 'qna') {
+                // 모달 입력 필드 초기화
+                document.querySelector(".qnaRegModal input[name='title']").value = '';
+                document.querySelector(".qnaRegModal textarea[name='content']").value = '';
                 document.querySelector(".qnaRegModal input[name='userId']").value;  // loginInfo
                 qnaRegModal.show();
             }
             if (modalType === 'faq') {
+                // 모달 입력 필드 초기화
+                document.querySelector(".faqRegModal input[name='question']").value = '';
+                document.querySelector(".faqRegModal textarea[name='answer']").value = '';
                 faqRegModal.show();
             }
         });
