@@ -19,7 +19,7 @@
         <!-- 관리자만 등록 버튼이 보이도록 조건문 수정 -->
         <div>
             <div>
-                <button type="button" th:if="${user != null && user.Username == 'admin'}" class="btn btn-primary btn-sm ticketingRegBtn">등록</button>
+                <button type="button" th:if="${user != null && user.uid == 'admin'}" class="btn btn-primary btn-sm ticketingRegBtn">등록</button>
             </div>
         </div>
         <!-- 티켓팅 정보 그리드 -->
