@@ -41,7 +41,8 @@ const initGrid = () => {
                 name: 'eventId',
                 align: 'center',
                 sortable: true,
-                sortingType: 'desc'
+                sortingType: 'desc',
+                hidden: true
             },
             {
                 header: '제목',
