@@ -38,6 +38,7 @@ public class CustomUserDetailsService implements org.springframework.security.co
                         .collect(Collectors.toList())
         );
 
+
         return new UserSecurityDTO(
                 user.getUserId(),
                 user.getPassword(),
