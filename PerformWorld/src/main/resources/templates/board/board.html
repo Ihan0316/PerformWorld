@@ -76,7 +76,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">아이디</label>
-                        <input type="text" class="form-control" name="userId" th:value="${user.uid}" required disabled>
+                        <input type="text" class="form-control" name="userId" th:value="${user != null && user.uid}" required disabled>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">내용</label>
@@ -180,10 +180,6 @@
         <div class="row">
             <div class="col-md-12">
                 <h2>서비스 센터</h2>
-                <!-- Thymeleaf를 사용하여 서버에서 userId 값을 HTML에 직접 삽입 -->
-                <div>
-                    <input type="hidden" th:value="${user.uid}" id="username">
-                </div>
             </div>
         </div>
         <div id="menu">
@@ -215,6 +211,8 @@
 <!-- JavaScript -->
 <th:block layout:fragment="javascript">
     <script th:inline="javascript">
+        const user = [[${user}]]
+        console.log(user)
         const noticeRegModal = new bootstrap.Modal(document.querySelector('.noticeRegModal'));
         const qnaRegModal = new bootstrap.Modal(document.querySelector('.qnaRegModal'));
         const faqRegModal = new bootstrap.Modal(document.querySelector('.faqRegModal'));
