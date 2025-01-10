@@ -51,8 +51,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="button" class="btn btn-primary updRvBtn" value="수정하기">
-                    <input type="button" class="btn btn-primary delRvBtn" value="삭제하기">
+                    <input type="button" class="btn btn-primary updRvBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_USER')" value="수정하기">
+                    <input type="button" class="btn btn-primary delRvBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_USER')" value="삭제하기">
                 </div>
             </div>
         </div>
