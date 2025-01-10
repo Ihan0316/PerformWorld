@@ -2,6 +2,7 @@
 <html class="no-js" lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="~{layout/base.html}">
 
 <body>
@@ -73,7 +74,7 @@
             <!-- 후기 목록 -->
             <div id="rvListGrid"></div>
             <div class="form-group">
-                <input type="button" class="btn btn-primary btn-md registReview" value="후기 등록">
+                <input type="button" class="btn btn-primary btn-md registReview" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_USER')" value="후기 등록">
             </div>
         </div>
     </div>
