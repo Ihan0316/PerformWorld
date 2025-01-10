@@ -424,7 +424,7 @@ const init = () => {
                 const data = {
                     title: title,
                     content: content,
-                    userId: 'user123'  // loginInfo
+                    userId: user.uid
                 };
                 await axios({
                     method: 'post',
@@ -729,7 +729,7 @@ const init = () => {
         })
     })
 
-    document.querySelector("button[name='regResponse']").addEventListener('click', async function () {
+    document.querySelector("button[name='regResponse']")?.addEventListener('click', async function () {
         const modal = document.querySelector(".qnaDtlModal");
         const responseUpdateBtn = modal.querySelector("button[name='regResponse']");
         const responseInput = modal.querySelector("textarea[name='response']");
