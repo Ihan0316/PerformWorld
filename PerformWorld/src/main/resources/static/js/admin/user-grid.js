@@ -65,9 +65,7 @@ const getUserList = async (userGrid) => {
             }
         });
 
-        console.log('API response:', res.data);
-
-        const userData = res.data.filter(user => user.userId !== 'admin'); // admin 계정 제외
+        const userData = res.data.filter(resuser => resuser.userId !== user.uid); // admin 계정 제외
         userGrid.resetData(userData); // 데이터를 그리드에 바인딩
     } catch (error) {
         console.error('Error fetching user list:', error);
