@@ -65,7 +65,7 @@ const getUserList = async (userGrid) => {
             }
         });
 
-        const userData = res.data.filter(resuser => resuser.userId !== user.uid); // admin 계정 제외
+        const userData = res.data.filter(resuser => resuser.authorities[0].authority !== "ROLE_ADMIN"); // admin 계정 제외
         userGrid.resetData(userData); // 데이터를 그리드에 바인딩
     } catch (error) {
         console.error('Error fetching user list:', error);
