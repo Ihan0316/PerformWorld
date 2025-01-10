@@ -48,8 +48,8 @@ public class CustomSecurityConfig {
                 authorizeRequests -> {
                     authorizeRequests.requestMatchers
                             ("/css/**", "/js/**","/images/**",
-                                    "/","/event/**", "/sys/**","/user/**","/review/getRvList",
-                                    "/board/**",
+                                    "/","/event/**", "/sys/**","/user/**",
+                                    "/board/**", "/review/getRvList", "/ticketing/info", "/ticketing/ticketingInfo",
                                     "http://localhost:8080/login/oauth2/code/kakao",
                                     "https://kauth.kakao.com",
                                     "https://kapi.kakao.com").permitAll();
@@ -69,23 +69,12 @@ public class CustomSecurityConfig {
 
         );
 
-        http.rememberMe(
-                httpSecurityRememberMeConfigurer
-                        -> httpSecurityRememberMeConfigurer.key("12345678")
-                        .tokenRepository(persistentTokenRepository())
-                        .userDetailsService(customUserDetailsService)
-                        .tokenValiditySeconds(60*60*24*30)
-        );
-
         http.oauth2Login(
                 oauthLogin -> {
                     oauthLogin.loginPage("/user/login");
                     oauthLogin.successHandler(authenticationSuccessHandler());
                 }
         );
-
-
-
 
         return http.build();
     }
