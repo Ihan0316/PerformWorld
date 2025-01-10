@@ -150,9 +150,9 @@ public class BoardRestController {
     public ResponseEntity<String> updateResponseQna(@RequestBody QnADTO qnADTO) {
         try {
             qnAService.updateResponseQna(qnADTO);
-            return ResponseEntity.ok("QnA 답변이 등록되었습니다.");
+            return ResponseEntity.ok("QnA 답변이 입력되었습니다.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("QnA 답변 등록에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("QnA 답변 입력에 실패했습니다.");
         }
     }
 }

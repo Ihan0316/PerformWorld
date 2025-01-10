@@ -120,9 +120,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" name="updateBoard" class="btn btn-primary">수정</button>
-                    <button type="button" name="regResponse" class="btn btn-primary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">답변 등록</button>
-                    <button type="button" name="deleteBoard" class="btn btn-secondary">삭제</button>
+                    <button type="button" name="updateBoard" class="btn btn-primary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_USER')">수정</button>
+                    <button type="button" name="regResponse" class="btn btn-primary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">답변 입력</button>
+                    <button type="button" name="deleteBoard" class="btn btn-secondary" th:if="${user} != null">삭제</button>
                 </div>
             </div>
         </div>
