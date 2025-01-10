@@ -50,7 +50,8 @@ const initSeatGrid = () => {
                 name: 'price',
                 align: 'center',
                 minWidth: 150,
-                flex: 1
+                flex: 1,
+                formatter: ({ value }) => value?.toLocaleString() || '' // 값이 없을 경우 빈 문자열
             }
         ]
     });
