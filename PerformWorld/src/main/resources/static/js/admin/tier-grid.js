@@ -30,7 +30,7 @@ const initTierGrid = () => {
         draggable: false, // 드래그 비활성화
         columns: [
             {
-                header: '티어 아이디',
+                header: '등급 ID',
                 name: 'tierId',
                 align: 'center',
                 minWidth: 150,
@@ -39,7 +39,7 @@ const initTierGrid = () => {
                 sortingType: 'asc'
             },
             {
-                header: '티어 이름',
+                header: '등급 이름',
                 name: 'tierName',
                 align: 'center',
                 minWidth: 150,

@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // 티어 추가
+        // 등급 추가
         const newTierData = await addTier(tierName, minSpent, maxSpent, discountRate);
         if (newTierData) {
             location.reload();
