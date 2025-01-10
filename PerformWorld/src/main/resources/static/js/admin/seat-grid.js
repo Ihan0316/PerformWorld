@@ -39,7 +39,7 @@ const initSeatGrid = () => {
                 sortingType: 'asc'
             },
             {
-                header: '구역',
+                header: '좌석 등급',
                 name: 'section',
                 align: 'center',
                 minWidth: 150,
