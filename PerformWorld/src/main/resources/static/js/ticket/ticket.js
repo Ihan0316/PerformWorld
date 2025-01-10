@@ -50,12 +50,12 @@ const initGrid = () => {
                 align: 'center',
             },
             {
-                header: '시작일',
+                header: '회차 시작일',
                 name: 'prfpdfrom',
                 align: 'center',
             },
             {
-                header: '종료일',
+                header: '회차 종료일',
                 name: 'prfpdto',
                 align: 'center',
             },
