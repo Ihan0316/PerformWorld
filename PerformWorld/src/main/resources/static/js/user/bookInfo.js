@@ -60,7 +60,7 @@ const init = () => {
         const res = await axios({
             method : 'post',
             url : '/pay/cancel',
-            data : { userId: 'user123', bookingId: bookingId },  // loginInfo
+            data : { userId: user.uid, bookingId: bookingId },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }

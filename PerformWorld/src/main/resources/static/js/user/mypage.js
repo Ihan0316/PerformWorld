@@ -492,7 +492,7 @@ const init = () => {
         const res = await axios({
             method : 'delete',
             url : '/user',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -503,7 +503,7 @@ const init = () => {
     // 예매내역 조회
     async function getBkList(selectedStatus) {
         const data = {
-            userId: 'user123',  // loginInfo
+            userId: user.uid,  // loginInfo
             status: selectedStatus
         }
 
@@ -526,7 +526,7 @@ const init = () => {
         await axios({
             method : 'post',
             url : '/review/getRvList',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -573,7 +573,7 @@ const init = () => {
         await axios({
             method : 'post',
             url : '/board/getQnAList',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
