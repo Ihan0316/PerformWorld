@@ -12,7 +12,7 @@
         <div class="row">
           <div class="col-md-12 d-flex justify-content-between mb-5">
             <h2>공연 상세</h2>
-            <button type="button" class="btn btn-primary bookingBtn">예매하기</button>
+            <button type="button" class="btn btn-primary bookingBtn" th:if="${user} != null">예매하기</button>
           </div>
             <div class="col-md-6">
                 <img class="img-responsive poster" alt="Event Poster">
