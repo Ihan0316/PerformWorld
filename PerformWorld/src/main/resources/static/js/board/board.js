@@ -74,6 +74,11 @@ const initNoticeGrid = () => {
             document.querySelector(".noticeDtlModal input[name='noticeId']").value = row.noticeId;
             document.querySelector(".noticeDtlModal input[name='title']").value = row.title;
             document.querySelector(".noticeDtlModal textarea[name='content']").value = row.content;
+            document.querySelector(".noticeDtlModal input[name='title']").disabled = true;
+            document.querySelector(".noticeDtlModal textarea[name='content']").disabled = true;
+            if(document.querySelector(".noticeDtlModal button[name='updateBoard']")) {
+                document.querySelector(".noticeDtlModal button[name='updateBoard']").textContent = '수정';
+            }
             noticeDtlModal.show();
         }
     });
@@ -161,6 +166,13 @@ const initQnaGrid = () => {
             document.querySelector(".qnaDtlModal input[name='userId']").value = row.userId;
             document.querySelector(".qnaDtlModal textarea[name='content']").value = row.content;
             document.querySelector(".qnaDtlModal textarea[name='response']").value = row.response;
+            document.querySelector(".qnaDtlModal input[name='title']").disabled = true;
+            document.querySelector(".qnaDtlModal textarea[name='content']").disabled = true;
+            document.querySelector(".qnaDtlModal textarea[name='response']").disabled = true;
+            document.querySelector(".qnaDtlModal button[name='updateBoard']").textContent = '수정';
+            if(document.querySelector(".qnaDtlModal button[name='regResponse']")) {
+                document.querySelector(".qnaDtlModal button[name='regResponse']").textContent = '답변 등록';
+            }
             qnaDtlModal.show();
         }
     });
@@ -257,6 +269,9 @@ const init = () => {
 
     // tab mode 변경
     function setActiveTab(tabId, contentId) {
+        if(document.querySelector(".regFaqBtn")) {
+            document.querySelector(".regFaqBtn").style.display = 'none';
+        }
         // active 클래스 제거
         let tabs = document.querySelectorAll(".tab");
         tabs.forEach(function (tab) {
@@ -310,6 +325,9 @@ const init = () => {
             if (faqs !== "") {
                 const faqBoard = document.getElementById('faq-board');
                 faqBoard.innerHTML = ''; // 기존 내용을 비운다
+                if(document.querySelector(".regFaqBtn")) {
+                    document.querySelector(".regFaqBtn").style.display = 'block';
+                }
 
                 faqs.forEach(faq => {
                     const faqItem = document.createElement('div');
@@ -329,6 +347,11 @@ const init = () => {
                         document.querySelector(".faqDtlModal input[name='faqId']").value = faq.faqId;
                         document.querySelector(".faqDtlModal input[name='question']").value = faq.question;
                         document.querySelector(".faqDtlModal textarea[name='answer']").value = faq.answer;
+                        document.querySelector(".faqDtlModal input[name='question']").disabled = true;
+                        document.querySelector(".faqDtlModal textarea[name='answer']").disabled = true;
+                        if(document.querySelector(".faqDtlModal button[name='updateBoard']")) {
+                            document.querySelector(".faqDtlModal button[name='updateBoard']").textContent = '수정';
+                        }
                         faqDtlModal.show();
                     };
 
@@ -611,9 +634,13 @@ const init = () => {
                 const contentTextarea = modal.querySelector("textarea[name='content']");
                 const ResponseArea = modal.querySelector("textarea[name='response']");
                 const userId = modal.querySelector("input[name='userId']").value;
-                if (userId !== user.uid) {
-                    alert("Q&A를 수정할 수 없는 회원이에요.");
-                    return;
+                if(user.authorities[0].authority === 'ROLE_ADMIN') {
+                    ResponseArea.disabled = false;
+                } else {
+                    if (userId !== user.uid) {
+                        alert("Q&A를 수정할 수 없는 회원이에요.");
+                        return;
+                    }
                 }
                 if (ResponseArea.value.trim() ==="") {
                     if (updateBtn.textContent === '수정') {
@@ -649,6 +676,7 @@ const init = () => {
                             alert("Q&A 수정에 성공했습니다.");
                             titleInput.disabled = true;
                             contentTextarea.disabled = true;
+                            ResponseArea.disabled = true;
                             updateBtn.textContent = '수정';
                             qnaDtlModal.hide();
                             loadQnas().then(res => {
