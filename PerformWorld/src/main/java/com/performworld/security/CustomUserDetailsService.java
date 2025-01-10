@@ -31,6 +31,13 @@ public class CustomUserDetailsService implements org.springframework.security.co
 
         User user = result.get();
         log.info("로그인한 유저 확인2: user : " + user);
+
+        log.info("유저 권한 확인: " +
+                user.getRoleSet().stream()
+                        .map(role -> "ROLE_" + role.name())
+                        .collect(Collectors.toList())
+        );
+
         return new UserSecurityDTO(
                 user.getUserId(),
                 user.getPassword(),
