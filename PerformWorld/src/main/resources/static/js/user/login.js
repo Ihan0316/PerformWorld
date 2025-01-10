@@ -1,38 +1,47 @@
 $(document).ready(function () {
-    $("#loginForm").submit(function (e) {
+    // 로그인 폼 제출 시
+    // $("#loginForm").submit(function (e) {
+    //     e.preventDefault();  // 기본 폼 제출 동작을 막음
+    //
+    //     var username = $("input[name='username']").val();
+    //     var password = $("input[name='password']").val();
+    //
+    //     if (!validateForm(username, password)) {
+    //         return;
+    //     }
+    //
+    //     $("#loginButton").prop("disabled", true).val("로그인 중...");
+    //     $("#loadingSpinner").show();
+    //
+    //     // 로그인 요청을 AJAX로 보내기
+    //     $.ajax({
+    //         url: '/user/login',
+    //         type: 'POST',
+    //         data: {
+    //             username: username,
+    //             password: password
+    //         },
+    //         success: function (response) {
+    //             console.log(response)
+    //             // alert("로그인 성공!");
+    //
+    //             // // 세션에 사용자 정보 저장
+    //             // sessionStorage.setItem('currentUser', response.username);
+    //             //
+    //             // // 로그인 후 리다이렉션
+    //             // window.location.href = "/";  // 홈 페이지로 리다이렉션
+    //         },
+    //         error: function (xhr, status, error) {
+    //             alert(xhr.responseText || "로그인 실패");
+    //         },
+    //         complete: function () {
+    //             $("#loginButton").prop("disabled", false).val("Login");
+    //             $("#loadingSpinner").hide();
+    //         }
+    //     });
+    // });
 
-        var username = $("input[name='username']").val();
-        var password = $("input[name='password']").val();
-
-        if (!validateForm(username, password)) {
-            return;
-        }
-
-        $("#loginButton").prop("disabled", true).val("로그인 중...");
-        $("#loadingSpinner").show();
-
-        $.ajax({
-            url: '/user/login',
-            type: 'POST',
-            data: {
-                username: username,
-                password: password
-            },
-            success: function (response) {
-                alert("로그인 성공!");
-
-                sessionStorage.setItem('currentUser', response.username);
-            },
-            error: function (xhr, status, error) {
-                alert(xhr.responseText || "로그인 실패");
-            },
-            complete: function () {
-                $("#loginButton").prop("disabled", false).val("Login");
-                $("#loadingSpinner").hide();
-            }
-        });
-    });
-
+    // 로그인 폼 유효성 검사
     function validateForm(username, password) {
         if (!username || !password) {
             alert("아이디와 비밀번호를 모두 입력해주세요.");

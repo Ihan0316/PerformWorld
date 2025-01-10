@@ -10,11 +10,8 @@
 <body>
 <div id="fh5co-main" layout:fragment="content">
   <h1>로그인</h1>
-<!--  <div class="row">-->
-<!--    <div class="col-md-4">-->
-<!--    </div>-->
-<!--  </div>-->
-  <form id="loginForm" action="/user/login" method="POST">
+
+  <form id="loginForm" action="/user/login" method="post">
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
@@ -33,12 +30,13 @@
       <a href="/user/join" class="btn btn-secondary btn-md">회원가입</a>
     </div>
     <a href="/oauth2/authorization/kakao">
-<!--      <img th:src="@{/images/kakao_login_medium_narrow.png}" alt="카카오 로그인 화면">-->
+      <!--      <img th:src="@{/images/kakao_login_medium_narrow.png}" alt="카카오 로그인 화면">-->
     </a>
     <div class="form-group">
       <a href="#findPwModal" class="btn btn-link" data-toggle="modal">비밀번호 찾기</a>
     </div>
   </form>
+
   <div class="modal fade" id="findPwModal" tabindex="-1" role="dialog" aria-labelledby="findPwModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -62,10 +60,8 @@
       </div>
     </div>
   </div>
+
   <script th:src="@{/js/user/login.js}"></script>
 </div>
-
-
 </body>
-
 </html>
