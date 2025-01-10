@@ -84,11 +84,15 @@
                     <!-- 관리자 로그인 시 -->
                     <li class="nav-item"  th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                         <a href="/admin/userlist">Management</a>
+
+                    <br>
+                    <br>
+                    <li class="nav-item" th:if="${user != null}">
+                        <span style="color: #228896;">환영합니다, <span th:text="${user.name}">User Name</span>님!</span>
                     </li>
-                    <br>
-                    <br>
+
                     <!-- 로그아웃 -->
-                    <li class="nav-item"  th:if="${user} != null">
+                    <li class="nav-item"  th:if="${user != null}">
                         <a href="/user/logout">Logout</a>
                     </li>
                 </ul>
@@ -113,9 +117,8 @@
 
     <th:block layout:fragment="javascript"></th:block>
 </div>
-<script th:inline="javascript">
-    const user = [[${user}]];
-    console.log(user)
+<script>
+
     document.addEventListener('DOMContentLoaded', function () {
         const menuItems = document.querySelectorAll('#fh5co-main-menu a');
         const currentUrl = window.location.pathname;
