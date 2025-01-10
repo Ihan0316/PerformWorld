@@ -33,10 +33,7 @@ const initTierGrid = () => {
                 header: '등급 ID',
                 name: 'tierId',
                 align: 'center',
-                minWidth: 150,
-                flex: 1,
-                sortable: true,
-                sortingType: 'asc'
+                hidden: true
             },
             {
                 header: '등급 이름',
