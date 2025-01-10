@@ -78,11 +78,17 @@
                             <a href="/user/login">Login</a>
                         </li>
                     <!-- 유저 로그인 시 -->
-                    <li class="nav-item" th:if="${user} != null">
-                        <a href="/user/mypage">My Page</a>
+
+<!--                    <li class="nav-item" th:if="${user} != null and ${user.uid} != 'admin'">-->
+<!--                        <a href="/user/mypage">My Page</a>-->
+<!--                    </li>-->
+                    <li class="nav-item" th:if="${user != null}"  sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a class="nav-link" href="#" >관리자페이지</a>
                     </li>
+
+
                     <!-- 관리자 로그인 시 -->
-                    <li class="nav-item"  th:if="${user != null && user.Username == 'admin'}">
+                    <li class="nav-item"  th:if="${user != null && user.uid == 'admin'}">
                         <a href="/admin/userlist">Management</a>
                     </li>
                     <br>
