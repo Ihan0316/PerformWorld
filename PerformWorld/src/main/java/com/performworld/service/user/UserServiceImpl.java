@@ -137,4 +137,13 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
+
+    @Override
+    public void resetPw(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일에 해당하는 사용자가 없습니다."));
+        String temporaryPassword= passwordEncoder.encode("123456");
+        user.chnUserInfo(temporaryPassword);
+        userRepository.save(user);
+    }
 }

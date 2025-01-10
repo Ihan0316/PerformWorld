@@ -20,5 +20,7 @@ public interface UserService {
 
     void deleteUser(String userId);  // 회원탈퇴
 
+    void resetPw(String email);
+
 }
 

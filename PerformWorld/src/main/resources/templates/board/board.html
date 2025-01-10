@@ -2,6 +2,7 @@
 <html class="no-js" lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
       layout:decorate="~{layout/base.html}">
 
 <head>
@@ -54,8 +55,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" name="updateBoard" class="btn btn-primary" th:if="${user != null && user.uid == 'admin'}">수정</button>
-                    <button type="button" name="deleteBoard" class="btn btn-secondary" th:if="${user != null && user.uid == 'admin'}">삭제</button>
+                    <button type="button" name="updateBoard" class="btn btn-primary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">수정</button>
+                    <button type="button" name="deleteBoard" class="btn btn-secondary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">삭제</button>
                 </div>
             </div>
         </div>
@@ -120,7 +121,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" name="updateBoard" class="btn btn-primary">수정</button>
-                    <button type="button" name="regResponse" class="btn btn-primary" th:if="${user != null && user.uid == 'admin'}">답변 등록</button>
+                    <button type="button" name="regResponse" class="btn btn-primary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">답변 등록</button>
                     <button type="button" name="deleteBoard" class="btn btn-secondary">삭제</button>
                 </div>
             </div>
@@ -171,8 +172,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" name="updateBoard" class="btn btn-primary" th:if="${user != null && user.uid == 'admin'}">수정</button>
-                    <button type="button" name="deleteBoard" class="btn btn-secondary" th:if="${user != null && user.uid == 'admin'}">삭제</button>
+                    <button type="button" name="updateBoard" class="btn btn-primary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">수정</button>
+                    <button type="button" name="deleteBoard" class="btn btn-secondary" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">삭제</button>
                 </div>
             </div>
         </div>
@@ -195,15 +196,15 @@
         </div>
 
         <div class="board active" id="notice-board">
-            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user != null && user.uid == 'admin'}">공지사항 등록</button>
+            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">공지사항 등록</button>
             <div id="noticeGrid"></div>
         </div>
         <div class="board" id="qna-board">
-            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user != null && user.uid != 'admin'}">질문 등록</button>
+            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_USER')">질문 등록</button>
             <div id="qnaGrid"></div>
         </div>
         <div class="board" id="faq-board">
-            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user != null && user.uid == 'admin'}">FAQ 등록</button>
+            <button type="button" class="btn btn-primary btn-sm regBtn" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">FAQ 등록</button>
             <!-- FAQ 항목들이 여기에 동적으로 추가됩니다 -->
         </div>
     </div>

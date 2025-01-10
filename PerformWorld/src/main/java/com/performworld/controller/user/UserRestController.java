@@ -94,6 +94,16 @@ public class UserRestController {
         }
     }
 
+    @PostMapping("/resetPw")
+    public ResponseEntity<Map<String, String>> resetPw(@RequestBody UserDTO userDTO) {
+        try{
+            userService.resetPw(userDTO.getEmail());
+            return ResponseEntity.ok(Map.of("message","임시 비밀번호는 123456입니다. 비밀번호를 즉시 변경 바랍니다."));
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message","오류 발생:"+e.getMessage()));
+        }
+    }
+
 
 
 }
