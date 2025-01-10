@@ -85,8 +85,6 @@
 <!-- js import -->
 <th:block layout:fragment="javascript">
     <script th:inline="javascript">
-        const loginUser = [[${session.user}]];
-        console.log(loginUser);
         const bookingId = [[${bookingId}]];
     </script>
     <script th:src="@{/js/user/bookInfo.js}"></script>

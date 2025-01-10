@@ -41,7 +41,8 @@ public class UserController {
     }
     // 예매 상세내역
     @GetMapping("/book/{bookingId}")
-    public String bookingInfo(@PathVariable Long bookingId) {
+    public String bookingInfo(@AuthenticationPrincipal UserDetails user, Model model, @PathVariable Long bookingId) {
+        model.addAttribute("user", user);
         return "user/bookInfo";
     }
 }
