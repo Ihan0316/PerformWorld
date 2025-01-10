@@ -82,8 +82,6 @@
 <!-- JavaScript -->
 <th:block layout:fragment="javascript">
     <script th:inline="javascript">
-        const loginUser = [[${session.user}]];
-        console.log(loginUser);
         const regRvModal = new bootstrap.Modal(document.querySelector('.regRvModal'));
         const rvDtlModal = new bootstrap.Modal(document.querySelector('.rvDtlModal'));
     </script>
