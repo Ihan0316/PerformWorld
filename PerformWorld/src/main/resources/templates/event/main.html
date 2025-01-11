@@ -2,6 +2,7 @@
 <html class="no-js" lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="~{layout/base.html}">
 <head>
     <link rel="stylesheet" href="/css/event/mainstyle.css">
@@ -12,7 +13,7 @@
         <div class="row">
             <div class="col-md-12 d-flex justify-content-between">
                 <h2>공연 목록</h2>
-                <button type="button" class="btn btn-primary eventRegisterBtn"  th:if="${user != null && user.Username == 'admin'}">공연 등록</button>
+                <button type="button" class="btn btn-primary eventRegisterBtn"  th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">공연 등록</button>
             </div>
         </div>
 

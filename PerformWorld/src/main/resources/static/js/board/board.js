@@ -74,6 +74,11 @@ const initNoticeGrid = () => {
             document.querySelector(".noticeDtlModal input[name='noticeId']").value = row.noticeId;
             document.querySelector(".noticeDtlModal input[name='title']").value = row.title;
             document.querySelector(".noticeDtlModal textarea[name='content']").value = row.content;
+            document.querySelector(".noticeDtlModal input[name='title']").disabled = true;
+            document.querySelector(".noticeDtlModal textarea[name='content']").disabled = true;
+            if(document.querySelector(".noticeDtlModal button[name='updateBoard']")) {
+                document.querySelector(".noticeDtlModal button[name='updateBoard']").textContent = '수정';
+            }
             noticeDtlModal.show();
         }
     });
@@ -161,6 +166,15 @@ const initQnaGrid = () => {
             document.querySelector(".qnaDtlModal input[name='userId']").value = row.userId;
             document.querySelector(".qnaDtlModal textarea[name='content']").value = row.content;
             document.querySelector(".qnaDtlModal textarea[name='response']").value = row.response;
+            document.querySelector(".qnaDtlModal input[name='title']").disabled = true;
+            document.querySelector(".qnaDtlModal textarea[name='content']").disabled = true;
+            document.querySelector(".qnaDtlModal textarea[name='response']").disabled = true;
+            if(document.querySelector(".qnaDtlModal button[name='updateBoard']")) {
+                document.querySelector(".qnaDtlModal button[name='updateBoard']").textContent = '수정';
+            }
+            if(document.querySelector(".qnaDtlModal button[name='regResponse']")) {
+                document.querySelector(".qnaDtlModal button[name='regResponse']").textContent = '답변 입력';
+            }
             qnaDtlModal.show();
         }
     });
@@ -243,13 +257,22 @@ const init = () => {
     document.querySelectorAll('.regBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             if (modalType === 'notice') {
+                // 모달 입력 필드 초기화
+                document.querySelector(".noticeRegModal input[name='title']").value = '';
+                document.querySelector(".noticeRegModal textarea[name='content']").value = '';
                 noticeRegModal.show();
             }
             if (modalType === 'qna') {
+                // 모달 입력 필드 초기화
+                document.querySelector(".qnaRegModal input[name='title']").value = '';
+                document.querySelector(".qnaRegModal textarea[name='content']").value = '';
                 document.querySelector(".qnaRegModal input[name='userId']").value;  // loginInfo
                 qnaRegModal.show();
             }
             if (modalType === 'faq') {
+                // 모달 입력 필드 초기화
+                document.querySelector(".faqRegModal input[name='question']").value = '';
+                document.querySelector(".faqRegModal textarea[name='answer']").value = '';
                 faqRegModal.show();
             }
         });
@@ -257,6 +280,9 @@ const init = () => {
 
     // tab mode 변경
     function setActiveTab(tabId, contentId) {
+        if(document.querySelector(".regFaqBtn")) {
+            document.querySelector(".regFaqBtn").style.display = 'none';
+        }
         // active 클래스 제거
         let tabs = document.querySelectorAll(".tab");
         tabs.forEach(function (tab) {
@@ -310,19 +336,9 @@ const init = () => {
             if (faqs !== "") {
                 const faqBoard = document.getElementById('faq-board');
                 faqBoard.innerHTML = ''; // 기존 내용을 비운다
-
-                // 등록 버튼 생성
-                const saveButton = document.createElement('button');
-                saveButton.classList.add('btn');
-                saveButton.classList.add('btn-primary');
-                saveButton.classList.add('btn-sm');
-                saveButton.classList.add('regBtn');
-                saveButton.textContent = 'FAQ 등록';
-                saveButton.onclick = () => {
-                    faqRegModal.show();
-                };
-
-                faqBoard.appendChild(saveButton);
+                if(document.querySelector(".regFaqBtn")) {
+                    document.querySelector(".regFaqBtn").style.display = 'block';
+                }
 
                 faqs.forEach(faq => {
                     const faqItem = document.createElement('div');
@@ -342,6 +358,11 @@ const init = () => {
                         document.querySelector(".faqDtlModal input[name='faqId']").value = faq.faqId;
                         document.querySelector(".faqDtlModal input[name='question']").value = faq.question;
                         document.querySelector(".faqDtlModal textarea[name='answer']").value = faq.answer;
+                        document.querySelector(".faqDtlModal input[name='question']").disabled = true;
+                        document.querySelector(".faqDtlModal textarea[name='answer']").disabled = true;
+                        if(document.querySelector(".faqDtlModal button[name='updateBoard']")) {
+                            document.querySelector(".faqDtlModal button[name='updateBoard']").textContent = '수정';
+                        }
                         faqDtlModal.show();
                     };
 
@@ -424,7 +445,7 @@ const init = () => {
                 const data = {
                     title: title,
                     content: content,
-                    userId: 'user123'  // loginInfo
+                    userId: user.uid
                 };
                 await axios({
                     method: 'post',
@@ -514,9 +535,8 @@ const init = () => {
             // qna 탭일 경우
             if (modalType === 'qna') {
                 const modal = document.querySelector(".qnaDtlModal");
-                const contentuserId = modal.querySelector("input[name='userId']").value;
-                const userID = document.getElementById('username').value;
-                if (contentuserId !== userID) {
+                const userId = modal.querySelector("input[name='userId']").value;
+                if (userId !== user.uid) {
                     alert("Q&A를 삭제할 수 없는 회원이에요.");
                     return;
                 }
@@ -624,11 +644,14 @@ const init = () => {
                 const titleInput = modal.querySelector("input[name='title']");
                 const contentTextarea = modal.querySelector("textarea[name='content']");
                 const ResponseArea = modal.querySelector("textarea[name='response']");
-                const contentuserId = modal.querySelector("input[name='userId']").value;
-                const userID = document.getElementById('username').value;
-                if (contentuserId !== userID) {
-                    alert("Q&A를 수정할 수 없는 회원이에요.");
-                    return;
+                const userId = modal.querySelector("input[name='userId']").value;
+                if(user.authorities[0].authority === 'ROLE_ADMIN') {
+                    ResponseArea.disabled = false;
+                } else {
+                    if (userId !== user.uid) {
+                        alert("Q&A를 수정할 수 없는 회원이에요.");
+                        return;
+                    }
                 }
                 if (ResponseArea.value.trim() ==="") {
                     if (updateBtn.textContent === '수정') {
@@ -664,6 +687,7 @@ const init = () => {
                             alert("Q&A 수정에 성공했습니다.");
                             titleInput.disabled = true;
                             contentTextarea.disabled = true;
+                            ResponseArea.disabled = true;
                             updateBtn.textContent = '수정';
                             qnaDtlModal.hide();
                             loadQnas().then(res => {
@@ -729,15 +753,19 @@ const init = () => {
         })
     })
 
-    document.querySelector("button[name='regResponse']").addEventListener('click', async function () {
+    document.querySelector("button[name='regResponse']")?.addEventListener('click', async function () {
         const modal = document.querySelector(".qnaDtlModal");
         const responseUpdateBtn = modal.querySelector("button[name='regResponse']");
         const responseInput = modal.querySelector("textarea[name='response']");
-        if (responseUpdateBtn.textContent === '답변 등록') {
+        if (responseUpdateBtn.textContent === '답변 입력') {
             // 입력 필드를 수정 가능하도록 활성화
             responseInput.disabled = false;
             responseUpdateBtn.textContent = '답변 저장';  // 버튼 텍스트를 '저장'으로 변경
         } else {
+            if(responseInput.value.trim() === "") {
+                alert("답변을 입력해주세요.");
+                return;
+            }
             // 제목과 내용 값을 가져와 수정된 데이터로 서버에 전송
             const updatedQnAResponseData = {
                 qnaId: modal.querySelector("input[name='qnaId']").value,
@@ -752,20 +780,20 @@ const init = () => {
                     'Content-Type': 'application/json'
                 }
             }).then(res => {
-                alert("Q&A 답변 등록에 성공했습니다.");
+                alert("Q&A 답변 입력에 성공했습니다.");
                 responseInput.disabled = true;
-                responseUpdateBtn.textContent = '답변 등록';
+                responseUpdateBtn.textContent = '답변 입력';
                 qnaDtlModal.hide();
                 loadQnas().then(res => {
                     if (res !== "") {
                         qnaGrid.resetData(res);  // grid에 세팅
                     }
                 }).catch(e => {
-                    alert("Q&A 답변 등록에 실패했습니다.");
+                    alert("Q&A 답변 입력에 실패했습니다.");
                 });
 
             }).catch(e => {
-                alert("Q&A 답변 등록에 실패했습니다.");
+                alert("Q&A 답변 입력에 실패했습니다.");
             });
         }
     })

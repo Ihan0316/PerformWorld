@@ -81,6 +81,27 @@ const initGrid = () => {
             console.log('클릭된 행:', grid.getRow(rowKey));
             const row = grid.getRow(rowKey);
 
+            if(user == null) {
+                if(document.querySelector(".updRvBtn")) {
+                    document.querySelector(".updRvBtn").style.display = 'none';
+                }
+                if(document.querySelector(".delRvBtn")) {
+                    document.querySelector(".delRvBtn").style.display = 'none';
+                }
+            } else {
+                if(row.userId !== user.uid) {
+                    if(document.querySelector(".updRvBtn")) {
+                        document.querySelector(".updRvBtn").style.display = 'none';
+                    }
+                    if(document.querySelector(".delRvBtn")) {
+                        document.querySelector(".delRvBtn").style.display = 'none';
+                    }
+                } else {
+                    document.querySelector(".updRvBtn").style.display = 'block';
+                    document.querySelector(".delRvBtn").style.display = 'block';
+                }
+            }
+
             document.querySelector("input[name='reviewId']").value = row.reviewId;
             document.querySelector("select[name='booking']").innerHTML =
                 `<option value="${row.bookingId}">${row.eventInfo}</option>`;
@@ -110,7 +131,7 @@ const init = () => {
     });
 
     // 후기 등록
-    document.querySelector(".registReview").addEventListener("click", function (e) {
+    document.querySelector(".registReview")?.addEventListener("click", function (e) {
         // 후기 작성 안 된 관람공연 중 선택
         getSeenEvent().then(data => {
             const selectElement = document.querySelector("select[name='seenEvent']");
@@ -123,6 +144,10 @@ const init = () => {
 
                 selectElement.appendChild(optionElement);
             }
+            // 모달 내 입력값 초기화
+            document.querySelector("select[name='seenEvent']").value = ""; // 관람 공연 선택 초기화
+            document.querySelector("textarea[name='content']").value = ""; // 내용 초기화
+
             regRvModal.show();
         }).catch(e => {
            alert("관람 공연 정보를 가져오는데 실패했습니다.");
@@ -151,7 +176,7 @@ const init = () => {
     });
 
     // 수정하기
-    document.querySelector(".updRvBtn").addEventListener("click", function (e) {
+    document.querySelector(".updRvBtn")?.addEventListener("click", function (e) {
         if (e.target.value === '수정하기') {
             document.querySelector("textarea[name='rvContent']").disabled = false;
             e.target.value = '수정 완료';
@@ -177,7 +202,7 @@ const init = () => {
     });
 
     // 삭제하기
-    document.querySelector(".delRvBtn").addEventListener("click", function (e) {
+    document.querySelector(".delRvBtn")?.addEventListener("click", function (e) {
         if(confirm("정말로 삭제하시겠습니까?")) {
             deleteReview().then(res => {
                 alert("후기 삭제에 성공했습니다.");
@@ -217,7 +242,7 @@ const init = () => {
         const res = await axios({
             method : 'post',
             url : '/review/getSeenEvent',
-            data : { userId: 'user123' },  // loginInfo
+            data : { userId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }
@@ -228,7 +253,7 @@ const init = () => {
     // 후기 등록
     async function registReview() {
         const data = {
-            userId: 'user123',  // loginInfo
+            userId: user.uid,  // loginInfo
             bookingId: document.querySelector("select[name='seenEvent']").value,
             content: document.querySelector("textarea[name='content']").value
         };

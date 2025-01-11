@@ -30,16 +30,13 @@ const initTierGrid = () => {
         draggable: false, // 드래그 비활성화
         columns: [
             {
-                header: '티어 아이디',
+                header: '등급 ID',
                 name: 'tierId',
                 align: 'center',
-                minWidth: 150,
-                flex: 1,
-                sortable: true,
-                sortingType: 'asc'
+                hidden: true
             },
             {
-                header: '티어 이름',
+                header: '등급 이름',
                 name: 'tierName',
                 align: 'center',
                 minWidth: 150,
@@ -50,21 +47,25 @@ const initTierGrid = () => {
                 name: 'minSpent',
                 align: 'center',
                 minWidth: 150,
-                flex: 1
+                flex: 1,
+                formatter: ({ value }) => value?.toLocaleString() || '' // 값이 없을 경우 빈 문자열
             },
             {
                 header: '최대 사용 금액',
                 name: 'maxSpent',
                 align: 'center',
                 minWidth: 150,
-                flex: 1
+                flex: 1,
+                formatter: ({ value }) => value?.toLocaleString() || '' // 값이 없을 경우 빈 문자열
             },
             {
                 header: '할인율',
                 name: 'discountRate',
+                type: 'number',
                 align: 'center',
                 minWidth: 100,
-                flex: 1
+                flex: 1,
+                formatter: ({ value }) => (value !== undefined ? `${value}%` : '') // 값이 없을 경우 빈 문자열
             }
         ]
     });

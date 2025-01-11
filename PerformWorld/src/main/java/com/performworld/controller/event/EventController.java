@@ -40,8 +40,9 @@ public class EventController {
 
     // 예매하기
     @GetMapping("{eventId}/book")
-    public String booking(@PathVariable Long eventId, Model model) {
+    public String booking(@AuthenticationPrincipal UserDetails user, @PathVariable Long eventId, Model model) {
         model.addAttribute("eventId", eventId);
+        model.addAttribute("user", user);
         return "event/booking";
     }
     @GetMapping("/search")

@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const ulElement = document.querySelector(".header_genreMenu__34716");
 
         // "전체" 카테고리 추가
-        ulElement.innerHTML = `<li class="categoryList" data-id="">
+        ulElement.innerHTML = `<li class="categoryList active" data-id="">
                               <a class="header_link__5ddf2">전체</a>
                            </li>`;
         // 카테고리 목록 추가
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 공연 등록
-    document.querySelector(".eventRegisterBtn").addEventListener("click",function (e){
+    document.querySelector(".eventRegisterBtn")?.addEventListener("click",function (e){
         e.stopPropagation();
         e.preventDefault();
 

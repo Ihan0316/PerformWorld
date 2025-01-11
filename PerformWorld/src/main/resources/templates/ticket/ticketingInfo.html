@@ -2,6 +2,7 @@
 <html class="no-js" lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="~{layout/base.html}">
 
 <head>
@@ -19,7 +20,7 @@
         <!-- 관리자만 등록 버튼이 보이도록 조건문 수정 -->
         <div>
             <div>
-                <button type="button" th:if="${user != null && user.Username == 'admin'}" class="btn btn-primary btn-sm ticketingRegBtn">등록</button>
+                <button type="button" th:if="${user} != null" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="btn btn-primary btn-sm ticketingRegBtn">등록</button>
             </div>
         </div>
         <!-- 티켓팅 정보 그리드 -->
