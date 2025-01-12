@@ -42,7 +42,7 @@ const initGrid = () => {
                 align: 'center',
                 sortable: true,
                 sortingType: 'desc',
-                // hidden: true
+                hidden: true
             },
             {
                 header: '제목',
@@ -95,7 +95,6 @@ const init = () =>{
             }
         }
 
-        console.log("검색 URL:", url); // 생성된 URL을 콘솔에 출력해 확인
         try{
             const res = await axios({
                 method: 'get',
@@ -105,7 +104,6 @@ const init = () =>{
                 }
             });
             const ticketData = res.data;
-            console.log(ticketData)
             testGrid.resetData(ticketData);
         }catch(error){
             console.error('Error fetching ticketing list:',error);
@@ -130,7 +128,6 @@ const init = () =>{
     }
 
     getCategoryList().then(data => {
-        console.log(data);
         const selectElement = document.querySelector("select[name='genre-code']");
         const optionElement = document.createElement("option");
         optionElement.value = ""
@@ -359,8 +356,7 @@ const init = () =>{
         const inputs = document.querySelectorAll('.dynamic-row input');
         inputs.forEach(input => input.value = '');
 
-        // 선택된 이벤트 ID 콘솔 출력
-        console.log("이벤트 ID:", event.eventId);
+
 
         try {
             // 티켓팅 데이터 가져오기
@@ -369,12 +365,10 @@ const init = () =>{
 
             // 티켓팅 데이터가 있을 경우 기존 행에 이어서 추가
             if (ticketingData && ticketingData.length > 0) {
-                console.log("Ticketing Data:", ticketingData); // 데이터를 콘솔에 출력하여 확인
 
                 // 티켓팅 데이터가 있다면 동적 행 생성
                 ticketingData.forEach((ticket) => {
                     phaseCount++; // 차수 증가
-                    console.log("Ticket:", ticket); // 각 ticket 객체 출력
 
                     // 동적 행 생성
                     const row = document.createElement('div');
