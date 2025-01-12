@@ -42,7 +42,7 @@ const initGrid = () => {
                 align: 'center',
                 sortable: true,
                 sortingType: 'desc',
-                hidden: true
+                // hidden: true
             },
             {
                 header: '제목',
@@ -62,14 +62,14 @@ const initGrid = () => {
             {
                 header: '장소',
                 name: 'location',
-                align: 'center',
-                sortable: true,
-                sortingType: 'desc'
+                align: 'center'
             },
             {
                 header: '장르',
                 name: 'genre',
                 align: 'center',
+                sortable: true,
+                sortingType: 'desc'
             }
         ]
     });
@@ -313,12 +313,16 @@ const init = () =>{
     document.getElementById('ticketingRegisterBtn').addEventListener('click', async () => {
         const selectedEventIds = [];
         const checkboxes = document.querySelectorAll('.row-checkbox');
-        const rows = testGrid.getData();
+        const rowsPerPage = 10; // 페이지당 표시할 데이터 수
+        const currentPage = testGrid.getPagination()._currentPage; // 현재 페이지 번호 (1부터 시작)
+        const offset = (currentPage - 1) * rowsPerPage; // 현재 페이지의 시작 인덱스
+        const allRows = testGrid.getData(); // 전체 데이터를 가져옴
 
         // 선택된 체크박스의 데이터를 가져옴
         checkboxes.forEach((checkbox, index) => {
             if (checkbox.checked) {
-                selectedEventIds.push(rows[index]);
+                const globalIndex = offset + index; // 전체 데이터 기준의 인덱스
+                selectedEventIds.push(allRows[globalIndex]); // 전체 데이터에서 선택
             }
         });
 
@@ -331,7 +335,6 @@ const init = () =>{
             alert("한번에 하나의 이벤트만 티켓팅 일정 추가가 가능합니다.");
             return;
         }
-
         const container = document.getElementById('dynamicRowsContainer');
         // 저장 완료 후 동적 행 초기화 (기존 행 삭제)
         while (container.firstChild) {
@@ -340,7 +343,6 @@ const init = () =>{
 
         // 첫 번째 선택된 이벤트에 대한 상세 정보 설정
         const event = selectedEventIds[0]; // 첫 번째 이벤트의 상세 정보를 가져옵니다.
-        console.log(event)
         // 한 줄 요약 설정
         const summary = `${event.title} | ${event.prfpdfrom} ~ ${event.prfpdto} | ${event.location}`;
         document.getElementById('modal-summary').textContent = summary;
