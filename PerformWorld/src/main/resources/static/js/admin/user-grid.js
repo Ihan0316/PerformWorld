@@ -53,7 +53,7 @@ const initUserGrid = () => {
                     return `${address1} ${address2} (${postcode})`.trim(); // 결합된 주소
                 }
             },
-            { header: '티어', name: 'tierName', align: 'center', minWidth: 100, flex: 1 }
+            { header: '등급', name: 'tierName', align: 'center', minWidth: 100, flex: 1 }
         ]
     });
 
