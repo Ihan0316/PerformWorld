@@ -34,6 +34,10 @@ public class CustomSecurityConfig {
 
         http.formLogin(formLogin -> formLogin.defaultSuccessUrl("/", true));
 
+        http.formLogin(formLogin -> {
+            formLogin.failureUrl("/user/login?error=true");
+        });
+
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
         http.authorizeHttpRequests(authorizeRequests -> {
