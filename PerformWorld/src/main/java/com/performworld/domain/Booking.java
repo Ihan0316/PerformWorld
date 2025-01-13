@@ -51,6 +51,9 @@ public class Booking extends BaseEntity {
     @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
 
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review reviews;
+
     // 취소 상태로 변경
     public void chnStatus(SystemCode chnStatus) {
         this.status = chnStatus;
