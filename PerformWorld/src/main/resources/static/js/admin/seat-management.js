@@ -53,8 +53,8 @@ async function openEditSectionModal() {
         // 모달 열기
         document.getElementById('editSectionModal').style.display = 'block';
     } catch (error) {
-        console.error('섹션 목록을 불러오는 데 오류 발생:', error);
-        alert('섹션 목록을 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        console.error('구역 목록을 불러오는 데 오류 발생:', error);
+        alert('구역 목록을 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
 }
 
@@ -104,16 +104,16 @@ document.getElementById('editSectionForm').addEventListener('submit', async func
         });
 
         if (response.status === 200) {
-            alert(`${selectedSection} 섹션 수정이 완료되었습니다.`);
+            alert(`${selectedSection} 구역 수정이 완료되었습니다.`);
             closeSectionModal(); // 모달 닫기
             // 필요 시 테이블 갱신 로직 추가
             location.reload();
         }
     } catch (error) {
-        console.error("섹션 수정 오류:", error);
+        console.error("구역 수정 오류:", error);
         if (error.response) {
             console.error("서버 응답 데이터:", error.response.data);
         }
-        alert("섹션 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+        alert("구역 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     }
 });

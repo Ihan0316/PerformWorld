@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return { tierName: tier.tierName, minSpent: tier.minSpent, maxSpent: tier.maxSpent };
             });
         } catch (error) {
-            console.error("Failed to fetch existing tiers:", error);
+            console.error("기존 등급을 가져오지 못했습니다.:", error);
             return [];
         }
     }
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             addTierButton.disabled = true;
             const response = await axios.post("/admin/addTier", { tierName, minSpent, maxSpent, discountRate });
-            alert("새 Tier가 추가되었습니다!");
+            alert("새 등급이 추가되었습니다!");
             addForm.reset();
             toggleAddModal(false);
             return response.data;
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // 중복 이름 체크
         const isDuplicateName = existingTiers.some(tier => tier.tierName === tierName);
         if (isDuplicateName) {
-            alert("중복되는 Tier 이름이 있습니다. 다른 이름을 입력해주세요.");
+            alert("중복되는 등급 이름이 있습니다. 다른 이름을 입력해주세요.");
             return;
         }
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (isDuplicateRange) {
-            alert("중복되는 Tier 범위가 있습니다. 다른 값을 입력해주세요.");
+            alert("중복되는 등급 범위가 있습니다. 다른 값을 입력해주세요.");
             return;
         }
 
