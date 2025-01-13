@@ -525,7 +525,7 @@ const init = () => {
         await axios({
             method : 'post',
             url : '/review/getRvList',
-            data : { userId: user.uid },  // loginInfo
+            data : { srhUserId: user.uid },  // loginInfo
             headers : {
                 'Content-Type' : 'application/json'
             }

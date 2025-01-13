@@ -33,7 +33,7 @@ public class ReviewCustomRepoImpl extends QuerydslRepositorySupport implements R
             builder.and(event.title.contains(reviewDTO.getSrhEvent()));
         }
         if(reviewDTO.getSrhUserId() != null && !reviewDTO.getSrhUserId().isEmpty()) {
-            builder.and(review.user.userId.contains(reviewDTO.getSrhUserId()));
+            builder.and(review.user.userId.eq(reviewDTO.getSrhUserId()));
         }
 
         List<Tuple> result = from(review)

@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function fetchPerformances(performName, startDate, endDate, locationCode, genre, page) {
         // API URL 설정
         const apiUrl = `/event/search?performName=${performName}&startDate=${startDate}&endDate=${endDate}&locationCode=${locationCode}&genre=${genre}&page=${page}&size=${pageSize}`;
+        console.log("호출 URL : " + apiUrl)
         fetch(apiUrl)
             .then(response => response.text())  // XML 데이터를 문자열로 받아옴
             .then(xmlString => {
