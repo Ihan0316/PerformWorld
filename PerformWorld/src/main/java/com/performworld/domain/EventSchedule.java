@@ -28,6 +28,6 @@ public class EventSchedule extends BaseEntity {
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;  // 공연 날짜
 
-    @OneToMany(mappedBy = "booking", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "eventSchedule", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 }
